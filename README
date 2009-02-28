@@ -1,0 +1,20 @@
+netcalc  Copyright (C) 2009  Matthew Reath
+
+netcalc is an advanced CLI-based network subnetting tool. It provides the
+following features:
+
+	- provided an ip address and mask, it will calculate the network
+	  address, broadcast address, bits in mask, and all hosts 
+	  of the network
+
+	- provided an ip address, mask, and network count, it will 
+	  calculate the network addresses, and masks in order to
+	  subnet the network into smaller networks based on the
+	  number of networks desired
+
+	- provided an ip address, mask, and host count, it will
+	  calculate the network addresses, and mask in ord to
+	  subnet the network into smaller networks based on the
+	  number of hosts desired
+
+
