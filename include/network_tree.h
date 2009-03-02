@@ -23,8 +23,10 @@ int split_network(tptr n1);
 typedef struct network_tree_node {
 	
 	network n;
+	int in_use;
 	struct network_tree_node *left;
 	struct network_tree_node *right;
+	struct network_tree_node *parent;
 
 } tnode;
 
@@ -37,4 +39,9 @@ void build_tree_net_count(tnode *t1, int nets);
 void split_to_depth(tnode *t1, int depth, int target);
 
 void build_tree_host_count(tnode *t1, int hosts);
+
+void build_tree_vlsm(tnode *t1, int hosts, int right);
+
+void free_network_tree(tnode *t1);
+
 #endif

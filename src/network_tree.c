@@ -48,13 +48,16 @@ int split_network(tnode *n1) {
 	initialize_network(&t1->n, &h1);
 	t1->left = NULL;
 	t1->right = NULL;
-	
+	t1->parent = n1;
+
 	/* create second network */
 	n1->right = (tnode *)malloc(sizeof(tnode));
 	t2 = n1->right;
 	initialize_network(&t2->n, &h2);
 	t2->left = NULL;
 	t2->right = NULL;
+	t2->parent = n1;
+	
 
 	return 1;
 }
@@ -67,7 +70,11 @@ void print_network_tree(tnode *n1) {
 
 		inttodd(ip_address, n1->n.address.ip_address);
 
-		printf("Network: %s/%u\n", ip_address, get_bits_in_mask(n1->n.address.mask));
+		printf("Network: %s/%u", ip_address, get_bits_in_mask(n1->n.address.mask));
+		if(n1->in_use)
+			printf("*");
+
+		printf("\n");
 	}
 
 	if(n1->left != NULL)
@@ -108,16 +115,35 @@ void build_tree_host_count(tnode *t1, int hosts) {
 	split_to_depth(t1, bdepth, tdepth);  
 }
 
-build_tree_vlsm(tnode *t1, int hosts) {
+void build_tree_vlsm(tnode *t1, int hosts, int right) {
 
-	/* can the current network support the host requirements? */
+	if(t1->n.host_count/2 >= hosts) {
+		if(t1->left == NULL && t1->right == NULL)
+			split_network(t1);
+
+		
+		build_tree_vlsm(t1->left, hosts, right);
+	} else {
+		/* ok, we are at the end point for our host count */
+
+		/* make sure we are a leaf , and not in use*/
+
+		if(t1->left == NULL && t1->right == NULL && t1->in_use == 0) {
+			t1->in_use = 1;
+			return;
+		} else {
+			/* we need to traverse up the tree */
+			if(t1 == t1->parent->right)
+				build_tree_vlsm(t1->parent->parent->right, hosts, right);
+			else if(t1 != t1->parent->right)
+				build_tree_vlsm(t1->parent->right, hosts, right);
+
+		}
+
+	} 
+
 	
-
-	/* if not, and children are null split network */
-
-	/* if not, and children are not null, traverse to children */
-
-	
+		
 
 }
 

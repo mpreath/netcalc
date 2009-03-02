@@ -69,7 +69,12 @@ int main(int argc, char* argv[]) {
 	root->left = NULL;
 	root->right = NULL;
 
-	build_tree_host_count(root, atoi(argv[3]));
+	//build_tree_host_count(root, atoi(argv[3]));
+	build_tree_vlsm(root, 2, 0);
+	build_tree_vlsm(root, 2, 0);
+	build_tree_vlsm(root, 2, 0);
+	build_tree_vlsm(root, 2, 0);
+	build_tree_vlsm(root, 6, 0);
 	/*
 	int i = 0;
 	int j = atoi(argv[3]);
