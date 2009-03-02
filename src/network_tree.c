@@ -121,8 +121,11 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 		if(t1->left == NULL && t1->right == NULL)
 			split_network(t1);
 
-		
-		build_tree_vlsm(t1->left, hosts, right);
+		if(right) {
+			build_tree_vlsm(t1->right, hosts, right);
+		} else {
+			build_tree_vlsm(t1->left, hosts, right);
+		}
 	} else {
 		/* ok, we are at the end point for our host count */
 
@@ -133,11 +136,20 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 			return;
 		} else {
 			/* we need to traverse up the tree */
-			if(t1 == t1->parent->right)
-				build_tree_vlsm(t1->parent->parent->right, hosts, right);
-			else if(t1 != t1->parent->right)
-				build_tree_vlsm(t1->parent->right, hosts, right);
+			if(right) {
+		
+				if(t1 == t1->parent->left)
+					build_tree_vlsm(t1->parent->parent->left, hosts, right);
+				else if(t1 != t1->parent->left)
+					build_tree_vlsm(t1->parent->left, hosts, right);
 
+			} else {
+
+				if(t1 == t1->parent->right)
+					build_tree_vlsm(t1->parent->parent->right, hosts, right);
+				else if(t1 != t1->parent->right)
+					build_tree_vlsm(t1->parent->right, hosts, right);
+			}
 		}
 
 	} 

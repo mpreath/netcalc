@@ -101,3 +101,14 @@ unsigned int extend_mask(unsigned int mask, int bits) {
 	return new_mask;
 
 }
+
+unsigned int shorten_mask(unsigned int mask, int bits) {
+
+	int i;
+
+	for(i = 0; i < bits; i++, mask = mask << 1)
+		;
+	
+	return mask;
+
+}

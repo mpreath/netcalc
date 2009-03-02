@@ -44,4 +44,6 @@ int get_bits_in_mask(unsigned int mask);
 
 unsigned int extend_mask(unsigned int mask, int bits);
 
+unsigned int shorten_mask(unsigned int mask, int bits);
+
 #endif
