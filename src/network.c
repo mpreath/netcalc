@@ -51,13 +51,15 @@ int print_network_info(network* n) {
 	char mask[16];
 	inttodd(ip_address, s);
 	printf("Network:\t%s\n", ip_address);
+	inttodd(ip_address, e);
+	printf("Broadcast:\t%s\n", ip_address);
 	inttodd(ip_address, n->address.mask);
 	printf("Mask:\t\t%s[/%i]\n", ip_address, bc);
 	printf("Hosts:\t\t%i\n", n->host_count);
 	
 	inttodd(mask, n->address.mask);
 
-	for(i = s; i <= e; i++) {
+	for(i = s+1; i < e; i++) {
 		inttodd(ip_address,i);
 		printf("%s\t%s\n", ip_address, mask);
 	}

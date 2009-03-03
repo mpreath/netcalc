@@ -171,6 +171,52 @@ void split_to_depth(tnode *t1, int depth, int target) {
 
 }
 
+
+void combine_networks(tnode *t1, tnode *s1, tnode *s2) {
+
+	unsigned int new_net1, new_net2;;
+	unsigned int new_mask;
+	host h1, h2;
+
+	if(s1->n.address.mask == s2->n.address.mask) {
+
+		new_mask = shorten_mask(s1->n.address.mask, 1);
+		
+		h1.ip_address = s1->n.address.ip_address;
+		h1.mask = new_mask;
+
+		h2.ip_address = s2->n.address.ip_address;
+		h2.mask = new_mask;
+
+		new_net1 = get_network_address(&h1);
+		new_net2 = get_network_address(&h2);
+
+		if(new_net1 == new_net2) {
+			// we can summarize these two
+			t1 = (tnode *)malloc(sizeof(tnode));
+
+			initialize_network(&t1->n, &h1);
+			/* set pointers */
+			s1->parent = t1;
+			s2->parent = t1;
+			if(s1->n.address.ip_address < s2->n.address.ip_address) {
+				t1->left = s1;
+				t1->right = s2;
+			} else {
+				t1->right = s1;
+				t1->left = s2;
+			}
+
+		} else {
+
+			t1 = NULL;
+		}
+	} else {
+		t1 = NULL;
+	}
+
+}
+
 void free_network_tree(tnode* t1) {
 
 	if(t1->left != NULL && t1->right != NULL) {

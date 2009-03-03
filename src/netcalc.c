@@ -25,71 +25,64 @@
 #include <network.h>
 #include <network_tree.h>
 
+void print_info();
+void print_usage();
+void net_info(char* ip_address, char* mask);
+void host_tree(char* ip_address, char* mask, int hosts);
+void net_tree(char* ip_address, char* mask, int nets);
+void vlsm_tree(char* ip_address, char* mask, char* nets);
+void net_summary();
+
 int main(int argc, char* argv[]) {
 
-	fprintf(stderr, "netcalc  Copyright (C) 2009  Matthew Reath\n");
-	fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
-	fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
-	fprintf(stderr, "under certain circumstances. See the included LICENSE file\n");
-	fprintf(stderr, "for more information.\n");
-
-	if(argc != 4) {
-		fprintf(stderr, "Wrong number of arguments.\n");
-		return 0;	
-	}
-
-	host h1;
-
-	h1.ip_address = ddtoint(argv[1]);
-	h1.mask = ddtoint(argv[2]);
-	/*
-	network n1;	
-
-	initialize_network(&n1, &h1);
-	
-	print_network_info(&n1);
-	*/
-
-	/*
-	unsigned int new_mask;
-	int obits,nbits;
-
-	new_mask = extend_mask(h1.mask, 1);
-	obits = get_bits_in_mask(h1.mask);
-	nbits = get_bits_in_mask(new_mask);
-	printf("Old mask:\t/%u\tNew mask:\t/%u\n", obits, nbits);
-	*/
-	
-	tnode *root;
-	tnode *t1;
-
-	root = (tnode *)malloc(sizeof(tnode));
-	initialize_network(&root->n, &h1);
-
-	root->left = NULL;
-	root->right = NULL;
-
-	//build_tree_host_count(root, atoi(argv[3]));
-	build_tree_vlsm(root, 2, 1);
-	build_tree_vlsm(root, 2, 1);
-	build_tree_vlsm(root, 2, 1);
-	build_tree_vlsm(root, 2, 1);
-	build_tree_vlsm(root, 6, 1);
-	/*
-	int i = 0;
-	int j = atoi(argv[3]);
-
-	t1 = &root;
-	for(i = 0; i < j; i++, t1=t1->left) {
-		split_network(t1);
-	}
-
-	*/
-	/* print out tree */
-	print_network_tree(root);
-
-	/* release tree memory */	
-	free_network_tree(root);	
+	net_info(argv[1], argv[2]);	
 	
 	return 0;
 }
+
+void print_info() {
+
+	fprintf(stderr, "netcalc  Copyright (C) 2009  Matthew Reath\n");
+        fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
+        fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
+        fprintf(stderr, "under certain circumstances. See the included LICENSE file\n");
+        fprintf(stderr, "for more information.\n");
+}
+
+void print_usage() {
+	
+
+}
+
+void net_info(char* ip_address, char* mask) {
+
+	host h1;
+
+	h1.ip_address = ddtoint(ip_address);
+	h1.mask = ddtoint(mask);
+
+	network n1;
+
+	initialize_network(&n1, &h1);
+
+	print_network_info(&n1);
+
+}
+
+void host_tree(char* ip_address, char* mask, int hosts) {
+
+	
+}
+
+void net_tree(char* ip_address, char* mask, int nets) {
+
+}
+
+void vlsm_tree(char* ip_address, char* mask, char* nets) {
+
+}
+
+void net_summary() {
+
+}
+
