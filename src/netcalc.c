@@ -24,6 +24,7 @@
 #include <host.h>
 #include <network.h>
 #include <network_tree.h>
+#include <string.h>
 
 void print_info();
 void print_usage();
@@ -35,7 +36,29 @@ void net_summary();
 
 int main(int argc, char* argv[]) {
 
-	net_info(argv[1], argv[2]);	
+	if(argc == 3 && argv[1][0] != '-') {
+		net_info(argv[1], argv[2]);
+	} else if(argc > 1 && argv[1][0] == '-') {
+		switch(argv[1][1]) {
+		
+			case 'h':
+				host_tree(argv[3], argv[4], atoi(argv[2]));
+				break;
+			case 'n':
+				net_tree(argv[3], argv[4], atoi(argv[2]));
+				break;
+			case 'v':
+				vlsm_tree(argv[3], argv[4], argv[2]);
+				break;
+			case 's':
+				printf("Summarization\n");
+				break;
+			default:
+				print_usage();
+		}	
+	} else {
+		print_usage();
+	}
 	
 	return 0;
 }
@@ -71,15 +94,67 @@ void net_info(char* ip_address, char* mask) {
 
 void host_tree(char* ip_address, char* mask, int hosts) {
 
+	host h1;
+
+	initialize_host(&h1, ip_address, mask);
+
+	tnode* t1;
+
+	t1 = (tnode *) malloc(sizeof(tnode));
+
+	initialize_network(&t1->n, &h1);
+
+	build_tree_host_count(t1, hosts);
+
+	print_network_tree(t1);
+
+	free_network_tree(t1);
 	
 }
 
 void net_tree(char* ip_address, char* mask, int nets) {
 
+	host h1;
+
+	initialize_host(&h1, ip_address, mask);
+
+	tnode* t1;
+
+	t1 = (tnode *) malloc(sizeof(tnode));
+
+	initialize_network(&t1->n, &h1);
+
+	build_tree_net_count(t1, nets);
+
+	print_network_tree(t1);
+
+	free_network_tree(t1);
+
+
 }
 
 void vlsm_tree(char* ip_address, char* mask, char* nets) {
 
+	host h1;
+
+	initialize_host(&h1, ip_address, mask);
+
+	tnode *t1;
+
+	t1 = (tnode *) malloc(sizeof(tnode));
+
+	initialize_network(&t1->n, &h1);
+
+	char* tok;
+	char* sep = ",";
+
+	for(tok = strtok(nets, sep); tok; tok = strtok(NULL,sep)) {
+		build_tree_vlsm(t1, atoi(tok), 0);
+	}
+
+	print_network_tree(t1);
+
+	free_network_tree(t1);
 }
 
 void net_summary() {

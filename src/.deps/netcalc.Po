@@ -12,7 +12,8 @@ netcalc.o netcalc.o: netcalc.c ../include/utility.h /usr/include/stdio.h \
   /usr/include/libkern/_OSByteOrder.h \
   /usr/include/libkern/i386/_OSByteOrder.h /usr/include/alloca.h \
   /usr/include/machine/types.h /usr/include/i386/types.h \
-  ../include/host.h ../include/network.h ../include/network_tree.h
+  ../include/host.h ../include/network.h ../include/network_tree.h \
+  /usr/include/string.h
 
 ../include/utility.h:
 
@@ -73,3 +74,5 @@ netcalc.o netcalc.o: netcalc.c ../include/utility.h /usr/include/stdio.h \
 ../include/network.h:
 
 ../include/network_tree.h:
+
+/usr/include/string.h:

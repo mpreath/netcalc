@@ -25,4 +25,6 @@ typedef struct host_struct {
 	unsigned int mask;
 } host;
 
+void initialize_host(host* h1, char* ip_address, char* mask);
+
 #endif
