@@ -1,5 +1,5 @@
-netcalc.o netcalc.o: netcalc.c ../include/utility.h /usr/include/stdio.h \
-  /usr/include/_types.h /usr/include/sys/_types.h \
+netcalc.o netcalc.o: netcalc.c ../config.h ../include/utility.h \
+  /usr/include/stdio.h /usr/include/_types.h /usr/include/sys/_types.h \
   /usr/include/sys/cdefs.h /usr/include/machine/_types.h \
   /usr/include/i386/_types.h /usr/include/stdlib.h \
   /usr/include/available.h /usr/include/sys/wait.h \
@@ -14,6 +14,8 @@ netcalc.o netcalc.o: netcalc.c ../include/utility.h /usr/include/stdio.h \
   /usr/include/machine/types.h /usr/include/i386/types.h \
   ../include/host.h ../include/network.h ../include/network_tree.h \
   /usr/include/string.h
+
+../config.h:
 
 ../include/utility.h:
 

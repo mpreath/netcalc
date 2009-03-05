@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include <config.h>
 #include <utility.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,21 +37,26 @@ void net_summary();
 int main(int argc, char* argv[]) {
 
 	if(argc == 3 && argv[1][0] != '-') {
+		print_info();
 		net_info(argv[1], argv[2]);
 	} else if(argc > 1 && argv[1][0] == '-') {
 		switch(argv[1][1]) {
 		
 			case 'h':
+				print_info();
 				host_tree(argv[3], argv[4], atoi(argv[2]));
 				break;
 			case 'n':
+				print_info();
 				net_tree(argv[3], argv[4], atoi(argv[2]));
 				break;
 			case 'v':
+				print_info();
 				vlsm_tree(argv[3], argv[4], argv[2]);
 				break;
 			case 's':
-				printf("Summarization\n");
+				print_usage();
+				//printf("Summarization\n");
 				break;
 			default:
 				print_usage();
@@ -64,15 +69,27 @@ int main(int argc, char* argv[]) {
 }
 
 void print_info() {
-
-	fprintf(stderr, "netcalc  Copyright (C) 2009  Matthew Reath\n");
+/*
+	fprintf(stderr, "netcalc %s  Copyright (C) 2009  Matthew Reath\n", VERSION);
         fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
         fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
         fprintf(stderr, "under certain circumstances. See the included LICENSE file\n");
         fprintf(stderr, "for more information.\n");
+*/
 }
 
 void print_usage() {
+	fprintf(stderr, "netcalc %s usage:\n\n", VERSION);
+	fprintf(stderr, "netcalc <address> <mask>\n");
+	fprintf(stderr, "netcalc -h <host count> <address> <mask>\n");
+	fprintf(stderr, "netcalc -n <network count> <address> <mask>\n");
+	fprintf(stderr, "netcalc -v <host list> <address> <mask>\n\n");
+
+	fprintf(stderr, "Examples:\n\n");
+	fprintf(stderr, "netcalc 192.168.2.10 255.255.255.252\n");
+	fprintf(stderr, "netcalc -h 50 192.168.2.0 255.255.255.0\n");
+	fprintf(stderr, "netcalc -n 8 192.168.2.0 255.255.255.0\n");
+	fprintf(stderr, "netcalc -v 2,2,2,2,50,50 192.168.2.0 255.255.255.0\n");
 	
 
 }
