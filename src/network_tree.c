@@ -66,7 +66,7 @@ void print_network_tree(tnode *n1) {
 
 	char ip_address[16];
 
-	if(n1->left == NULL && n1->right == NULL) {
+	//if(n1->left == NULL && n1->right == NULL) {
 
 		inttodd(ip_address, n1->n.address.ip_address);
 
@@ -75,7 +75,7 @@ void print_network_tree(tnode *n1) {
 			printf("*");
 
 		printf("\n");
-	}
+	//}
 
 	if(n1->left != NULL)
 		print_network_tree(n1->left);
@@ -172,16 +172,24 @@ void split_to_depth(tnode *t1, int depth, int target) {
 }
 
 
-void combine_networks(tnode *t1, tnode *s1, tnode *s2) {
+tnode* combine_networks(tnode *s1, tnode *s2) {
 
 	unsigned int new_net1, new_net2;;
 	unsigned int new_mask;
 	host h1, h2;
 
+	tnode *t1;
+
 	if(s1->n.address.mask == s2->n.address.mask) {
 
-		new_mask = shorten_mask(s1->n.address.mask, 1);
+		//printf("Masks are the same: %u\n", get_bits_in_mask(s1->n.address.mask));
 		
+		new_mask = shorten_mask(s1->n.address.mask, 1);
+
+
+	
+		//printf("New mask: %u, %u[%u]\n", s1->n.address.mask, new_mask, get_bits_in_mask(new_mask));	
+
 		h1.ip_address = s1->n.address.ip_address;
 		h1.mask = new_mask;
 
@@ -190,9 +198,17 @@ void combine_networks(tnode *t1, tnode *s1, tnode *s2) {
 
 		new_net1 = get_network_address(&h1);
 		new_net2 = get_network_address(&h2);
-
+		/*
+		char ip_address[16];
+		inttodd(ip_address, new_net1);
+		printf("New net 1: %s\n", ip_address);
+		inttodd(ip_address, new_net2);
+		printf("New net 2: %s\n", ip_address);
+		*/
 		if(new_net1 == new_net2) {
 			// we can summarize these two
+			//printf("Summarizing.\n");
+
 			t1 = (tnode *)malloc(sizeof(tnode));
 
 			initialize_network(&t1->n, &h1);
@@ -207,12 +223,14 @@ void combine_networks(tnode *t1, tnode *s1, tnode *s2) {
 				t1->left = s2;
 			}
 
+			return t1;
+
 		} else {
 
-			t1 = NULL;
+			return NULL;
 		}
 	} else {
-		t1 = NULL;
+		return NULL;
 	}
 
 }

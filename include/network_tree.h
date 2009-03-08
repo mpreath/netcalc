@@ -42,6 +42,8 @@ void build_tree_host_count(tnode *t1, int hosts);
 
 void build_tree_vlsm(tnode *t1, int hosts, int right);
 
+tnode* combine_networks(tnode *s1, tnode *s2);
+
 void free_network_tree(tnode *t1);
 
 #endif

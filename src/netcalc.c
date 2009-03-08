@@ -55,8 +55,7 @@ int main(int argc, char* argv[]) {
 				vlsm_tree(argv[3], argv[4], argv[2]);
 				break;
 			case 's':
-				print_usage();
-				//printf("Summarization\n");
+				net_summary();
 				break;
 			default:
 				print_usage();
@@ -175,6 +174,61 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
 }
 
 void net_summary() {
+	
+	host h1,h2;
+	char ip1[16];
+	char ip2[16];
+	char mask1[16];
+	char mask2[16];
 
+	scanf("%s %s", ip1, mask1);
+	scanf("%s %s", ip2, mask2);
+	printf("%s %s\n", ip1, mask1);
+	printf("%s %s\n", ip2, mask2);	
+
+	initialize_host(&h1, ip1, mask1);
+	initialize_host(&h2, ip2, mask2);
+	
+	tnode *s1;
+	tnode *s2;
+	tnode *root;
+
+	root = NULL;
+	
+	s1 = (tnode *)malloc(sizeof(tnode));
+	s2 = (tnode *)malloc(sizeof(tnode));
+
+	s1->left = NULL;
+	s1->right = NULL;
+	s1->parent = NULL;
+	s2->left = NULL;
+	s2->right = NULL;
+	s2->parent = NULL;	
+
+	
+	initialize_network(&s1->n, &h1);
+	initialize_network(&s2->n, &h2);
+	/*
+	print_network_info(&s1->n);
+	print_network_info(&s2->n);
+	*/
+	root = combine_networks(s1,s2);
+
+
+	if(root != NULL) {
+		char ip_address[16], mask[16];
+
+		inttodd(ip_address, root->n.address.ip_address);
+		inttodd(mask, root->n.address.mask);
+		
+		printf("Summary: %s/%u\n", ip_address, get_bits_in_mask(root->n.address.mask));
+		print_network_tree(root);		
+
+		free_network_tree(root);
+
+		
+	} else {
+		printf("Can't be summarized\n");
+	}
 }
 
