@@ -26,6 +26,8 @@
 #include <network_tree.h>
 #include <string.h>
 
+#define MAX_NUM_TREES 256
+
 void print_info();
 void print_usage();
 void net_info(char* ip_address, char* mask);
@@ -175,60 +177,79 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
 
 void net_summary() {
 	
+
+	tnode* networks[MAX_NUM_TREES]; 
+	tnode* cnetworks[MAX_NUM_TREES];
 	host h1,h2;
-	char ip1[16];
-	char ip2[16];
-	char mask1[16];
-	char mask2[16];
+	char ip[16];
+	char mask[16];
+	int i;
 
-	scanf("%s %s", ip1, mask1);
-	scanf("%s %s", ip2, mask2);
-	printf("%s %s\n", ip1, mask1);
-	printf("%s %s\n", ip2, mask2);	
+	/* initialize the nodes to NULL */
+	for(i = 0; i < MAX_NUM_TREES; i++)
+		networks[i] = NULL;
 
-	initialize_host(&h1, ip1, mask1);
-	initialize_host(&h2, ip2, mask2);
-	
-	tnode *s1;
-	tnode *s2;
-	tnode *root;
-
-	root = NULL;
-	
-	s1 = (tnode *)malloc(sizeof(tnode));
-	s2 = (tnode *)malloc(sizeof(tnode));
-
-	s1->left = NULL;
-	s1->right = NULL;
-	s1->parent = NULL;
-	s2->left = NULL;
-	s2->right = NULL;
-	s2->parent = NULL;	
-
-	
-	initialize_network(&s1->n, &h1);
-	initialize_network(&s2->n, &h2);
-	/*
-	print_network_info(&s1->n);
-	print_network_info(&s2->n);
-	*/
-	root = combine_networks(s1,s2);
-
-
-	if(root != NULL) {
-		char ip_address[16], mask[16];
-
-		inttodd(ip_address, root->n.address.ip_address);
-		inttodd(mask, root->n.address.mask);
-		
-		printf("Summary: %s/%u\n", ip_address, get_bits_in_mask(root->n.address.mask));
-		print_network_tree(root);		
-
-		free_network_tree(root);
-
-		
-	} else {
-		printf("Can't be summarized\n");
+	/* populate the array with the networks from the input */
+	for(i = 0; scanf("%s %s", ip, mask) != EOF; i++) {
+		initialize_host(&h1, ip, mask);
+		networks[i] = malloc(sizeof(tnode));
+		initialize_network(&networks[i]->n, &h1);		
+		networks[i]->left = NULL;
+		networks[i]->right = NULL;
+		networks[i]->parent = NULL;
+		print_network_tree(networks[i]);
+		printf("%i\n", i);
 	}
+
+
+	int j;
+	int k;
+	int l;
+	int c;
+	c = 0;
+	tnode *t1;
+	int made_changes = 1;
+
+	while(made_changes) {
+
+		made_changes = 0;
+	
+
+		for(j = 0; j < i; j++) {
+
+			for(k = j+1; k < i; k++) {
+
+				printf("%i %i*\n",k, i);
+				if((t1 = combine_networks(networks[j], networks[k])) != NULL) {
+					printf("Combined network.\n");
+				
+					networks[j] = NULL;
+					networks[k] = NULL;
+
+					for(l = 0; networks[l] != NULL; l++)
+						;
+
+					networks[l] = t1;
+				
+				
+					made_changes = 1;
+				
+					}
+
+			}
+		}
+
+	}
+
+	printf("%i\n", c);
+	for(i = 0; i < MAX_NUM_TREES; i++) {
+		if(networks[i] != NULL) {
+			printf("[%i] ", i);
+			print_network_tree(networks[i]);
+			free_network_tree(networks[i]);
+		}
+	}
+
 }
+
 

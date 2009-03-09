@@ -180,15 +180,12 @@ tnode* combine_networks(tnode *s1, tnode *s2) {
 
 	tnode *t1;
 
+	if(s1 == NULL || s2 == NULL)
+		return NULL;
+
 	if(s1->n.address.mask == s2->n.address.mask) {
 
-		//printf("Masks are the same: %u\n", get_bits_in_mask(s1->n.address.mask));
-		
 		new_mask = shorten_mask(s1->n.address.mask, 1);
-
-
-	
-		//printf("New mask: %u, %u[%u]\n", s1->n.address.mask, new_mask, get_bits_in_mask(new_mask));	
 
 		h1.ip_address = s1->n.address.ip_address;
 		h1.mask = new_mask;
@@ -198,21 +195,13 @@ tnode* combine_networks(tnode *s1, tnode *s2) {
 
 		new_net1 = get_network_address(&h1);
 		new_net2 = get_network_address(&h2);
-		/*
-		char ip_address[16];
-		inttodd(ip_address, new_net1);
-		printf("New net 1: %s\n", ip_address);
-		inttodd(ip_address, new_net2);
-		printf("New net 2: %s\n", ip_address);
-		*/
+		
 		if(new_net1 == new_net2) {
-			// we can summarize these two
-			//printf("Summarizing.\n");
 
 			t1 = (tnode *)malloc(sizeof(tnode));
 
 			initialize_network(&t1->n, &h1);
-			/* set pointers */
+			
 			s1->parent = t1;
 			s2->parent = t1;
 			if(s1->n.address.ip_address < s2->n.address.ip_address) {
