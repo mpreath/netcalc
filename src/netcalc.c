@@ -214,7 +214,7 @@ void net_summary() {
 		for(j = 0; j < i; j++) {
 
 			/* compare each member for summarization*/
-			for(k = j+1; k < i; k++) {
+			for(k = 0; k < i; k++) {
 
 				if((t1 = combine_networks(networks[j], networks[k])) != NULL) {
 					networks[j] = NULL;
@@ -228,7 +228,7 @@ void net_summary() {
 				
 					made_changes = 1;
 				
-					}
+				}
 
 			}
 		}
