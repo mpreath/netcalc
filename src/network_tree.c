@@ -74,6 +74,9 @@ void print_network_tree(tnode *n1) {
 		if(n1->in_use)
 			printf("*");
 
+		if(n1->parent == NULL)
+			printf("[r]");
+
 		printf("\n");
 	//}
 
@@ -161,8 +164,10 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 
 void split_to_depth(tnode *t1, int depth, int target) {
 
-	if(depth >= target)
+	if(depth >= target) {
+		t1->in_use = 1;		
 		return;
+	}
 
 	split_network(t1);
 	

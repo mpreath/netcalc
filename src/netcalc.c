@@ -179,7 +179,6 @@ void net_summary() {
 	
 
 	tnode* networks[MAX_NUM_TREES]; 
-	tnode* cnetworks[MAX_NUM_TREES];
 	host h1,h2;
 	char ip[16];
 	char mask[16];
@@ -197,32 +196,27 @@ void net_summary() {
 		networks[i]->left = NULL;
 		networks[i]->right = NULL;
 		networks[i]->parent = NULL;
-		print_network_tree(networks[i]);
-		printf("%i\n", i);
 	}
 
 
 	int j;
 	int k;
 	int l;
-	int c;
-	c = 0;
 	tnode *t1;
 	int made_changes = 1;
 
+	/* loop until there are no summarization left to do */
 	while(made_changes) {
 
 		made_changes = 0;
 	
-
+		/* loop through each member */
 		for(j = 0; j < i; j++) {
 
+			/* compare each member for summarization*/
 			for(k = j+1; k < i; k++) {
 
-				printf("%i %i*\n",k, i);
 				if((t1 = combine_networks(networks[j], networks[k])) != NULL) {
-					printf("Combined network.\n");
-				
 					networks[j] = NULL;
 					networks[k] = NULL;
 
@@ -241,10 +235,8 @@ void net_summary() {
 
 	}
 
-	printf("%i\n", c);
 	for(i = 0; i < MAX_NUM_TREES; i++) {
 		if(networks[i] != NULL) {
-			printf("[%i] ", i);
 			print_network_tree(networks[i]);
 			free_network_tree(networks[i]);
 		}
