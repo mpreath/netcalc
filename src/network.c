@@ -87,6 +87,24 @@ int get_bits_in_mask(unsigned int mask) {
 	return bc;
 }
 
+unsigned int get_mask_from_bits(int bits) {
+
+	unsigned int mask;
+	int i;
+	int bit_count;
+
+	bit_count = 32 - bits;
+	mask = 0;
+	mask = ~mask;
+
+	for(i = 0; i < bit_count; mask = mask << 1, i++)
+		;
+	
+
+	return mask;
+
+}
+
 unsigned int extend_mask(unsigned int mask, int bits) {
 
 	int i;

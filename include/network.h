@@ -42,6 +42,8 @@ unsigned int get_broadcast_address(host* h);
 
 int get_bits_in_mask(unsigned int mask);
 
+unsigned int get_mask_from_bits(int bits);
+
 unsigned int extend_mask(unsigned int mask, int bits);
 
 unsigned int shorten_mask(unsigned int mask, int bits);
