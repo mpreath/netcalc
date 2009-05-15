@@ -99,8 +99,7 @@ void net_info(char* ip_address, char* mask) {
 
 	host h1;
 
-	h1.ip_address = ddtoint(ip_address);
-	h1.mask = ddtoint(mask);
+	initialize_host(&h1, ip_address, mask);
 
 	network n1;
 
