@@ -21,13 +21,14 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <glib.h>
 
-unsigned int ddtoint(char* dd) {
+guint32 ddtoint(char* dd) {
 
-	unsigned int ip;
+	guint32 ip;
 	ip = 0; 
 
-	unsigned int octets[4];
+	guint32 octets[4];
 	int octet = 0;
 	char *tok;
 	char *sep = ".";
@@ -62,9 +63,9 @@ unsigned int ddtoint(char* dd) {
 	return ip;
 }
 
-int inttodd(char* dd, unsigned int ip) {
+int inttodd(char* dd, guint32 ip) {
 
-	unsigned int octets[4];
+	guint32 octets[4];
 	octets[0] = 0;
 	octets[1] = 0;
 	octets[2] = 0;

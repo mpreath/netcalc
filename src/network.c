@@ -21,10 +21,16 @@
 #include <host.h>
 #include <utility.h>
 #include <stdio.h>
+#include <glib.h>
 
 int initialize_network(network* n, host* h) {
 
-	unsigned int s, e;
+	guint32 t1, t2;
+
+	t1 = 0;
+	t2 = 0;
+
+	guint32 s, e;
 
 	n->address.ip_address = get_network_address(h);
 	n->address.mask = h->mask;
@@ -39,7 +45,7 @@ int initialize_network(network* n, host* h) {
 
 int print_network_info(network* n) {
 
-	unsigned int i, s, e;
+	guint32 i, s, e;
 	int bc = 0;	
 
 	s = n->address.ip_address;
@@ -68,17 +74,17 @@ int print_network_info(network* n) {
 	return 1;
 }
 
-unsigned int get_network_address(host* h) {
+guint32 get_network_address(host* h) {
 
 	return (h->ip_address & h->mask);
 }
 
-unsigned int get_broadcast_address(host* h) {
+guint32 get_broadcast_address(host* h) {
 
 	return (h->ip_address | ~(h->mask));
 }
 
-int get_bits_in_mask(unsigned int mask) {
+int get_bits_in_mask(guint32 mask) {
 
 	int bc;
 	
@@ -87,9 +93,9 @@ int get_bits_in_mask(unsigned int mask) {
 	return bc;
 }
 
-unsigned int get_mask_from_bits(int bits) {
+guint32 get_mask_from_bits(int bits) {
 
-	unsigned int mask;
+	guint32 mask;
 	int i;
 	int bit_count;
 
@@ -105,10 +111,10 @@ unsigned int get_mask_from_bits(int bits) {
 
 }
 
-unsigned int extend_mask(unsigned int mask, int bits) {
+guint32 extend_mask(guint32 mask, int bits) {
 
 	int i;
-	unsigned int new_mask, m;
+	guint32 new_mask, m;
 	new_mask = mask;
 	m = 1;
 	m = m << 31;
@@ -122,7 +128,7 @@ unsigned int extend_mask(unsigned int mask, int bits) {
 
 }
 
-unsigned int shorten_mask(unsigned int mask, int bits) {
+guint32 shorten_mask(guint32 mask, int bits) {
 
 	int i;
 

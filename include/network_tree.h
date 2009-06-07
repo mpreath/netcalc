@@ -5,6 +5,7 @@
 #include <host.h>
 #include <network.h>
 #include <stdlib.h>
+#include <glib.h>
 
 /*
 typedef struct network_tree_node *tptr;

@@ -24,6 +24,7 @@
 #include <host.h>
 #include <stdio.h>
 #include <math.h>
+#include <glib.h>
 
 int split_network(tnode *n1) {
 
@@ -179,8 +180,8 @@ void split_to_depth(tnode *t1, int depth, int target) {
 
 tnode* combine_networks(tnode *s1, tnode *s2) {
 
-	unsigned int new_net1, new_net2;;
-	unsigned int new_mask;
+	guint32 new_net1, new_net2;;
+	guint32 new_mask;
 	host h1, h2;
 
 	tnode *t1;

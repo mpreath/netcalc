@@ -23,11 +23,12 @@
 
 #include <host.h>
 #include <utility.h>
+#include <glib.h>
 
 typedef struct network_struct {
 
 	host address;
-	unsigned int host_count;
+	guint32 host_count;
 	
 } network;
 
@@ -36,16 +37,16 @@ int initiaize_network(network* n, host* h);
 
 int print_network_info(network* n);
 
-unsigned int get_network_address(host* h);
+guint32 get_network_address(host* h);
 
-unsigned int get_broadcast_address(host* h);
+guint32 get_broadcast_address(host* h);
 
-int get_bits_in_mask(unsigned int mask);
+int get_bits_in_mask(guint32 mask);
 
-unsigned int get_mask_from_bits(int bits);
+guint32 get_mask_from_bits(int bits);
 
-unsigned int extend_mask(unsigned int mask, int bits);
+guint32 extend_mask(guint32 mask, int bits);
 
-unsigned int shorten_mask(unsigned int mask, int bits);
+guint32 shorten_mask(guint32 mask, int bits);
 
 #endif

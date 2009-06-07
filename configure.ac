@@ -11,6 +11,9 @@ AM_CONFIG_HEADER([config.h])
 AC_PROG_CC
 
 # Checks for libraries.
+PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.0.0])
+AC_SUBST([GLIB_CFLAGS])
+AC_SUBST([GLIB_LIBS])
 
 # Checks for header files.
 AC_HEADER_STDC

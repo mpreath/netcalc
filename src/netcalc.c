@@ -25,6 +25,7 @@
 #include <network.h>
 #include <network_tree.h>
 #include <string.h>
+#include <glib.h>
 
 #define MAX_NUM_TREES 256
 

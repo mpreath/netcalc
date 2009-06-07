@@ -19,11 +19,12 @@
 
 #ifndef __UTILITY_H__
 #define __UTILITY_H__
+#include <glib.h>
 
 /* dotted decimal string to integer */
-unsigned int ddtoint(char* dd);
+guint32 ddtoint(char* dd);
 
 /* integer to dotted decimal */
-int inttodd(char* dd, unsigned int ip);
+int inttodd(char* dd, guint32 ip);
 
 #endif

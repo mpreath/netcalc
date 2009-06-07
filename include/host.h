@@ -19,10 +19,11 @@
 
 #ifndef __HOST_H__
 #define __HOST_H__
+#include <glib.h>
 
 typedef struct host_struct {
-	unsigned int ip_address;
-	unsigned int mask;
+	guint32 ip_address;
+	guint32 mask;
 } host;
 
 void initialize_host(host* h1, char* ip_address, char* mask);
