@@ -1,0 +1,121 @@
+commit cc2a825f204788a8bf6a02b191e63eed6581f471
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sun Jun 7 12:19:52 2009 -0500
+
+    Started converting to the GLIB library for better platform independence.
+
+commit 488fe33d4d03c4e7c3776fbfaf294fc3c5b4b501
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Fri May 15 15:50:46 2009 -0500
+
+    Changed some obsolete code.
+
+commit 106fd79376ad64877ac35aecf209fe036f151b21
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Fri May 15 15:46:07 2009 -0500
+
+    Update the README file
+
+commit 975d9ea37651c1872d3fccbffef78cc486757afb
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Tue Mar 10 14:27:57 2009 -0500
+
+    Added a get_mask_from_bits() function in network.c
+
+commit 33f67444622bde390947e7b0babd535c16d5b50d
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Tue Mar 10 10:19:25 2009 -0500
+
+    Code cleanup.
+
+commit 646c74a44ee09c81265271d0951cc5d0028eaf1a
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Tue Mar 10 07:29:49 2009 -0500
+
+    Finished net_summary() function, updated the print_network_tree() function. Need to create a clean way to print out the program results.
+
+commit fc96fa29b65a3e5ddb107ca802892d656ca1d315
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Mon Mar 9 15:50:56 2009 -0500
+
+    Got the summarizing functionality working in net_summary(). Need to clean up the code and logic but it summarizes correctly.
+
+commit 191e3ee50630bd1aacbcbe4be70e693f9e58f9de
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sun Mar 8 12:50:42 2009 -0500
+
+    Completed the combine_network function. Added some initial logic to the net_summary() function.
+
+commit 763172a85d2a29fc2cd8ac173ce8435940cc684f
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Fri Mar 6 13:21:26 2009 -0600
+
+    Fixed some more build issues.
+
+commit 128bbefc43656522853db39571e1c047cdf131c9
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Thu Mar 5 09:08:31 2009 -0600
+
+    Added a print_usage function in netcalc.c. Prep'd for 0.1 release.
+
+commit c55f2b85fc707690f4669ea8131bb26796765470
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Wed Mar 4 15:36:28 2009 -0600
+
+    Fixed the build system to include the math library if needed. Linux needs the -lm flag, Mac OS X doesn't.
+
+commit 0fd2caabe35b514e4ba3c7962966af48137b89c0
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Wed Mar 4 14:47:46 2009 -0600
+
+    Added an initialize_host function.
+
+commit 3b674b8c18854bbc7db01fc4c62dbfb8190b2a1c
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Wed Mar 4 14:45:31 2009 -0600
+
+    Fixed part of the build system.
+    
+    Added CLI argument processing. Getting the code ready for alpha release.
+
+commit 3f5405cc8de7db77847175d62993da7bc066cc19
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Tue Mar 3 15:34:57 2009 -0600
+
+    Working on getting netcalc to a deployable beta.
+
+commit 6c7335ffe33916ee2e9e366edfee6f706f7a641b
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Mon Mar 2 13:49:12 2009 -0600
+
+    Added the ability in the VLSM function for the tree to be built either to the right (high numbers = smaller subnets) or the the left (low numbers = smaller subnets).
+
+commit 9f67fd3ced845d68b527f8b8f03a9c4d9387f1e7
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Mon Mar 2 10:07:36 2009 -0600
+
+    Got the build_tree_vlsm working. Had to add a parent point to the network_tree struct. Testing function calls added to netcalc.c.
+
+commit 7fb24ae21717ba646bfa79395a2635c31c5982c8
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Feb 28 11:41:21 2009 -0600
+
+    Added more information to the readme file.
+
+commit 33b5b7f1a53088519cfb49ce84ca4b3c91e46205
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Feb 28 08:05:20 2009 -0600
+
+    Added GPL header to network_tree.c
+
+commit bdcb8e37dbe1a68c6e4edb8de499855e016f0e61
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Feb 28 07:59:45 2009 -0600
+
+    Added information into the AUTHORS, INSTALL, and README files.
+
+commit 07bcf52b9892c882609592931c35cf99c1f0cb4d
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Fri Feb 27 23:25:30 2009 -0600
+
+    Initial git commit
