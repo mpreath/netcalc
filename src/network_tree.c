@@ -44,7 +44,7 @@ int split_network(tnode *n1) {
 	h2.mask = extend_mask(n1->n.address.mask, 1);
 
 	/* create first network */
-	n1->left = (tnode *)malloc(sizeof(tnode));
+	n1->left = (tnode *)g_malloc(sizeof(tnode));
 	t1 = n1->left;
 	initialize_network(&t1->n, &h1);
 	t1->left = NULL;
@@ -52,7 +52,7 @@ int split_network(tnode *n1) {
 	t1->parent = n1;
 
 	/* create second network */
-	n1->right = (tnode *)malloc(sizeof(tnode));
+	n1->right = (tnode *)g_malloc(sizeof(tnode));
 	t2 = n1->right;
 	initialize_network(&t2->n, &h2);
 	t2->left = NULL;
@@ -204,7 +204,7 @@ tnode* combine_networks(tnode *s1, tnode *s2) {
 		
 		if(new_net1 == new_net2) {
 
-			t1 = (tnode *)malloc(sizeof(tnode));
+			t1 = (tnode *)g_malloc(sizeof(tnode));
 
 			initialize_network(&t1->n, &h1);
 			
@@ -237,6 +237,6 @@ void free_network_tree(tnode* t1) {
 		free_network_tree(t1->right);
 	}
 
-	free(t1);
+	g_free(t1);
 	
 }
