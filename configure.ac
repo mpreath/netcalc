@@ -21,6 +21,9 @@ AC_CHECK_HEADERS([stdlib.h string.h])
 AC_CHECK_HEADERS([math.h])
 AC_SEARCH_LIBS(cos,m)
 
+#AC_CHECK_HEADERS([glib.h])
+#AC_SEARCH_LIBS(g_free,glib-2.0)
+
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
