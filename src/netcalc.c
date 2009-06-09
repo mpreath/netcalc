@@ -191,13 +191,15 @@ void net_summary() {
 	/* populate the array with the networks from the input */
 	for(i = 0; scanf("%s %s", ip, mask) != EOF; i++) {
 		initialize_host(&h1, ip, mask);
-		networks[i] = malloc(sizeof(tnode));
+		networks[i] = g_malloc(sizeof(tnode));
 		initialize_network(&networks[i]->n, &h1);		
 		networks[i]->left = NULL;
 		networks[i]->right = NULL;
 		networks[i]->parent = NULL;
+		printf("Added network %s %s\n", ip, mask);
 	}
 
+	printf("%i\n", i);
 
 	int j;
 	int k;
@@ -216,7 +218,8 @@ void net_summary() {
 			/* compare each member for summarization*/
 			for(k = 0; k < i; k++) {
 
-				if((t1 = combine_networks(networks[j], networks[k])) != NULL) {
+				if((j != k) && (t1 = combine_networks(networks[j], networks[k])) != NULL) {
+					printf("Combined networks\n[%i:%i]\n", j,k);
 					networks[j] = NULL;
 					networks[k] = NULL;
 
