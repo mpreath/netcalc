@@ -124,7 +124,7 @@ void host_tree(char* ip_address, char* mask, int hosts) {
 
 	build_tree_host_count(t1, hosts);
 
-	print_network_tree(t1);
+	print_network_tree(t1, 0);
 
 	free_network_tree(t1);
 	
@@ -144,7 +144,7 @@ void net_tree(char* ip_address, char* mask, int nets) {
 
 	build_tree_net_count(t1, nets);
 
-	print_network_tree(t1);
+	print_network_tree(t1, 0);
 
 	free_network_tree(t1);
 
@@ -170,7 +170,7 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
 		build_tree_vlsm(t1, atoi(tok), 0);
 	}
 
-	print_network_tree(t1);
+	print_network_tree(t1, 0);
 
 	free_network_tree(t1);
 }
@@ -240,7 +240,7 @@ void net_summary() {
 
 	for(i = 0; i < MAX_NUM_TREES; i++) {
 		if(networks[i] != NULL) {
-			print_network_tree(networks[i]);
+			print_network_tree(networks[i], 0);
 			free_network_tree(networks[i]);
 		}
 	}

@@ -27,6 +27,7 @@ uname -v = #1 SMP Tue Nov 18 12:19:59 EST 2008
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
+PATH: /usr/kerberos/sbin
 PATH: /usr/lib/qt-3.3/bin
 PATH: /usr/kerberos/bin
 PATH: /usr/lib/ccache
@@ -219,7 +220,7 @@ configure:4571: result: yes
 configure:4586: checking for library containing cos
 configure:4627: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c:30: warning: conflicting types for built-in function 'cos'
-/tmp/cccxEQ9d.o: In function `main':
+/tmp/cc0FW21x.o: In function `main':
 /home/mpreath/Projects/netcalc/conftest.c:34: undefined reference to `cos'
 collect2: ld returned 1 exit status
 configure:4634: $? = 1

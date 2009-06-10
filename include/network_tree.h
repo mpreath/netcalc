@@ -33,7 +33,7 @@ typedef struct network_tree_node {
 
 int split_network(tnode *n1);
 
-void print_network_tree(tnode *n1);
+void print_network_tree(tnode *n1, int depth);
 
 void build_tree_net_count(tnode *t1, int nets);
 
