@@ -196,10 +196,10 @@ void net_summary() {
 		networks[i]->left = NULL;
 		networks[i]->right = NULL;
 		networks[i]->parent = NULL;
-		printf("Added network %s %s\n", ip, mask);
+	//	printf("Added network %s %s\n", ip, mask);
 	}
 
-	printf("%i\n", i);
+	//printf("%i\n", i);
 
 	int j;
 	int k;
@@ -219,7 +219,7 @@ void net_summary() {
 			for(k = 0; k < i; k++) {
 
 				if((j != k) && (t1 = combine_networks(networks[j], networks[k])) != NULL) {
-					printf("Combined networks\n[%i:%i]\n", j,k);
+	//				printf("Combined networks\n[%i:%i]\n", j,k);
 					networks[j] = NULL;
 					networks[k] = NULL;
 
