@@ -29,16 +29,43 @@ guint32 ddtoint(char* dd) {
 	ip = 0; 
 
 	guint32 octets[4];
+	
+	int i;
+	int j;
+	i = j = 0;
 	int octet = 0;
 	char *tok;
 	char *sep = ".";
 
 
+	// need to verify input size
+	// max string size = 255.255.255.255 = 15 characters
+
+	if(strlen(dd) > 15)
+		g_error("address length is too long");
+
 	/* replaced old code with a loop using strtok, much simpler */
-	for(tok = strtok(dd, sep); tok; tok = strtok(NULL,sep), octet++) {
-		octets[octet] = atoi(tok);
-		//printf("[%i]%s\n", octet, tok);
+	for(tok = strtok(dd, sep), i = 1; tok; tok = strtok(NULL,sep), octet++, i++) {
+		//printf("%i\n", strlen(tok));	
+		// verify that the input is numerical	
+		for(j = 0; j < strlen(tok); j++) {
+			if(!(tok[j] > 47 && tok[j] < 58))
+				g_error("address contains non-numeric values");
+		}
+
+		// verify input is the correct value, put in array
+		if((octets[octet] = atoi(tok)) > 255)
+			g_error("octet in address is too large (255 max)");
+	
+		
 	}
+
+	//printf("i=%i\n", i);
+
+	// verify our loop count, it tells us if we have an address 
+	// with less than 4 octets or more than 4 octets
+	if(i != 5)
+		g_error("address does not have the correct number of decimals");
 	
 
 
