@@ -58,6 +58,7 @@ int main(int argc, char* argv[]) {
 				vlsm_tree(argv[3], argv[4], argv[2]);
 				break;
 			case 's':
+				print_info();
 				net_summary();
 				break;
 			default:
@@ -71,13 +72,11 @@ int main(int argc, char* argv[]) {
 }
 
 void print_info() {
-/*
 	fprintf(stderr, "netcalc %s  Copyright (C) 2009  Matthew Reath\n", VERSION);
         fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
         fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
-        fprintf(stderr, "under certain circumstances. See the included LICENSE file\n");
-        fprintf(stderr, "for more information.\n");
-*/
+        fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
+        fprintf(stderr, "for more information.\n\n");
 }
 
 void print_usage() {
@@ -165,10 +164,17 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
 
 	initialize_network(&t1->n, &h1);
 
+	int j = 0;
 	char* tok;
 	char* sep = ",";
 
 	for(tok = strtok(nets, sep); tok; tok = strtok(NULL,sep)) {
+		//verify host counts are legit
+		for(j = 0; j < strlen(tok); j++) {
+                  	if(!(tok[j] > 47 && tok[j] < 58))
+                                  g_error("vlsm string contains non-numeric values    ");
+                 }
+
 		build_tree_vlsm(t1, atoi(tok), 0);
 	}
 
@@ -242,6 +248,7 @@ void net_summary() {
 
 	for(i = 0; i < MAX_NUM_TREES; i++) {
 		if(networks[i] != NULL) {
+			printf("Networks were summarized as follows:\n\n");
 			print_network_tree(networks[i], 0);
 			free_network_tree(networks[i]);
 		}
