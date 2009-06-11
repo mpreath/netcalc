@@ -151,6 +151,9 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 		} else {
 			build_tree_vlsm(t1->left, hosts, right);
 		}
+	}
+	else if(t1->n.host_count < hosts) {
+		g_error("the vlsm requirements are too great for this network");
 	} else {
 		/* ok, we are at the end point for our host count */
 
