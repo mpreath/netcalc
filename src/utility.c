@@ -65,7 +65,7 @@ guint32 ddtoint(char* dd) {
 	// verify our loop count, it tells us if we have an address 
 	// with less than 4 octets or more than 4 octets
 	if(i != 5)
-		g_error("address does not have the correct number of decimals");
+		g_error("address does not have the correct number of octets");
 	
 
 
