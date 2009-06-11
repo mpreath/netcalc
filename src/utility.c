@@ -30,9 +30,7 @@ guint32 ddtoint(char* dd) {
 
 	guint32 octets[4];
 	
-	int i;
-	int j;
-	i = j = 0;
+	int i = 0;
 	int octet = 0;
 	char *tok;
 	char *sep = ".";
@@ -48,10 +46,9 @@ guint32 ddtoint(char* dd) {
 	for(tok = strtok(dd, sep), i = 1; tok; tok = strtok(NULL,sep), octet++, i++) {
 		//printf("%i\n", strlen(tok));	
 		// verify that the input is numerical	
-		for(j = 0; j < strlen(tok); j++) {
-			if(!(tok[j] > 47 && tok[j] < 58))
-				g_error("address contains non-numeric values");
-		}
+	
+		if(!is_number(tok))
+			g_error("address contains non-numeric values");
 
 		// verify input is the correct value, put in array
 		if((octets[octet] = atoi(tok)) > 255)
@@ -119,4 +116,19 @@ int inttodd(char* dd, guint32 ip) {
 
 
 	return 1;
+}
+
+
+int is_number(char* s) {
+
+	int i;
+	int b = 1;
+
+	for(i = 0; i < strlen(s); i++) {
+		if(s[i] < 48 || s[i] > 57)
+			b = 0;	
+	}
+
+	return b;
+
 }

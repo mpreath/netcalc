@@ -164,16 +164,20 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
 
 	initialize_network(&t1->n, &h1);
 
-	int j = 0;
+	//int j = 0;
 	char* tok;
 	char* sep = ",";
 
 	for(tok = strtok(nets, sep); tok; tok = strtok(NULL,sep)) {
 		//verify host counts are legit
+		if(!is_number(tok))
+			g_error("vlsm string contains non-numeric values");
+		/*
 		for(j = 0; j < strlen(tok); j++) {
                   	if(!(tok[j] > 47 && tok[j] < 58))
                                   g_error("vlsm string contains non-numeric values    ");
                  }
+		*/
 
 		build_tree_vlsm(t1, atoi(tok), 0);
 	}

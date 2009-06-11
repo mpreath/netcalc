@@ -27,4 +27,7 @@ guint32 ddtoint(char* dd);
 /* integer to dotted decimal */
 int inttodd(char* dd, guint32 ip);
 
+/* check if a string is also numeric */
+int is_number(char* s);
+
 #endif
