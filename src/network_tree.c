@@ -165,33 +165,66 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 		} else {
 			/* we need to traverse up the tree */
 			if(right) {
-		
+				// are we a left child	
 				if(t1 == t1->parent->left) {
 					if(t1->parent->parent == NULL)
 						g_error("the vlsm requirements are too great for this network");
 
 					build_tree_vlsm(t1->parent->parent->left, hosts, right);	
 				}
-				else if(t1 != t1->parent->left)
+				//else if(t1 != t1->parent->left)
+				else /* or a right child */
 					build_tree_vlsm(t1->parent->left, hosts, right);
 
 			} else {
-
+				// our we a right child
 				if(t1 == t1->parent->right) {
+					// yes
 					if(t1->parent->parent == NULL)
 						g_error("the vlsm requirements are too great for this network");
-					build_tree_vlsm(t1->parent->parent->right, hosts, right);
+					
+
+
+					/* FAILED ATTEMPT AT FIXING A BUG	
+					if(t1->parent->parent->right = t1->parent) {
+						if(t1->parent->parent->parent == NULL)
+							g_error("the vlsm requirements are too great for this network");
+						else
+							build_tree_vlsm(t1->parent->parent->parent->right, hosts, right);
+					} 
+					else*/
+
+					// is our parent a right child
+					if(t1->parent == t1->parent->parent->right) {
+						// yes
+						/* DEBUGGING STUFF
+						char ip_address[16];
+						char mask[16];
+
+						inttodd(ip_address,t1->n.address.ip_address);
+						inttodd(mask,t1->n.address.mask);	
+						printf("%s %s\n", ip_address, mask);
+						printf("our parent is right\n");
+						*/
+						if(t1->parent->parent->parent == NULL)
+							//printf("our plan is impossible\n");
+							g_error("the vlsm requirements are too great for this network");
+						else {
+							build_tree_vlsm(t1->parent->parent->parent->right, hosts, right);		
+						}
+					} else {
+						// no
+						build_tree_vlsm(t1->parent->parent->right, hosts, right);
+					}
 				}
-				else if(t1 != t1->parent->right)
+				//else if(t1 != t1->parent->right)
+				else {
+					// no
 					build_tree_vlsm(t1->parent->right, hosts, right);
+				}
 			}
 		}
-
 	} 
-
-	
-		
-
 }
 
 void split_to_depth(tnode *t1, int depth, int target) {
