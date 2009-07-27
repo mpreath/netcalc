@@ -169,8 +169,19 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 				if(t1 == t1->parent->left) {
 					if(t1->parent->parent == NULL)
 						g_error("the vlsm requirements are too great for this network");
+					
 
-					build_tree_vlsm(t1->parent->parent->left, hosts, right);	
+
+					if(t1->parent == t1->parent->parent->left) {
+                                                
+						if(t1->parent->parent->parent == NULL)
+                                                        g_error("the vlsm requirements are too great for this network");
+                                                else {
+                                                        build_tree_vlsm(t1->parent->parent->parent->left, hosts, right);          
+                                                }
+					}
+					else
+						build_tree_vlsm(t1->parent->parent->left, hosts, right);	
 				}
 				//else if(t1 != t1->parent->left)
 				else /* or a right child */

@@ -39,6 +39,7 @@ void net_summary();
 
 int main(int argc, char* argv[]) {
 
+	/* we need to get rid of this and use real argument parsing */
 	if(argc == 3 && argv[1][0] != '-') {
 		print_info();
 		net_info(argv[1], argv[2]);
@@ -178,8 +179,8 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
                                   g_error("vlsm string contains non-numeric values    ");
                  }
 		*/
-
-		build_tree_vlsm(t1, atoi(tok), 0);
+		// we should have left and right as an option here, set by CLI flag
+		build_tree_vlsm(t1, atoi(tok), 1);
 	}
 
 	print_network_tree(t1, 0);
