@@ -63,10 +63,12 @@ int split_network(tnode *n1) {
 	return 1;
 }
 
-void print_network_tree(tnode *n1, int depth) {
+void print_network_tree(tnode *n1, int depth, gboolean verbose) {
 
 	char ip_address[16];
 	int num_of_bits;
+
+	if(verbose) {
 	//if(n1->left == NULL && n1->right == NULL) {
 
 		inttodd(ip_address, n1->n.address.ip_address);
@@ -85,10 +87,10 @@ void print_network_tree(tnode *n1, int depth) {
 	
 
 	*/
-	int i;
+		int i;
 
-	for(i = 0; i < depth; i++) {
-		printf(" |");
+		for(i = 0; i < depth; i++) {
+			printf(" |");
 
 		/*
 		if((i == depth-2) && (n1->left == NULL)) {
@@ -98,14 +100,25 @@ void print_network_tree(tnode *n1, int depth) {
 		}
 		*/
 			
+		}
+
+		printf("__%s/%u\n", ip_address, num_of_bits);
 	}
+	else
+	{
+		if(n1->left == NULL && n1->right == NULL) {
+			/* leaf */
+                	inttodd(ip_address, n1->n.address.ip_address);
+                	num_of_bits = get_bits_in_mask(n1->n.address.mask);
 
-	printf("__%s/%u\n", ip_address, num_of_bits);
+			printf("%s/%i\n", ip_address, num_of_bits);
+		}
 
+	}
 	if(n1->left != NULL)
-		print_network_tree(n1->left, depth+1);
+		print_network_tree(n1->left, depth+1, verbose);
 	if(n1->right != NULL)
-		print_network_tree(n1->right, depth+1);
+		print_network_tree(n1->right, depth+1, verbose);
 
 }
 
