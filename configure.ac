@@ -4,7 +4,7 @@
 AC_PREREQ(2.60)
 AC_INIT(netcalc, 0.5, mpreath at gmail dot com)
 AC_CONFIG_SRCDIR([src/netcalc.c])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([-Wall -Werror])
 AM_CONFIG_HEADER([config.h])
 
 # Checks for programs.

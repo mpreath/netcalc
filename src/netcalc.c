@@ -42,7 +42,7 @@ static gint do_host_count = 0;
 static gint do_net_count = 0;
 static gboolean do_summary = FALSE;
 static gboolean verbose = FALSE;
-static gboolean do_help = FALSE;
+//static gboolean do_help = FALSE;
 static GOptionEntry entries[]  =
 {
 	{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
@@ -269,7 +269,7 @@ void net_summary() {
 	
 
 	tnode* networks[MAX_NUM_TREES]; 
-	host h1,h2;
+	host h1;
 	char ip[16];
 	char mask[16];
 	int i;
