@@ -77,7 +77,9 @@ int main(int argc, char* argv[]) {
 	}	
 	
 
-	print_info();
+	if(verbose) {
+		print_info();
+	}
 
 	if(vlsm_counts) {
 		if(argc == 3)

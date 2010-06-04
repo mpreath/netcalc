@@ -124,6 +124,8 @@ int is_number(char* s) {
 	int i;
 	int b = 1;
 
+	/* ONLY WORKS FOR ASCII codes */
+
 	for(i = 0; i < strlen(s); i++) {
 		if(s[i] < 48 || s[i] > 57)
 			b = 0;	
@@ -131,4 +133,12 @@ int is_number(char* s) {
 
 	return b;
 
+}
+
+int is_valid_mask(guint32 mask) {
+	
+	/* how do we test this ? */
+	
+
+	
 }

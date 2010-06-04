@@ -50,6 +50,7 @@ int split_network(tnode *n1) {
 	t1->left = NULL;
 	t1->right = NULL;
 	t1->parent = n1;
+	t1->in_use = 0;
 
 	/* create second network */
 	n1->right = (tnode *)g_malloc(sizeof(tnode));
@@ -58,6 +59,7 @@ int split_network(tnode *n1) {
 	t2->left = NULL;
 	t2->right = NULL;
 	t2->parent = n1;
+	t2->in_use = 0;
 	
 
 	return 1;
@@ -70,6 +72,12 @@ void print_network_tree(tnode *n1, int depth, gboolean verbose) {
 
 	if(verbose) {
 	//if(n1->left == NULL && n1->right == NULL) {
+		if(depth == 0) {
+			printf("* = assigned network\n");
+			printf("[n] = # of useable hosts\n");
+			printf("+ = useable network\n\n");
+		}
+
 
 		inttodd(ip_address, n1->n.address.ip_address);
 		num_of_bits = get_bits_in_mask(n1->n.address.mask);
@@ -102,7 +110,12 @@ void print_network_tree(tnode *n1, int depth, gboolean verbose) {
 			
 		}
 
-		printf("__%s/%u\n", ip_address, num_of_bits);
+		printf("__%s/%u", ip_address, num_of_bits);
+		if(n1->in_use == 1)
+			printf("*[%i]", n1->n.host_count);
+		if(n1->left == NULL && n1->right == NULL)
+			printf("+");
+		printf("\n");
 	}
 	else
 	{
@@ -155,7 +168,8 @@ void build_tree_host_count(tnode *t1, int hosts) {
 
 void build_tree_vlsm(tnode *t1, int hosts, int right) {
 
-	if(t1->n.host_count/2 >= hosts) {
+
+	if(t1->n.host_count/2 > hosts) {
 		if(t1->left == NULL && t1->right == NULL)
 			split_network(t1);
 
@@ -173,6 +187,8 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 		/* make sure we are a leaf , and not in use*/
 
 		if(t1->left == NULL && t1->right == NULL && t1->in_use == 0) {
+			//printf("build_tree_vlsm: %i(%i)/%i\n", t1->n.host_count, t1->n.host_count/2, hosts);
+			
 			t1->in_use = 1;
 			return;
 		} else {
@@ -268,7 +284,7 @@ void split_to_depth(tnode *t1, int depth, int target) {
 
 tnode* combine_networks(tnode *s1, tnode *s2) {
 
-	guint32 new_net1, new_net2;;
+	guint32 new_net1, new_net2;
 	guint32 new_mask;
 	host h1, h2;
 
