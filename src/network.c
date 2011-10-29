@@ -34,6 +34,8 @@ int initialize_network(network* n, host* h) {
 
 	n->address.ip_address = get_network_address(h);
 	n->address.mask = h->mask;
+	
+	is_valid_mask(n->address.mask);
 
 	s = n->address.ip_address;
 	e = get_broadcast_address(&n->address);
@@ -64,6 +66,7 @@ int print_network_info(network* n) {
 	printf("Hosts:\t\t%i\n", n->host_count);
 	
 	inttodd(mask, n->address.mask);
+	
 
 	for(i = s+1; i < e; i++) {
 		inttodd(ip_address,i);

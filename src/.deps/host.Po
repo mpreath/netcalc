@@ -1,4 +1,4 @@
-network.o network.o: network.c ../include/network.h ../include/host.h \
+host.o host.o: host.c ../include/host.h \
   /opt/local/include/glib-2.0/glib.h \
   /opt/local/include/glib-2.0/glib/galloca.h \
   /opt/local/include/glib-2.0/glib/gtypes.h \
@@ -76,11 +76,7 @@ network.o network.o: network.c ../include/network.h ../include/host.h \
   /opt/local/include/glib-2.0/glib/gtree.h \
   /opt/local/include/glib-2.0/glib/gurifuncs.h \
   /opt/local/include/glib-2.0/glib/gvarianttype.h \
-  /opt/local/include/glib-2.0/glib/gvariant.h ../include/utility.h \
-  /usr/include/stdio.h /usr/include/secure/_stdio.h \
-  /usr/include/secure/_common.h
-
-../include/network.h:
+  /opt/local/include/glib-2.0/glib/gvariant.h ../include/utility.h
 
 ../include/host.h:
 
@@ -263,9 +259,3 @@ network.o network.o: network.c ../include/network.h ../include/host.h \
 /opt/local/include/glib-2.0/glib/gvariant.h:
 
 ../include/utility.h:
-
-/usr/include/stdio.h:
-
-/usr/include/secure/_stdio.h:
-
-/usr/include/secure/_common.h:

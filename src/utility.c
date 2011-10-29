@@ -18,6 +18,7 @@
 */
 
 #include <utility.h>
+#include <network.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,7 +65,6 @@ guint32 ddtoint(char* dd) {
 	if(i != 5)
 		g_error("address does not have the correct number of octets");
 	
-
 
 	//printf("Initial:\t %i\n", ip);
 
@@ -139,6 +139,28 @@ int is_valid_mask(guint32 mask) {
 	
 	/* how do we test this ? */
 	
+	/* 255.255.192.0 = 11111111.11111111.11000000.00000000 */
+	/* 255.224.0.0 = 11111111.11100000.00000000.00000000 */
+	//printf("mask value: %u\n", mask);
 
+	/* a subnet mask must have consective 1-bits starting high-order to lower-order */
+	/* can iterate through all possible subnet masks (32 of them) and verify that it is valid */
+	
+	int i;
+	int is_valid = 0;
+	for(i=1; i<=32; i++) {
+				
+		if(mask == get_mask_from_bits(i)) {
+			is_valid = 1;
+			continue;
+		}
+			
+				
+	}
+	
+	//printf("is valid?: %i\n", is_valid);
+	
+	return is_valid;
+	
 	
 }
