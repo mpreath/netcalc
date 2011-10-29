@@ -1,3 +1,144 @@
+commit 56db3e158aaf474481b33dfce1bb279be73d2728
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Oct 29 12:27:42 2011 -0500
+
+    Added an is_valid_mask() routine and tested.
+
+commit 894c64eacff72eb116d633dbe8b77d6f1a350b22
+Author: mpreath <mpreath@gmail.com>
+Date:   Fri Jun 4 15:12:39 2010 -0500
+
+    Updated version number to .6 and updated copyright year
+
+commit bc10654aa5f5df5700fff7ff9476384cc0ec99c8
+Author: mpreath <mpreath@gmail.com>
+Date:   Fri Jun 4 15:08:18 2010 -0500
+
+    Fixed a bug in the VLSM tree function, added in test script, and working on subnet mask format check.
+
+commit 176663209de102e010eb7666d240cfe71d9fe6cb
+Author: mpreath <mpreath@gmail.com>
+Date:   Fri Jun 4 08:30:45 2010 -0500
+
+    Adding a test script to verify correct operation of netcalc
+
+commit 9a566f307872fd33d45757fb6d0bba1213143b38
+Author: mpreath <mpreath@gmail.com>
+Date:   Thu Jun 3 07:43:01 2010 -0500
+
+    Cleaning up code to get rid of errors when compiling with -Wall
+
+commit b7051dc9b0c293bf8f48768c072132ebf8ccdc23
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Mon Jul 27 11:11:31 2009 -0500
+
+    Updated the command-line parsing to use GLib - GOption libraries. Much smoother CLI parsing now.
+
+commit 0e8eaa95d453fa578ed9622ff84e00e758646e99
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Mon Jul 27 07:29:52 2009 -0500
+
+    Added VLSM bug fixes to right tree networks.
+
+commit 644e8d526e75bfa700a52e4fae914804b6291712
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sun Jul 26 16:39:25 2009 -0500
+
+    Fixed a bug that occured when using the -v option and had more than 4 subnets with the same host count would cause an infinite loop.
+
+commit 3ec44f044a122221741820eede8791a5f38de895
+Author: mpreath <mpreath@gmail.com>
+Date:   Thu Jun 11 07:37:00 2009 -0500
+
+    Added an is_number() function to save on coding the input validation for various functions.
+
+commit 57015e6c7c73348f88d2863abf266c7d53f998a3
+Author: mpreath <mpreath@gmail.com>
+Date:   Thu Jun 11 06:57:32 2009 -0500
+
+    Fixed another VLSM bug. If host count is specified that the network can not handle an error will be issued rather than netcalc doing nothing.
+
+commit dc13225a46cd10a073fd6649a84723ba117ae15c
+Author: mpreath <mpreath@gmail.com>
+Date:   Wed Jun 10 22:09:47 2009 -0500
+
+    Fixed a VLSM tree bug resulting in seg faults if the VLSM requirements were too great for the root network.
+    
+    Updated version information to 0.5 and made program output more consistent.
+
+commit 3d6b6c88f247fef0081d86b823354b037e702e31
+Author: mpreath <mpreath@gmail.com>
+Date:   Wed Jun 10 21:12:44 2009 -0500
+
+    Finished the input validation for ddtoint()
+
+commit 68b3c7c980331ac8a66b810b49d2ec5d603bb51b
+Author: mpreath <mpreath@gmail.com>
+Date:   Wed Jun 10 21:08:00 2009 -0500
+
+    Worked on adding input verification to the dotted decimal to integer function.
+
+commit 0690a169a44f01c85ab7ede22d067ed0cf07cfa6
+Author: mpreath <mpreath@gmail.com>
+Date:   Wed Jun 10 20:18:14 2009 -0500
+
+    Added a file for testing the summarization option.
+    
+    Cleaned up some code in netcalc.c
+
+commit ce5ed46b7367dd5e001d522b585645d1d26a0029
+Author: mpreath <mpreath@gmail.com>
+Date:   Wed Jun 10 16:13:57 2009 -0500
+
+    ./netcalc -v 2,2,2,2,20 208.189.34.0 255.255.255.0
+    __208.189.34.0/24
+     |__208.189.34.0/25
+     | |__208.189.34.0/26
+     | | |__208.189.34.0/27
+     | | | |__208.189.34.0/28
+     | | | | |__208.189.34.0/29
+     | | | | | |__208.189.34.0/30
+     | | | | | |__208.189.34.4/30
+     | | | | |__208.189.34.8/29
+     | | | | | |__208.189.34.8/30
+     | | | | | |__208.189.34.12/30
+     | | | |__208.189.34.16/28
+     | | |__208.189.34.32/27
+     | |__208.189.34.64/26
+     |__208.189.34.128/25
+    
+    Pretty new tree structure for printing out subnet trees.
+
+commit 6d1dd9c1740542fbab0edbc3025147356e87c339
+Author: mpreath <mpreath@gmail.com>
+Date:   Tue Jun 9 22:38:30 2009 -0500
+
+    Updated the print_network_tree function to have better output.
+
+commit 09392b2f634d98dc3542bb3d0fb0a97850275d92
+Author: Matthew <mpreath@ryuk.localdomain>
+Date:   Mon Jun 8 21:41:51 2009 -0500
+
+    Found a malloc call that needed to converted to g_malloc. Fixed a bug in the network summarization logic.
+
+commit 6259bb50e70047ec52c1fc66a972995395b55fbf
+Author: Matthew <mpreath@ryuk.localdomain>
+Date:   Mon Jun 8 21:17:53 2009 -0500
+
+    Updated build environment to work on my GNU/Linux box. Will test on the macbook as well.
+
+commit 204708069032563e774046380267556547a1db9b
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Mon Jun 8 09:10:47 2009 -0500
+
+    In the process of updating the code to use g_malloc and g_free instead of malloc and free. More GLIB fun!
+
+commit 9e31a58d7643ff0f0fcd7e2c7b3def51b096b500
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sun Jun 7 15:26:06 2009 -0500
+
+    Updated ChangeLog using git log command.
+
 commit cc2a825f204788a8bf6a02b191e63eed6581f471
 Author: Matt Reath <mpreath@gmail.com>
 Date:   Sun Jun 7 12:19:52 2009 -0500
