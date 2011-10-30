@@ -2,7 +2,7 @@
     netcalc - a simple CLI subnet calculator written in ANSI C
     netcalc.c - main entry point into the netcalc application
 
-    Copyright (C) 2009  Matthew Reath 
+    Copyright (C) 2011  Matthew Reath 
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
 }
 
 void print_info() {
-	fprintf(stderr, "netcalc %s  Copyright (C) 2009  Matthew Reath\n", VERSION);
+	fprintf(stderr, "netcalc %s  Copyright (C) 2011  Matthew Reath\n", VERSION);
         fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
         fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
         fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
