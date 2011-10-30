@@ -1,3 +1,45 @@
+commit 200e05a66e24a692c9c6481d8fdc3dedd5acea8b
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Oct 29 20:11:08 2011 -0500
+
+    updated README with correct status of summarization
+
+commit b7ffbccb5ba20bf93c4185de49b73f837bdcdc22
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Oct 29 20:08:00 2011 -0500
+
+    Updated Copyright statements
+
+commit d2c267eccdf39000f3715f7246e2720821edc2d6
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Oct 29 20:01:38 2011 -0500
+
+    Updated version number to 0.7
+
+commit ccdb9addf03386e5a35f39085fae00638ebc7249
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Oct 29 12:38:42 2011 -0500
+
+    Removed binary
+
+commit 3c08ba2a690b524f9322db13848bfb8a4385fda9
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Oct 29 12:38:10 2011 -0500
+
+    Removed object files
+
+commit 3da3b792a9b6209885d11e3055c997cdd4bef7ec
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Oct 29 12:36:32 2011 -0500
+
+    Fixed subnet mask bug - only valid subnet masks will be accepted now
+
+commit d99843f7f6170eb6730ffe1690db0ed719be9a9c
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Sat Oct 29 12:29:38 2011 -0500
+
+    Updated ChangeLog with git log command
+
 commit 56db3e158aaf474481b33dfce1bb279be73d2728
 Author: Matt Reath <mpreath@gmail.com>
 Date:   Sat Oct 29 12:27:42 2011 -0500
