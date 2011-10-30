@@ -25,7 +25,7 @@ following features:
 	  different sizes (done)
 
 	- provided a list of subnets, it will try to summarize
-	  the subnets into one (or more) supernets if possible.
+	  the subnets into one (or more) supernets if possible. (done)
 
 netcalc uses bit shifting and mask operators to work with ip addresses
 in their actual 32 bit integer form. It converts from dotted decimal
