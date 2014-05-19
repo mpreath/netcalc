@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <glib.h>
 
-int initialize_network(network* n, host* h) {
+void initialize_network(network* n, host* h) {
 
 	guint32 t1, t2;
 
@@ -42,7 +42,6 @@ int initialize_network(network* n, host* h) {
 
 	n->host_count = (e - s) - 1;
 
-	return 1;
 }
 
 int print_network_info(network* n) {

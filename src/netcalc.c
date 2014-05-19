@@ -100,6 +100,11 @@ int main(int argc, char* argv[]) {
 
 		if(argc == 3)
 			net_info(argv[argc-2],argv[argc-1]);
+		else {
+			print_info();
+			print_usage();
+		}
+			
 	}
 
 	/* we need to get rid of this and use real argument parsing */
@@ -138,7 +143,7 @@ int main(int argc, char* argv[]) {
 }
 
 void print_info() {
-	fprintf(stderr, "netcalc %s  Copyright (C) 2011  Matthew Reath\n", VERSION);
+	fprintf(stderr, "netcalc %s  Copyright (C) 2014  Matthew Reath\n", VERSION);
         fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
         fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
         fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
@@ -150,14 +155,14 @@ void print_usage() {
 	fprintf(stderr, "netcalc <address> <mask>\n");
 	fprintf(stderr, "netcalc -h <host count> <address> <mask>\n");
 	fprintf(stderr, "netcalc -n <network count> <address> <mask>\n");
-	fprintf(stderr, "netcalc -v <host list> <address> <mask>\n");
+	fprintf(stderr, "netcalc -l <host list> <address> <mask>\n");
 	fprintf(stderr, "netcalc -s\n\n");
 
 	fprintf(stderr, "Examples:\n\n");
 	fprintf(stderr, "netcalc 192.168.2.10 255.255.255.252\n");
 	fprintf(stderr, "netcalc -h 50 192.168.2.0 255.255.255.0\n");
 	fprintf(stderr, "netcalc -n 8 192.168.2.0 255.255.255.0\n");
-	fprintf(stderr, "netcalc -v 2,2,2,50,50 192.168.2.0 255.255.255.0\n");
+	fprintf(stderr, "netcalc -l 2,2,2,50,50 192.168.2.0 255.255.255.0\n");
 	fprintf(stderr, "netcalc -s < network_list.txt\n");
 	
 
