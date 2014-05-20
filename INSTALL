@@ -1,5 +1,5 @@
-
-
+autoreconf
+automake --add-missing
 ./configure
 make
 make install

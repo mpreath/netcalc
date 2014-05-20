@@ -158,13 +158,14 @@ void print_usage() {
 	fprintf(stderr, "netcalc -l <host list> <address> <mask>\n");
 	fprintf(stderr, "netcalc -s\n\n");
 
-	fprintf(stderr, "Examples:\n\n");
-	fprintf(stderr, "netcalc 192.168.2.10 255.255.255.252\n");
-	fprintf(stderr, "netcalc -h 50 192.168.2.0 255.255.255.0\n");
-	fprintf(stderr, "netcalc -n 8 192.168.2.0 255.255.255.0\n");
-	fprintf(stderr, "netcalc -l 2,2,2,50,50 192.168.2.0 255.255.255.0\n");
-	fprintf(stderr, "netcalc -s < network_list.txt\n");
-	
+	if(verbose) {
+		fprintf(stderr, "Examples:\n\n");
+		fprintf(stderr, "netcalc 192.168.2.10 255.255.255.252\n");
+		fprintf(stderr, "netcalc -h 50 192.168.2.0 255.255.255.0\n");
+		fprintf(stderr, "netcalc -n 8 192.168.2.0 255.255.255.0\n");
+		fprintf(stderr, "netcalc -l 2,2,2,50,50 192.168.2.0 255.255.255.0\n");
+		fprintf(stderr, "netcalc -s < network_list.txt\n");
+	}
 
 }
 
