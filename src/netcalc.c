@@ -107,38 +107,6 @@ int main(int argc, char* argv[]) {
 			
 	}
 
-	/* we need to get rid of this and use real argument parsing */
-	/*
-	if(argc == 3 && argv[1][0] != '-') {
-		print_info();
-		net_info(argv[1], argv[2]);
-	} else if(argc > 1 && argv[1][0] == '-') {
-		switch(argv[1][1]) {
-		
-			case 'h':
-				print_info();
-				host_tree(argv[3], argv[4], atoi(argv[2]));
-				break;
-			case 'n':
-				print_info();
-				net_tree(argv[3], argv[4], atoi(argv[2]));
-				break;
-			case 'v':
-				print_info();
-				vlsm_tree(argv[3], argv[4], argv[2]);
-				break;
-			case 's':
-				print_info();
-				net_summary();
-				break;
-			default:
-				print_usage();
-		}	
-	} else {
-		print_usage();
-	}
-	*/
-
 	return 0;
 }
 
@@ -258,13 +226,9 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
 		//verify host counts are legit
 		if(!is_number(tok))
 			g_error("vlsm string contains non-numeric values");
-		/*
-		for(j = 0; j < strlen(tok); j++) {
-                  	if(!(tok[j] > 47 && tok[j] < 58))
-                                  g_error("vlsm string contains non-numeric values    ");
-                 }
-		*/
+	
 		// we should have left and right as an option here, set by CLI flag
+		// default is left
 		build_tree_vlsm(t1, atoi(tok), 0);
 	}
 
