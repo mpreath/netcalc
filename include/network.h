@@ -28,7 +28,7 @@
 typedef struct network_struct {
 
 	host address;
-	guint32 host_count;
+	guint32 host_count; /*only used for v4, v6 uses 64-bit hosts */
 	
 } network;
 

@@ -48,7 +48,7 @@ static GOptionEntry entries[]  =
 	{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 	"Use verbose output", NULL },
 	{ "hosts", 'h', 0, G_OPTION_ARG_INT, &do_host_count,
-	"Specify the host count to use to subnet the network",
+	"Specify the host count to use to subnet the network [IPv4 only]",
 	"HOSTS"},
 	{ "nets", 'n', 0, G_OPTION_ARG_INT, &do_net_count,
 	"Specify the net count to use to subnet the network",
@@ -78,7 +78,8 @@ int main(int argc, char* argv[]) {
 	
 
 	if(verbose) {
-		print_info();
+		if(argc != 1)
+			print_info();
 	}
 
 	if(vlsm_counts) {
@@ -132,7 +133,7 @@ void print_usage() {
 		fprintf(stderr, "netcalc -h 50 192.168.2.0 255.255.255.0\n");
 		fprintf(stderr, "netcalc -n 8 192.168.2.0 255.255.255.0\n");
 		fprintf(stderr, "netcalc -l 2,2,2,50,50 192.168.2.0 255.255.255.0\n");
-		fprintf(stderr, "netcalc -s < network_list.txt\n");
+		fprintf(stderr, "netcalc -s < network_list.txt OR \nnetcalc -s\n192.168.1.0 255.255.255.128\n192.168.1.128 255.255.255.128\n^D\n");
 	}
 
 }
