@@ -1,5 +1,8 @@
 netcalc  Copyright (C) 2011  Matthew Reath
 
+Overview
+========
+
 netcalc is an advanced CLI-based network subnetting tool. It provides the
 following features:
 
@@ -35,3 +38,162 @@ values.
 netcalc also uses a binary tree structure to subnet networks by 
 extending the mask by one bit and create two new networks as a nodes
 left and right child. Left is the lower half, right the upper half.
+
+Compiling/Installing
+====================
+
+autoreconf
+automake --add-missing
+./configure
+make
+make install
+
+Usage
+=====
+
+netcalc --help
+Usage:
+  netcalc [OPTION...] [ip_address] [mask] - calculate network information
+
+Help Options:
+  -?, --help               Show help options
+
+Application Options:
+  -v, --verbose            Use verbose output
+  -h, --hosts=HOSTS        Specify the host count to use to subnet the network [IPv4 only]
+  -n, --nets=NETS          Specify the net count to use to subnet the network
+  -l, --vlsm=VLSM_LIST     Comma seperated list of host count requirements for VLSM network
+  -s, --summary            Summarize a list of subnets into a one or more supernets
+
+Basic network information
+=========================
+
+netcalc -v 10.1.1.0 255.255.255.252
+netcalc 0.8  Copyright (C) 2014  Matthew Reath
+This program comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain circumstances. See the included COPYING file
+for more information.
+
+Network:	10.1.1.0
+Broadcast:	10.1.1.3
+Mask:		255.255.255.252[/30]
+Hosts:		2
+10.1.1.1	255.255.255.252
+10.1.1.2	255.255.255.252
+
+Subnet a network based on hosts needed per subnet
+=================================================
+50 hosts per subnet needed, starting with 10.1.1.0/24
+
+netcalc -v -h 50 10.1.1.0 255.255.255.0
+netcalc 0.8  Copyright (C) 2014  Matthew Reath
+This program comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain circumstances. See the included COPYING file
+for more information.
+
+* = assigned network
+[n] = # of useable hosts
++ = useable network
+
+__10.1.1.0/24
+ |__10.1.1.0/25
+ | |__10.1.1.0/26*[62]+
+ | |__10.1.1.64/26*[62]+
+ |__10.1.1.128/25
+ | |__10.1.1.128/26*[62]+
+ | |__10.1.1.192/26*[62]+
+ 
+ Subnet a network based on the number of networks needed
+ =======================================================
+ 8 networks needed, starting with 10.1.1.0/24
+ 
+ netcalc -v -n 8 10.1.1.0 255.255.255.0
+ netcalc 0.8  Copyright (C) 2014  Matthew Reath
+ This program comes with ABSOLUTELY NO WARRANTY;
+ This is free software, and you are welcome to redistribute it
+ under certain circumstances. See the included COPYING file
+ for more information.
+
+ * = assigned network
+ [n] = # of useable hosts
+ + = useable network
+
+ __10.1.1.0/24
+  |__10.1.1.0/25
+  | |__10.1.1.0/26
+  | | |__10.1.1.0/27*[30]+
+  | | |__10.1.1.32/27*[30]+
+  | |__10.1.1.64/26
+  | | |__10.1.1.64/27*[30]+
+  | | |__10.1.1.96/27*[30]+
+  |__10.1.1.128/25
+  | |__10.1.1.128/26
+  | | |__10.1.1.128/27*[30]+
+  | | |__10.1.1.160/27*[30]+
+  | |__10.1.1.192/26
+  | | |__10.1.1.192/27*[30]+
+  | | |__10.1.1.224/27*[30]+
+  
+  Subnet a network using VLSM
+  ===========================
+  2 - 2 host networks needed (point-to-point links)
+  2 - 50 host networks needed
+  Start with 10.1.1.0/24
+  
+  netcalc -v -l 2,2,50,50 10.1.1.0 255.255.255.0
+  netcalc 0.8  Copyright (C) 2014  Matthew Reath
+  This program comes with ABSOLUTELY NO WARRANTY;
+  This is free software, and you are welcome to redistribute it
+  under certain circumstances. See the included COPYING file
+  for more information.
+
+  * = assigned network
+  [n] = # of useable hosts
+  + = useable network
+
+  __10.1.1.0/24
+   |__10.1.1.0/25
+   | |__10.1.1.0/26
+   | | |__10.1.1.0/27
+   | | | |__10.1.1.0/28
+   | | | | |__10.1.1.0/29
+   | | | | | |__10.1.1.0/30*[2]+
+   | | | | | |__10.1.1.4/30*[2]+
+   | | | | |__10.1.1.8/29+
+   | | | |__10.1.1.16/28+
+   | | |__10.1.1.32/27+
+   | |__10.1.1.64/26*[62]+
+   |__10.1.1.128/25
+   | |__10.1.1.128/26*[62]+
+   | |__10.1.1.192/26+
+  
+  Supernet/summarize a set of networks
+  ====================================
+
+  more test.txt
+  192.168.0.0 255.255.255.128
+  192.168.0.128 255.255.255.128
+  192.168.1.0 255.255.255.0
+  192.168.2.0 255.255.255.0
+  192.168.3.0 255.255.255.0
+
+  
+  netcalc -vs < test.txt
+  Networks were summarized as follows:
+
+  * = assigned network
+  [n] = # of useable hosts
+  + = useable network
+
+  __192.168.0.0/22
+   |__192.168.0.0/23
+   | |__192.168.0.0/24
+   | | |__192.168.0.0/25+
+   | | |__192.168.0.128/25+
+   | |__192.168.1.0/24+
+   |__192.168.2.0/23
+   | |__192.168.2.0/24+
+   | |__192.168.3.0/24+
+  
