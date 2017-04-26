@@ -120,7 +120,7 @@ guint32 extend_mask(guint32 mask, int bits) {
 	new_mask = mask;
 	m = 1;
 	m = m << 31;
-	// shit to the right one bit, then set the high order bit to 1
+	// shift to the right one bit, then set the high order bit to 1
 	for(i = 0; i < bits; i++) {
 		new_mask = new_mask >> 1;
 		new_mask = new_mask | m;
