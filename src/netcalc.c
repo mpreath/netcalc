@@ -38,6 +38,8 @@ void vlsm_tree(char* ip_address, char* mask, char* nets);
 void net_summary();
 
 static char* vlsm_counts = NULL;
+static char* ip_address = NULL;
+static char* netmask = NULL;
 static gint do_host_count = 0;
 static gint do_net_count = 0;
 static gboolean do_summary = FALSE;
@@ -59,6 +61,12 @@ static GOptionEntry entries[]  =
 	{ "summary", 's', 0, G_OPTION_ARG_NONE, &do_summary,
 	"Summarize a list of subnets into a one or more supernets",
 	NULL},
+	{ "ip-address", 'i', 0, G_OPTION_ARG_STRING, &ip_address,
+	"Specific the IPv4 Address to use for calculation", 
+	NULL },
+	{ "netmask", 'm', 0, G_OPTION_ARG_STRING, &netmask,
+	"Specific the IPv4 Network Mask to use for calculation", 
+	NULL },
 	{ NULL }
 };
 
@@ -68,30 +76,37 @@ int main(int argc, char* argv[]) {
 
 	GError *error = NULL;
 	GOptionContext *context;
-	context = g_option_context_new ("[ip_address] [mask] - calculate network information");
+	context = g_option_context_new ("- calculate network information");
 	g_option_context_add_main_entries (context, entries, NULL);
 	//g_option_context_add_group (context, glib_get_option_group (TRUE));
 	if(!g_option_context_parse(context, &argc, &argv, &error))
 	{
 		g_print("option parsing failed: %s\n", error->message);
+		exit(1);
 	}	
 	
 
 	if(verbose) {
-		if(argc != 1)
-			print_info();
+		print_info();
 	}
 
 	if(vlsm_counts) {
-		if(argc == 3)
-			vlsm_tree(argv[argc-2],argv[argc-1],vlsm_counts);
+		if(ip_address && netmask)
+			vlsm_tree(ip_address,netmask,vlsm_counts);
+		else
+			g_print("no ip address or netmask specified, use -? for usage information\n");
 	}
 	else if(do_host_count) {
-		if(argc == 3)
-			host_tree(argv[argc-2],argv[argc-1],do_host_count);
+		if(ip_address && netmask)
+			host_tree(ip_address,netmask,do_host_count);
+		else
+			g_print("no ip address or netmask specified, use -? for usage information\n");
 	}
 	else if(do_net_count) {
-			net_tree(argv[argc-2],argv[argc-1],do_net_count);
+		if(ip_address && netmask)
+			net_tree(ip_address,netmask,do_net_count);
+		else
+			g_print("no ip address or netmask specified, use -? for usage information\n");
 	}
 	else if(do_summary) {
 		net_summary();
@@ -99,12 +114,10 @@ int main(int argc, char* argv[]) {
 	else 
 	{
 
-		if(argc == 3)
-			net_info(argv[argc-2],argv[argc-1]);
-		else {
-			print_info();
-			print_usage();
-		}
+		if(ip_address && netmask)
+			net_info(ip_address,netmask);
+		else
+			g_print("no ip address or netmask specified, use -? for usage information\n");
 			
 	}
 
@@ -117,25 +130,6 @@ void print_info() {
         fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
         fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
         fprintf(stderr, "for more information.\n\n");
-}
-
-void print_usage() {
-	fprintf(stderr, "netcalc %s usage:\n\n", VERSION);
-	fprintf(stderr, "netcalc <address> <mask>\n");
-	fprintf(stderr, "netcalc -h <host count> <address> <mask>\n");
-	fprintf(stderr, "netcalc -n <network count> <address> <mask>\n");
-	fprintf(stderr, "netcalc -l <host list> <address> <mask>\n");
-	fprintf(stderr, "netcalc -s\n\n");
-
-	if(verbose) {
-		fprintf(stderr, "Examples:\n\n");
-		fprintf(stderr, "netcalc 192.168.2.10 255.255.255.252\n");
-		fprintf(stderr, "netcalc -h 50 192.168.2.0 255.255.255.0\n");
-		fprintf(stderr, "netcalc -n 8 192.168.2.0 255.255.255.0\n");
-		fprintf(stderr, "netcalc -l 2,2,2,50,50 192.168.2.0 255.255.255.0\n");
-		fprintf(stderr, "netcalc -s < network_list.txt OR \nnetcalc -s\n192.168.1.0 255.255.255.128\n192.168.1.128 255.255.255.128\n^D\n");
-	}
-
 }
 
 void net_info(char* ip_address, char* mask) {
