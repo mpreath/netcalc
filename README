@@ -53,7 +53,7 @@ Usage
 
 netcalc --help
 Usage:
-  netcalc [OPTION...] [ip_address] [mask] - calculate network information
+  netcalc [OPTION?] - calculate network information
 
 Help Options:
   -?, --help               Show help options
@@ -64,30 +64,33 @@ Application Options:
   -n, --nets=NETS          Specify the net count to use to subnet the network
   -l, --vlsm=VLSM_LIST     Comma seperated list of host count requirements for VLSM network
   -s, --summary            Summarize a list of subnets into a one or more supernets
+  -i, --ip-address         Specific the IPv4 Address to use for calculation
+  -m, --netmask            Specific the IPv4 Network Mask to use for calculation
+
 
 Basic network information
 =========================
 
-netcalc -v 10.1.1.0 255.255.255.252
-netcalc 0.8  Copyright (C) 2014  Matthew Reath
+netcalc -v -i 10.1.1.0 -m 255.255.255.252
+netcalc 0.8  Copyright (C) 2017 Matt Reath
 This program comes with ABSOLUTELY NO WARRANTY;
 This is free software, and you are welcome to redistribute it
 under certain circumstances. See the included COPYING file
 for more information.
 
-Network:	10.1.1.0
-Broadcast:	10.1.1.3
-Mask:		255.255.255.252[/30]
-Hosts:		2
-10.1.1.1	255.255.255.252
-10.1.1.2	255.255.255.252
+Network:  10.1.1.0
+Broadcast:  10.1.1.3
+Mask:   255.255.255.252[/30]
+Hosts:    2
+10.1.1.1  255.255.255.252
+10.1.1.2  255.255.255.252
 
 Subnet a network based on hosts needed per subnet
 =================================================
 50 hosts per subnet needed, starting with 10.1.1.0/24
 
-netcalc -v -h 50 10.1.1.0 255.255.255.0
-netcalc 0.8  Copyright (C) 2014  Matthew Reath
+netcalc -v -h 50 -i 10.1.1.0 -m 255.255.255.0
+netcalc 0.8  Copyright (C) 2017 Matt Reath
 This program comes with ABSOLUTELY NO WARRANTY;
 This is free software, and you are welcome to redistribute it
 under certain circumstances. See the included COPYING file
@@ -109,32 +112,32 @@ __10.1.1.0/24
  =======================================================
  8 networks needed, starting with 10.1.1.0/24
  
- netcalc -v -n 8 10.1.1.0 255.255.255.0
- netcalc 0.8  Copyright (C) 2014  Matthew Reath
- This program comes with ABSOLUTELY NO WARRANTY;
- This is free software, and you are welcome to redistribute it
- under certain circumstances. See the included COPYING file
- for more information.
-
- * = assigned network
- [n] = # of useable hosts
- + = useable network
-
- __10.1.1.0/24
-  |__10.1.1.0/25
-  | |__10.1.1.0/26
-  | | |__10.1.1.0/27*[30]+
-  | | |__10.1.1.32/27*[30]+
-  | |__10.1.1.64/26
-  | | |__10.1.1.64/27*[30]+
-  | | |__10.1.1.96/27*[30]+
-  |__10.1.1.128/25
-  | |__10.1.1.128/26
-  | | |__10.1.1.128/27*[30]+
-  | | |__10.1.1.160/27*[30]+
-  | |__10.1.1.192/26
-  | | |__10.1.1.192/27*[30]+
-  | | |__10.1.1.224/27*[30]+
+  netcalc -v -n 8 -i 10.1.1.0 -m 255.255.255.0
+  netcalc 0.8  Copyright (C) 2017 Matt Reath
+  This program comes with ABSOLUTELY NO WARRANTY;
+  This is free software, and you are welcome to redistribute it
+  under certain circumstances. See the included COPYING file
+  for more information.
+  
+  * = assigned network
+  [n] = # of useable hosts
+  + = useable network
+  
+  __10.1.1.0/24
+   |__10.1.1.0/25
+   | |__10.1.1.0/26
+   | | |__10.1.1.0/27*[30]+
+   | | |__10.1.1.32/27*[30]+
+   | |__10.1.1.64/26
+   | | |__10.1.1.64/27*[30]+
+   | | |__10.1.1.96/27*[30]+
+   |__10.1.1.128/25
+   | |__10.1.1.128/26
+   | | |__10.1.1.128/27*[30]+
+   | | |__10.1.1.160/27*[30]+
+   | |__10.1.1.192/26
+   | | |__10.1.1.192/27*[30]+
+   | | |__10.1.1.224/27*[30]+
   
   Subnet a network using VLSM
   ===========================
@@ -142,17 +145,17 @@ __10.1.1.0/24
   2 - 50 host networks needed
   Start with 10.1.1.0/24
   
-  netcalc -v -l 2,2,50,50 10.1.1.0 255.255.255.0
-  netcalc 0.8  Copyright (C) 2014  Matthew Reath
+  netcalc -v -l 2,2,50,50 -i 10.1.1.0 -m 255.255.255.0
+  netcalc 0.8  Copyright (C) 2017 Matt Reath
   This program comes with ABSOLUTELY NO WARRANTY;
   This is free software, and you are welcome to redistribute it
   under certain circumstances. See the included COPYING file
   for more information.
-
+  
   * = assigned network
   [n] = # of useable hosts
   + = useable network
-
+  
   __10.1.1.0/24
    |__10.1.1.0/25
    | |__10.1.1.0/26
