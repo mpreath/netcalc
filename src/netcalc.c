@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
 }
 
 void print_info() {
-	fprintf(stderr, "netcalc %s  Copyright (C) 2014  Matthew Reath\n", VERSION);
+	fprintf(stderr, "netcalc %s  Copyright (C) 2017 Matt Reath\n", VERSION);
         fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
         fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
         fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
@@ -141,13 +141,10 @@ void print_usage() {
 void net_info(char* ip_address, char* mask) {
 
 	host h1;
-
-	initialize_host(&h1, ip_address, mask);
-
 	network n1;
 
+	initialize_host(&h1, ip_address, mask);
 	initialize_network(&n1, &h1);
-
 	print_network_info(&n1);
 
 }

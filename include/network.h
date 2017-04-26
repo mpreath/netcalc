@@ -33,7 +33,7 @@ typedef struct network_struct {
 } network;
 
 /* initialize network */
-void initiaize_network(network* n, host* h);
+void initialize_network(network* n, host* h);
 
 int print_network_info(network* n);
 
