@@ -126,10 +126,10 @@ int main(int argc, char* argv[]) {
 
 void print_info() {
 	fprintf(stderr, "netcalc %s  Copyright (C) 2017 Matt Reath\n", VERSION);
-        fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
-        fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
-        fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
-        fprintf(stderr, "for more information.\n\n");
+    fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
+    fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
+    fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
+    fprintf(stderr, "for more information.\n\n");
 }
 
 void net_info(char* ip_address, char* mask) {
@@ -146,10 +146,9 @@ void net_info(char* ip_address, char* mask) {
 void host_tree(char* ip_address, char* mask, int hosts) {
 
 	host h1;
+	tnode* t1;
 
 	initialize_host(&h1, ip_address, mask);
-
-	tnode* t1;
 
 	t1 = (tnode *) malloc(sizeof(tnode));
 
@@ -158,11 +157,8 @@ void host_tree(char* ip_address, char* mask, int hosts) {
 	t1->parent = NULL;
 
 	initialize_network(&t1->n, &h1);
-
 	build_tree_host_count(t1, hosts);
-
 	print_network_tree(t1, 0, verbose);
-
 	free_network_tree(t1);
 	
 }
@@ -170,10 +166,9 @@ void host_tree(char* ip_address, char* mask, int hosts) {
 void net_tree(char* ip_address, char* mask, int nets) {
 
 	host h1;
+	tnode* t1;
 
 	initialize_host(&h1, ip_address, mask);
-
-	tnode* t1;
 
 	t1 = (tnode *) malloc(sizeof(tnode));
 
@@ -182,11 +177,8 @@ void net_tree(char* ip_address, char* mask, int nets) {
 	t1->parent = NULL;
 
 	initialize_network(&t1->n, &h1);
-
 	build_tree_net_count(t1, nets);
-
 	print_network_tree(t1, 0, verbose);
-
 	free_network_tree(t1);
 
 
@@ -195,11 +187,9 @@ void net_tree(char* ip_address, char* mask, int nets) {
 void vlsm_tree(char* ip_address, char* mask, char* nets) {
 
 	host h1;
-
+	tnode *t1;
 
 	initialize_host(&h1, ip_address, mask);
-
-	tnode *t1;
 
 	t1 = (tnode *) malloc(sizeof(tnode));
 
@@ -213,7 +203,6 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
 	char* tok;
 	char* sep = ",";
 	
-	
 	for(tok = strtok(nets, sep); tok; tok = strtok(NULL,sep)) {
 		//verify host counts are legit
 		if(!is_number(tok))
@@ -225,7 +214,6 @@ void vlsm_tree(char* ip_address, char* mask, char* nets) {
 	}
 
 	print_network_tree(t1, 0, verbose);
-
 	free_network_tree(t1);
 }
 
@@ -237,6 +225,11 @@ void net_summary() {
 	char ip[16];
 	char mask[16];
 	int i;
+	int j;
+	int k;
+	int l;
+	tnode *t1;
+	int made_changes = 1;
 
 	/* initialize the nodes to NULL */
 	for(i = 0; i < MAX_NUM_TREES; i++)
@@ -254,21 +247,14 @@ void net_summary() {
 	}
 
 	//printf("%i\n", i);
-
-	int j;
-	int k;
-	int l;
-	tnode *t1;
-	int made_changes = 1;
+	
 
 	/* loop until there are no summarization left to do */
 	while(made_changes) {
 
 		made_changes = 0;
-	
 		/* loop through each member */
 		for(j = 0; j < i; j++) {
-
 			/* compare each member for summarization*/
 			for(k = 0; k < i; k++) {
 
@@ -281,8 +267,6 @@ void net_summary() {
 						;
 
 					networks[l] = t1;
-				
-				
 					made_changes = 1;
 				
 				}
