@@ -164,7 +164,7 @@ void build_tree_host_count(tnode *t1, int hosts) {
 
 	printf("%i,%i\n", bdepth, tdepth);
 	//split_to_depth(t1, bdepth, tdepth); 
-	split_to_depth_test(t1, hosts);
+	split_to_depth_hc(t1, hosts);
 }
 
 void build_tree_vlsm(tnode *t1, int hosts, int right) {
@@ -268,7 +268,7 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 	} 
 }
 
-void split_to_depth_test(tnode *t1, int usable_hosts) {
+void split_to_depth_hc(tnode *t1, int usable_hosts) {
 	// example usable hosts = 8 14+2/2 = 8 8-2 = 6
 	// n.host_count 254,126,62,30,14,6,2
 
@@ -282,8 +282,8 @@ void split_to_depth_test(tnode *t1, int usable_hosts) {
 
 	split_network(t1);
 	
-	split_to_depth_test(t1->left, usable_hosts);
-	split_to_depth_test(t1->right, usable_hosts);
+	split_to_depth_hc(t1->left, usable_hosts);
+	split_to_depth_hc(t1->right, usable_hosts);
 
 }
 
