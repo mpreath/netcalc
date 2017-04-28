@@ -37,6 +37,8 @@ void print_network_tree(tnode *n1, int depth, gboolean verbose);
 
 void build_tree_net_count(tnode *t1, int nets);
 
+void split_to_depth_test(tnode *t1, int usable_hosts);
+
 void split_to_depth(tnode *t1, int depth, int target);
 
 void build_tree_host_count(tnode *t1, int hosts);

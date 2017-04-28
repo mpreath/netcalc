@@ -160,10 +160,11 @@ void build_tree_host_count(tnode *t1, int hosts) {
 	val = ceil(val);
 	
 	bdepth = get_bits_in_mask(t1->n.address.mask);
-	
 	tdepth = 32 - val;
 
-	split_to_depth(t1, bdepth, tdepth);  
+	printf("%i,%i\n", bdepth, tdepth);
+	//split_to_depth(t1, bdepth, tdepth); 
+	split_to_depth_test(t1, hosts);
 }
 
 void build_tree_vlsm(tnode *t1, int hosts, int right) {
@@ -265,6 +266,25 @@ void build_tree_vlsm(tnode *t1, int hosts, int right) {
 			}
 		}
 	} 
+}
+
+void split_to_depth_test(tnode *t1, int usable_hosts) {
+	// example usable hosts = 8 14+2/2 = 8 8-2 = 6
+	// n.host_count 254,126,62,30,14,6,2
+
+
+	//printf("usable hosts: %i", t1->n.host_count);
+	//if((t1->left != NULL) && (t1->left->n.host_count < usable_hosts)) {
+	if((((t1->n.host_count+2)/2)-2) < usable_hosts) {
+		t1->in_use = 1;		
+		return;
+	}
+
+	split_network(t1);
+	
+	split_to_depth_test(t1->left, usable_hosts);
+	split_to_depth_test(t1->right, usable_hosts);
+
 }
 
 void split_to_depth(tnode *t1, int depth, int target) {
