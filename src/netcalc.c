@@ -94,19 +94,19 @@ int main(int argc, char* argv[]) {
 		if(ip_address && netmask)
 			vlsm_tree(ip_address,netmask,vlsm_counts);
 		else
-			g_print("no ip address or netmask specified, use -? for usage information\n");
+			g_print("no ip address or netmask specified, use --help for usage information\n");
 	}
 	else if(do_host_count) {
 		if(ip_address && netmask)
 			host_tree(ip_address,netmask,do_host_count);
 		else
-			g_print("no ip address or netmask specified, use -? for usage information\n");
+			g_print("no ip address or netmask specified, use --help for usage information\n");
 	}
 	else if(do_net_count) {
 		if(ip_address && netmask)
 			net_tree(ip_address,netmask,do_net_count);
 		else
-			g_print("no ip address or netmask specified, use -? for usage information\n");
+			g_print("no ip address or netmask specified, use --help for usage information\n");
 	}
 	else if(do_summary) {
 		net_summary();
@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
 		if(ip_address && netmask)
 			net_info(ip_address,netmask);
 		else
-			g_print("no ip address or netmask specified, use -? for usage information\n");
+			g_print("no ip address or netmask specified, use --help for usage information\n");
 			
 	}
 
