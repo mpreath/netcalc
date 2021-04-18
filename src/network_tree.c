@@ -162,7 +162,7 @@ void build_tree_host_count(tnode *t1, int hosts) {
 	bdepth = get_bits_in_mask(t1->n.address.mask);
 	tdepth = 32 - val;
 
-	printf("%i,%i\n", bdepth, tdepth);
+	// printf("%i,%i\n", bdepth, tdepth);
 	//split_to_depth(t1, bdepth, tdepth); 
 	split_to_depth_hc(t1, hosts);
 }
