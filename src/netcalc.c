@@ -61,12 +61,6 @@ static GOptionEntry entries[]  =
 	{ "summary", 's', 0, G_OPTION_ARG_NONE, &do_summary,
 	"Summarize a list of subnets into a one or more supernets",
 	NULL},
-	{ "ip-address", 'i', 0, G_OPTION_ARG_STRING, &ip_address,
-	"Specific the IPv4 Address to use for calculation", 
-	NULL },
-	{ "netmask", 'm', 0, G_OPTION_ARG_STRING, &netmask,
-	"Specific the IPv4 Network Mask to use for calculation", 
-	NULL },
 	{ NULL }
 };
 
@@ -76,14 +70,19 @@ int main(int argc, char* argv[]) {
 
 	GError *error = NULL;
 	GOptionContext *context;
-	context = g_option_context_new ("- calculate network information");
+	context = g_option_context_new ("[ip_address] [mask] - calculate network information");
 	g_option_context_add_main_entries (context, entries, NULL);
 	//g_option_context_add_group (context, glib_get_option_group (TRUE));
 	if(!g_option_context_parse(context, &argc, &argv, &error))
 	{
 		g_print("option parsing failed: %s\n", error->message);
 		exit(1);
-	}	
+	}
+
+	if(argc == 3) {
+		ip_address = argv[argc-2];
+		netmask = argv[argc-1];
+	}
 	
 
 	if(verbose) {
@@ -117,7 +116,7 @@ int main(int argc, char* argv[]) {
 		if(ip_address && netmask)
 			net_info(ip_address,netmask);
 		else
-			g_print("no ip address or netmask specified, use --help for usage information\n");
+			g_print("%s", g_option_context_get_help (context, TRUE, NULL));
 			
 	}
 
