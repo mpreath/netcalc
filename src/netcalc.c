@@ -49,7 +49,7 @@ static GOptionEntry entries[]  =
 {
 	{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 	"Use verbose output", NULL },
-	{ "hosts", 'h', 0, G_OPTION_ARG_INT, &do_host_count,
+	{ "hosts", 'o', 0, G_OPTION_ARG_INT, &do_host_count,
 	"Specify the host count to use to subnet the network [IPv4 only]",
 	"HOSTS"},
 	{ "nets", 'n', 0, G_OPTION_ARG_INT, &do_net_count,
