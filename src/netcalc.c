@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 
 void print_info()
 {
-	fprintf(stderr, "netcalc %s  Copyright (C) 2017 Matt Reath\n", VERSION);
+	fprintf(stderr, "netcalc %s  Copyright (C) 2021 Matt Reath\n", VERSION);
 	fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
 	fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
 	fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
