@@ -17,7 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __NETWORK_H__
 #define __NETWORK_H__
 
@@ -25,21 +24,22 @@
 #include <utility.h>
 #include <glib.h>
 
-typedef struct network_struct {
+typedef struct network_struct
+{
 
-	host address;
-	guint32 host_count; /*only used for v4, v6 uses 64-bit hosts */
-	
+    host address;
+    guint32 host_count; /*only used for v4, v6 uses 64-bit hosts */
+
 } network;
 
 /* initialize network */
-void initialize_network(network* n, host* h);
+void initialize_network(network *n, host *h);
 
-int print_network_info(network* n);
+int print_network_info(network *n);
 
-guint32 get_network_address(host* h);
+guint32 get_network_address(host *h);
 
-guint32 get_broadcast_address(host* h);
+guint32 get_broadcast_address(host *h);
 
 int get_bits_in_mask(guint32 mask);
 

@@ -21,12 +21,13 @@
 #define __HOST_H__
 #include <glib.h>
 
-typedef struct host_struct {
-	guint32 ip_address; /* 32-bit IPv4 address */
-	guint64 ipv6_address[2]; /* 128-bit IPv6 address */
-	guint32 mask;
+typedef struct host_struct
+{
+    guint32 ip_address;      /* 32-bit IPv4 address */
+    guint64 ipv6_address[2]; /* 128-bit IPv6 address */
+    guint32 mask;
 } host;
 
-void initialize_host(host* h1, char* ip_address, char* mask);
+void initialize_host(host *h1, char *ip_address, char *mask);
 
 #endif

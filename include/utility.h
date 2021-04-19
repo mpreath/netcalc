@@ -22,13 +22,13 @@
 #include <glib.h>
 
 /* dotted decimal string to integer */
-guint32 ddtoint(char* dd);
+guint32 ddtoint(char *dd);
 
 /* integer to dotted decimal */
-int inttodd(char* dd, guint32 ip);
+int inttodd(char *dd, guint32 ip);
 
 /* check if a string is also numeric */
-int is_number(char* s);
+int is_number(char *s);
 
 /* verify the subnet mask is valid */
 int is_valid_mask(guint32 mask);
