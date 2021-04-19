@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.71])
-AC_INIT([netcalc],[0.4.2],[mpreath at gmail dot com])
+AC_INIT([netcalc],[0.8.4],[mpreath at gmail dot com])
 AC_CONFIG_SRCDIR([src/netcalc.c])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 AM_CONFIG_HEADER([config.h])
