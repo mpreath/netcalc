@@ -82,6 +82,16 @@ int main(int argc, char *argv[])
 	{
 		ip_address = argv[argc - 2];
 		netmask = argv[argc - 1];
+	} else if (argc == 2)
+	{
+		gchar** split_values = g_strsplit(argv[argc - 1], "/", 2);
+		ip_address = (gchar *) malloc(1 + sizeof(gchar) * strlen(split_values[0]));
+		g_stpcpy(ip_address, split_values[0]);
+		if(is_number(split_values[1]))
+		{
+			netmask = (gchar *) malloc (sizeof(gchar) * 16); 
+			inttodd(netmask, cidrtoint(split_values[1]));
+		}
 	}
 
 	if (verbose)
@@ -226,8 +236,6 @@ void net_summary()
 
 	tnode *networks[MAX_NUM_TREES];
 	host h1;
-	gchar ip[16];	// FIXME: Why are these a fixed size? Buffer Overflow risk with scanf below!!!!
-	gchar mask[16];	// FIXME: Why are these a fixed size? Buffer Overflow risk with scanf below!!!!
 	gchar* buffer;
 	gchar* cidr_tok = "/";
 	gchar* space_tok = " ";
