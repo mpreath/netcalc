@@ -85,50 +85,70 @@ int main(int argc, char *argv[])
 	} else if (argc == 2)
 	{
 		gchar** split_values = g_strsplit(argv[argc - 1], "/", 2);
-		ip_address = (gchar *) malloc(1 + sizeof(gchar) * strlen(split_values[0]));
-		g_stpcpy(ip_address, split_values[0]);
-		if(is_number(split_values[1]))
+		if(split_values[0] != NULL)
 		{
-			netmask = (gchar *) malloc (sizeof(gchar) * 16); 
-			inttodd(netmask, cidrtoint(split_values[1]));
+			ip_address = (gchar *) malloc(1 + sizeof(gchar) * strlen(split_values[0]));
+			g_stpcpy(ip_address, split_values[0]);
+		}
+		if(split_values[1] != NULL)
+		{
+			if(is_number(split_values[1]))
+			{
+				netmask = (gchar *) malloc (sizeof(gchar) * 16); 
+				inttodd(netmask, cidrtoint(split_values[1]));
+			}
 		}
 	}
 
-	if (verbose)
-	{
-		print_info();
-	}
-
+	
 	if (vlsm_counts)
 	{
 		if (ip_address && netmask)
+		{
+			if (verbose)
+				print_info();
 			vlsm_tree(ip_address, netmask, vlsm_counts);
+		}
 		else
-			g_print("no ip address or netmask specified, use --help for usage information\n");
+			g_print("no ip address and/or netmask specified, use --help for usage information\n");
 	}
 	else if (do_host_count)
 	{
 		if (ip_address && netmask)
+		{
+			if (verbose)
+				print_info();
 			host_tree(ip_address, netmask, do_host_count);
+		}
 		else
-			g_print("no ip address or netmask specified, use --help for usage information\n");
+			g_print("no ip address and/or netmask specified, use --help for usage information\n");
 	}
 	else if (do_net_count)
 	{
 		if (ip_address && netmask)
+		{
+			if (verbose)
+				print_info();
 			net_tree(ip_address, netmask, do_net_count);
+		}
 		else
-			g_print("no ip address or netmask specified, use --help for usage information\n");
+			g_print("no ip address and/or netmask specified, use --help for usage information\n");
 	}
 	else if (do_summary)
 	{
+		if (verbose)
+			print_info();
 		net_summary();
 	}
 	else
 	{
 
 		if (ip_address && netmask)
+		{
+			if (verbose)
+				print_info();
 			net_info(ip_address, netmask);
+		}
 		else
 			g_print("%s", g_option_context_get_help(context, TRUE, NULL));
 	}
