@@ -324,7 +324,9 @@ void net_summary()
 		}
 	}
 
-	printf("Networks were summarized as follows:\n\n");
+	if(verbose)
+		printf("Networks were summarized as follows:\n\n");
+
 	for (i = 0; i < MAX_NUM_TREES; i++)
 	{
 		if (networks[i] != NULL)
