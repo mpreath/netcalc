@@ -26,6 +26,7 @@
 #include <network_tree.h>
 #include <string.h>
 #include <glib.h>
+#include <glib/gprintf.h>
 
 #define MAX_NUM_TREES 256
 
@@ -81,43 +82,73 @@ int main(int argc, char *argv[])
 	{
 		ip_address = argv[argc - 2];
 		netmask = argv[argc - 1];
-	}
-
-	if (verbose)
+	} else if (argc == 2)
 	{
-		print_info();
+		gchar** split_values = g_strsplit(argv[argc - 1], "/", 2);
+		if(split_values[0] != NULL)
+		{
+			ip_address = (gchar *) malloc(1 + sizeof(gchar) * strlen(split_values[0]));
+			g_stpcpy(ip_address, split_values[0]);
+		}
+		if(split_values[1] != NULL)
+		{
+			if(is_number(split_values[1]))
+			{
+				netmask = (gchar *) malloc (sizeof(gchar) * 16); 
+				inttodd(netmask, cidrtoint(split_values[1]));
+			}
+		}
 	}
 
+	
 	if (vlsm_counts)
 	{
 		if (ip_address && netmask)
+		{
+			if (verbose)
+				print_info();
 			vlsm_tree(ip_address, netmask, vlsm_counts);
+		}
 		else
-			g_print("no ip address or netmask specified, use --help for usage information\n");
+			g_print("no ip address and/or netmask specified, use --help for usage information\n");
 	}
 	else if (do_host_count)
 	{
 		if (ip_address && netmask)
+		{
+			if (verbose)
+				print_info();
 			host_tree(ip_address, netmask, do_host_count);
+		}
 		else
-			g_print("no ip address or netmask specified, use --help for usage information\n");
+			g_print("no ip address and/or netmask specified, use --help for usage information\n");
 	}
 	else if (do_net_count)
 	{
 		if (ip_address && netmask)
+		{
+			if (verbose)
+				print_info();
 			net_tree(ip_address, netmask, do_net_count);
+		}
 		else
-			g_print("no ip address or netmask specified, use --help for usage information\n");
+			g_print("no ip address and/or netmask specified, use --help for usage information\n");
 	}
 	else if (do_summary)
 	{
+		if (verbose)
+			print_info();
 		net_summary();
 	}
 	else
 	{
 
 		if (ip_address && netmask)
+		{
+			if (verbose)
+				print_info();
 			net_info(ip_address, netmask);
+		}
 		else
 			g_print("%s", g_option_context_get_help(context, TRUE, NULL));
 	}
@@ -225,8 +256,10 @@ void net_summary()
 
 	tnode *networks[MAX_NUM_TREES];
 	host h1;
-	char ip[16];
-	char mask[16];
+	gchar* buffer;
+	gchar* cidr_tok = "/";
+	gchar* space_tok = " ";
+	size_t bufsize = 32;
 	int i;
 	int j;
 	int k;
@@ -238,17 +271,56 @@ void net_summary()
 	for (i = 0; i < MAX_NUM_TREES; i++)
 		networks[i] = NULL;
 
+	/* 	read each line from stdin (using readline)
+		check for "/" denoting a CIDR format
+			if true, then split on "/" and initialize host
+				need to develop an initialize host variant for CIDR
+				need to develop cidrtoint utility function (convert CIDR to binary representation)
+				check that mask is and integer and between 8 and 32 inside CIDRtoint
+		if no "/" detected, check for space
+			if true, split on space and initialize host as is done below */
+			
+
+	buffer = (gchar *)malloc(bufsize * sizeof(gchar));
 	/* populate the array with the networks from the input */
-	for (i = 0; scanf("%s %s", ip, mask) != EOF; i++)
+	for (i = 0; getline(&buffer, &bufsize, stdin) > 0; i++)
 	{
-		initialize_host(&h1, ip, mask);
-		networks[i] = g_malloc(sizeof(tnode));
-		initialize_network(&networks[i]->n, &h1);
-		networks[i]->left = NULL;
-		networks[i]->right = NULL;
-		networks[i]->parent = NULL;
-		//	printf("Added network %s %s\n", ip, mask);
+		if (buffer != NULL)
+		{
+			// remove newline characters from input
+			int length = strlen(buffer);
+			if (buffer[length-1] == '\n')
+				buffer[length-1]  = '\0';
+			//printf("%s\n", buffer);
+
+			if(g_strrstr(buffer,cidr_tok)) 
+			{
+				gchar** split_values = g_strsplit(buffer, cidr_tok, 2);
+				initialize_cidr_host(&h1, split_values[0], split_values[1]);
+				networks[i] = g_malloc(sizeof(tnode));
+				initialize_network(&networks[i]->n, &h1);
+				networks[i]->left = NULL;
+				networks[i]->right = NULL;
+				networks[i]->parent = NULL;
+				g_strfreev(split_values);
+				
+			}
+			else if(strstr(buffer,space_tok))
+			{
+				gchar** split_values = g_strsplit(buffer, space_tok, 2);
+				initialize_host(&h1, split_values[0], split_values[1]);
+				networks[i] = g_malloc(sizeof(tnode));
+				initialize_network(&networks[i]->n, &h1);
+				networks[i]->left = NULL;
+				networks[i]->right = NULL;
+				networks[i]->parent = NULL;
+				//	printf("Added network %s %s\n", ip, mask);
+				g_strfreev(split_values);
+			}
+		}
 	}
+
+	g_free(buffer);
 
 	//printf("%i\n", i);
 
@@ -280,7 +352,9 @@ void net_summary()
 		}
 	}
 
-	printf("Networks were summarized as follows:\n\n");
+	if(verbose)
+		printf("Networks were summarized as follows:\n\n");
+
 	for (i = 0; i < MAX_NUM_TREES; i++)
 	{
 		if (networks[i] != NULL)

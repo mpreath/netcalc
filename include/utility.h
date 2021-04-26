@@ -24,6 +24,9 @@
 /* dotted decimal string to integer */
 guint32 ddtoint(char *dd);
 
+/* cidr string to integer */
+guint32 cidrtoint(char *dd);
+
 /* integer to dotted decimal */
 int inttodd(char *dd, guint32 ip);
 
