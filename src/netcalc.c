@@ -26,6 +26,7 @@
 #include <network_tree.h>
 #include <string.h>
 #include <glib.h>
+#include <glib/gprintf.h>
 
 #define MAX_NUM_TREES 256
 
@@ -225,28 +226,66 @@ void net_summary()
 
 	tnode *networks[MAX_NUM_TREES];
 	host h1;
-	char ip[16];
-	char mask[16];
+	gchar ip[16];	// FIXME: Why are these a fixed size? Buffer Overflow risk with scanf below!!!!
+	gchar mask[16];	// FIXME: Why are these a fixed size? Buffer Overflow risk with scanf below!!!!
+	gchar* buffer;
+	gchar* cidr_tok = "/";
+	gchar* space_tok = " ";
+	size_t bufsize = 32;
 	int i;
 	int j;
 	int k;
 	int l;
 	tnode *t1;
-	int made_changes = 1;
+	int made_changes = 0;
 
 	/* initialize the nodes to NULL */
 	for (i = 0; i < MAX_NUM_TREES; i++)
 		networks[i] = NULL;
 
+	/* 	read each line from stdin (using readline)
+		check for "/" denoting a CIDR format
+			if true, then split on "/" and initialize host
+				need to develop an initialize host variant for CIDR
+				need to develop cidrtoint utility function (convert CIDR to binary representation)
+				check that mask is and integer and between 8 and 32 inside CIDRtoint
+		if no "/" detected, check for space
+			if true, split on space and initialize host as is done below */
+			
+
+	buffer = (gchar *)malloc(bufsize * sizeof(gchar));
 	/* populate the array with the networks from the input */
-	for (i = 0; scanf("%s %s", ip, mask) != EOF; i++)
+	for (i = 0; getline(&buffer, &bufsize, stdin) > 0; i++)
 	{
-		initialize_host(&h1, ip, mask);
-		networks[i] = g_malloc(sizeof(tnode));
-		initialize_network(&networks[i]->n, &h1);
-		networks[i]->left = NULL;
-		networks[i]->right = NULL;
-		networks[i]->parent = NULL;
+		if (buffer != NULL)
+		{
+			// remove newline characters from input
+			int length = strlen(buffer);
+			if (buffer[length-1] == '\n')
+				buffer[length-1]  = '\0';
+			//printf("%s\n", buffer);
+
+			if(g_strrstr(buffer,cidr_tok)) 
+			{
+				printf("cidr\n");
+				gchar** split_values = g_strsplit(buffer, "/", 2);
+				g_printf(split_values[0]);
+				g_printf("\n");
+				g_printf(split_values[1]);
+				g_printf("\n");
+				g_strfreev(split_values);
+			}
+			else if(strstr(buffer,space_tok))
+			{
+				printf("standard\n");
+			}
+		}
+		// initialize_host(&h1, ip, mask);
+		// networks[i] = g_malloc(sizeof(tnode));
+		// initialize_network(&networks[i]->n, &h1);
+		// networks[i]->left = NULL;
+		// networks[i]->right = NULL;
+		// networks[i]->parent = NULL;
 		//	printf("Added network %s %s\n", ip, mask);
 	}
 
