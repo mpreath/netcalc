@@ -96,7 +96,6 @@ guint32 cidrtoint(char* cidr_mask) {
 		mask_length = atoi(cidr_mask);
 		for(int i = 0; i < 32-mask_length; i++)
 		{
-			char	mask_string[16];
 			mask = mask << 1;			
 		}
 
