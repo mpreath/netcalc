@@ -237,7 +237,7 @@ void net_summary()
 	int k;
 	int l;
 	tnode *t1;
-	int made_changes = 0;
+	int made_changes = 1;
 
 	/* initialize the nodes to NULL */
 	for (i = 0; i < MAX_NUM_TREES; i++)
@@ -267,27 +267,32 @@ void net_summary()
 
 			if(g_strrstr(buffer,cidr_tok)) 
 			{
-				printf("cidr\n");
-				gchar** split_values = g_strsplit(buffer, "/", 2);
-				g_printf(split_values[0]);
-				g_printf("\n");
-				g_printf(split_values[1]);
-				g_printf("\n");
+				gchar** split_values = g_strsplit(buffer, cidr_tok, 2);
+				initialize_cidr_host(&h1, split_values[0], split_values[1]);
+				networks[i] = g_malloc(sizeof(tnode));
+				initialize_network(&networks[i]->n, &h1);
+				networks[i]->left = NULL;
+				networks[i]->right = NULL;
+				networks[i]->parent = NULL;
 				g_strfreev(split_values);
+				
 			}
 			else if(strstr(buffer,space_tok))
 			{
-				printf("standard\n");
+				gchar** split_values = g_strsplit(buffer, space_tok, 2);
+				initialize_host(&h1, split_values[0], split_values[1]);
+				networks[i] = g_malloc(sizeof(tnode));
+				initialize_network(&networks[i]->n, &h1);
+				networks[i]->left = NULL;
+				networks[i]->right = NULL;
+				networks[i]->parent = NULL;
+				//	printf("Added network %s %s\n", ip, mask);
+				g_strfreev(split_values);
 			}
 		}
-		// initialize_host(&h1, ip, mask);
-		// networks[i] = g_malloc(sizeof(tnode));
-		// initialize_network(&networks[i]->n, &h1);
-		// networks[i]->left = NULL;
-		// networks[i]->right = NULL;
-		// networks[i]->parent = NULL;
-		//	printf("Added network %s %s\n", ip, mask);
 	}
+
+	g_free(buffer);
 
 	//printf("%i\n", i);
 

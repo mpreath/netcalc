@@ -85,6 +85,28 @@ guint32 ddtoint(char *dd)
 	return ip;
 }
 
+guint32 cidrtoint(char* cidr_mask) {
+
+	guint32 mask_length;
+	guint32 mask = 4294967295;
+	
+
+	if (is_number(cidr_mask)) 
+	{
+		mask_length = atoi(cidr_mask);
+		for(int i = 0; i < 32-mask_length; i++)
+		{
+			char	mask_string[16];
+			mask = mask << 1;			
+		}
+
+		return mask;
+
+	}
+	
+	return -1;
+}
+
 int inttodd(char *dd, guint32 ip)
 {
 

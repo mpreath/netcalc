@@ -29,5 +29,6 @@ typedef struct host_struct
 } host;
 
 void initialize_host(host *h1, char *ip_address, char *mask);
+void initialize_cidr_host(host *h1, char *ip_address, char *mask);
 
 #endif
