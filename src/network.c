@@ -2,7 +2,7 @@
     netcalc - a simple CLI subnet calculator written in ANSI C
     network.c - network related functions
 
-    Copyright (C) 2011  Matthew Reath 
+    Copyright (c) 2021  Matthew Reath 
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
