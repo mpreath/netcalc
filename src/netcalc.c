@@ -45,19 +45,22 @@ static gint do_host_count = 0;
 static gint do_net_count = 0;
 static gboolean do_summary = FALSE;
 static gboolean verbose = FALSE;
+static gboolean version = FALSE;
 //static gboolean do_help = FALSE;
 static GOptionEntry entries[] =
 	{
 		{"verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 		 "Use verbose output", NULL},
+		 {"version", 'V', 0, G_OPTION_ARG_NONE, &version,
+		 "Display version information", NULL},
 		{"hosts", 'o', 0, G_OPTION_ARG_INT, &do_host_count,
-		 "Specify the host count to use to subnet the network [IPv4 only]",
+		 "Specify the host count to use to subnet the network",
 		 "HOSTS"},
 		{"nets", 'n', 0, G_OPTION_ARG_INT, &do_net_count,
 		 "Specify the net count to use to subnet the network",
 		 "NETS"},
 		{"vlsm", 'l', 0, G_OPTION_ARG_STRING, &vlsm_counts,
-		 "Comma seperated list of host count requirements for VLSM network",
+		 "Comma seperated list of host counts for VLSM network",
 		 "VLSM_LIST"},
 		{"summary", 's', 0, G_OPTION_ARG_NONE, &do_summary,
 		 "Summarize a list of subnets into a one or more supernets",
@@ -140,6 +143,13 @@ int main(int argc, char *argv[])
 			print_info();
 		net_summary();
 	}
+	else if (version)
+	{
+		if (verbose)
+			print_info();
+		else
+			printf("%s\n", PACKAGE_STRING);
+	}
 	else
 	{
 
@@ -158,11 +168,11 @@ int main(int argc, char *argv[])
 
 void print_info()
 {
-	fprintf(stderr, "netcalc %s  Copyright (C) 2021 Matt Reath\n", VERSION);
+	fprintf(stderr, "%s Copyright (c) 2021 Matt Reath\n", PACKAGE_STRING);
 	fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
 	fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
 	fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
-	fprintf(stderr, "for more information.\n\n");
+	fprintf(stderr, "for more information.\n");
 }
 
 void net_info(char *ip_address, char *mask)
