@@ -63,7 +63,7 @@ static GOptionEntry entries[] =
 		 "Comma seperated list of host counts for VLSM network",
 		 "VLSM_LIST"},
 		{"summary", 's', 0, G_OPTION_ARG_NONE, &do_summary,
-		 "Summarize a list of subnets into a one or more supernets",
+		 "Summarize subnets into one or more supernets",
 		 NULL},
 		{NULL}};
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
 	GError *error = NULL;
 	GOptionContext *context;
-	context = g_option_context_new("[ip_address] [mask] - calculate network information");
+	context = g_option_context_new("[ip_address][/CIDR] | [ip_address] [mask] - calculate network information");
 	g_option_context_add_main_entries(context, entries, NULL);
 	//g_option_context_add_group (context, glib_get_option_group (TRUE));
 	if (!g_option_context_parse(context, &argc, &argv, &error))
