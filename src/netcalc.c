@@ -83,8 +83,11 @@ int main(int argc, char *argv[])
 
 	if (argc == 3)
 	{
-		ip_address = argv[argc - 2];
-		netmask = argv[argc - 1];
+		ip_address = (gchar *) malloc(1 + sizeof(gchar) * strlen(argv[argc - 2]));
+		netmask = (gchar *) malloc (sizeof(gchar) * strlen(argv[argc - 1])); 
+		g_stpcpy(ip_address, argv[argc - 2]);
+		g_stpcpy(netmask, argv[argc - 1]);
+
 	} else if (argc == 2)
 	{
 		gchar** split_values = g_strsplit(argv[argc - 1], "/", 2);
@@ -163,6 +166,8 @@ int main(int argc, char *argv[])
 			g_print("%s", g_option_context_get_help(context, TRUE, NULL));
 	}
 
+	g_free(ip_address);
+	g_free(netmask);
 	return 0;
 }
 
