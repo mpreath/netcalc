@@ -2,7 +2,7 @@
     netcalc - a simple CLI subnet calculator written in ANSI C
     network.c - network related functions
 
-    Copyright (C) 2011  Matthew Reath 
+    Copyright (c) 2021  Matthew Reath 
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ void initialize_network(network *n, host *h)
 	n->host_count = (e - s) - 1;
 }
 
-int print_network_info(network *n)
+int print_network_info(network *n, gboolean verbose)
 {
 
 	guint32 i, s, e;
@@ -57,20 +57,26 @@ int print_network_info(network *n)
 
 	char ip_address[16];
 	char mask[16];
-	inttodd(ip_address, s);
-	printf("Network:\t%s\n", ip_address);
-	inttodd(ip_address, e);
-	printf("Broadcast:\t%s\n", ip_address);
-	inttodd(ip_address, n->address.mask);
-	printf("Mask:\t\t%s[/%i]\n", ip_address, bc);
-	printf("Hosts:\t\t%i\n", n->host_count);
+	if(verbose) 
+	{
+		inttodd(ip_address, s);
+		printf("Network:\t%s\n", ip_address);
+		inttodd(ip_address, e);
+		printf("Broadcast:\t%s\n", ip_address);
+		inttodd(ip_address, n->address.mask);
+		printf("Mask:\t\t%s[/%i]\n", ip_address, bc);
+		printf("Hosts:\t\t%i\n", n->host_count);
+	}
 
 	inttodd(mask, n->address.mask);
 
 	for (i = s + 1; i < e; i++)
 	{
 		inttodd(ip_address, i);
-		printf("%s\t%s\n", ip_address, mask);
+		if(verbose)
+			printf("%s\t%s\n", ip_address, mask);
+		else
+			printf("%s %s\n", ip_address, mask);
 	}
 
 	return 1;

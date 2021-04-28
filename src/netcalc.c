@@ -2,7 +2,7 @@
     netcalc - a simple CLI subnet calculator written in ANSI C
     netcalc.c - main entry point into the netcalc application
 
-    Copyright (C) 2011  Matthew Reath 
+    Copyright (c) 2021  Matthew Reath 
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,22 +45,25 @@ static gint do_host_count = 0;
 static gint do_net_count = 0;
 static gboolean do_summary = FALSE;
 static gboolean verbose = FALSE;
+static gboolean version = FALSE;
 //static gboolean do_help = FALSE;
 static GOptionEntry entries[] =
 	{
 		{"verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 		 "Use verbose output", NULL},
+		 {"version", 'V', 0, G_OPTION_ARG_NONE, &version,
+		 "Display version information", NULL},
 		{"hosts", 'o', 0, G_OPTION_ARG_INT, &do_host_count,
-		 "Specify the host count to use to subnet the network [IPv4 only]",
+		 "Specify the host count to use to subnet the network",
 		 "HOSTS"},
 		{"nets", 'n', 0, G_OPTION_ARG_INT, &do_net_count,
 		 "Specify the net count to use to subnet the network",
 		 "NETS"},
 		{"vlsm", 'l', 0, G_OPTION_ARG_STRING, &vlsm_counts,
-		 "Comma seperated list of host count requirements for VLSM network",
+		 "Comma seperated list of host counts for VLSM network",
 		 "VLSM_LIST"},
 		{"summary", 's', 0, G_OPTION_ARG_NONE, &do_summary,
-		 "Summarize a list of subnets into a one or more supernets",
+		 "Summarize subnets into one or more supernets",
 		 NULL},
 		{NULL}};
 
@@ -69,9 +72,8 @@ int main(int argc, char *argv[])
 
 	GError *error = NULL;
 	GOptionContext *context;
-	context = g_option_context_new("[ip_address] [mask] - calculate network information");
+	context = g_option_context_new("[<ip_address/cidr> | <ip_address> <mask>] - calculate network information");
 	g_option_context_add_main_entries(context, entries, NULL);
-	//g_option_context_add_group (context, glib_get_option_group (TRUE));
 	if (!g_option_context_parse(context, &argc, &argv, &error))
 	{
 		g_print("option parsing failed: %s\n", error->message);
@@ -80,8 +82,11 @@ int main(int argc, char *argv[])
 
 	if (argc == 3)
 	{
-		ip_address = argv[argc - 2];
-		netmask = argv[argc - 1];
+		ip_address = (gchar *) malloc(1 + sizeof(gchar) * strlen(argv[argc - 2]));
+		netmask = (gchar *) malloc (1 + sizeof(gchar) * strlen(argv[argc - 1])); 
+		g_stpcpy(ip_address, argv[argc - 2]);
+		g_stpcpy(netmask, argv[argc - 1]);
+
 	} else if (argc == 2)
 	{
 		gchar** split_values = g_strsplit(argv[argc - 1], "/", 2);
@@ -140,6 +145,13 @@ int main(int argc, char *argv[])
 			print_info();
 		net_summary();
 	}
+	else if (version)
+	{
+		if (verbose)
+			print_info();
+		else
+			printf("%s\n", PACKAGE_STRING);
+	}
 	else
 	{
 
@@ -153,12 +165,14 @@ int main(int argc, char *argv[])
 			g_print("%s", g_option_context_get_help(context, TRUE, NULL));
 	}
 
+	g_free(ip_address);
+	g_free(netmask);
 	return 0;
 }
 
 void print_info()
 {
-	fprintf(stderr, "netcalc %s  Copyright (C) 2021 Matt Reath\n", VERSION);
+	fprintf(stderr, "%s Copyright (c) 2021 Matt Reath\n", PACKAGE_STRING);
 	fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
 	fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
 	fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
@@ -173,7 +187,7 @@ void net_info(char *ip_address, char *mask)
 
 	initialize_host(&h1, ip_address, mask);
 	initialize_network(&n1, &h1);
-	print_network_info(&n1);
+	print_network_info(&n1, verbose);
 }
 
 void host_tree(char *ip_address, char *mask, int hosts)
@@ -259,7 +273,7 @@ void net_summary()
 	gchar* buffer;
 	gchar* cidr_tok = "/";
 	gchar* space_tok = " ";
-	size_t bufsize = 32;
+	size_t bufsize = 34;
 	int i;
 	int j;
 	int k;
@@ -291,7 +305,6 @@ void net_summary()
 			int length = strlen(buffer);
 			if (buffer[length-1] == '\n')
 				buffer[length-1]  = '\0';
-			//printf("%s\n", buffer);
 
 			if(g_strrstr(buffer,cidr_tok)) 
 			{
@@ -314,15 +327,12 @@ void net_summary()
 				networks[i]->left = NULL;
 				networks[i]->right = NULL;
 				networks[i]->parent = NULL;
-				//	printf("Added network %s %s\n", ip, mask);
 				g_strfreev(split_values);
 			}
 		}
 	}
 
 	g_free(buffer);
-
-	//printf("%i\n", i);
 
 	/* loop until there are no summarization left to do */
 	while (made_changes)
@@ -338,7 +348,6 @@ void net_summary()
 
 				if ((j != k) && (t1 = combine_networks(networks[j], networks[k])) != NULL)
 				{
-					//				printf("Combined networks\n[%i:%i]\n", j,k);
 					networks[j] = NULL;
 					networks[k] = NULL;
 

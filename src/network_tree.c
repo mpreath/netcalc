@@ -3,7 +3,7 @@
     network_tree.c - subnetting/supernetting related fuctions. It is better
     to handle these functions as a tree structure
 
-    Copyright (C) 2011  Matthew Reath 
+    Copyright (c) 2021  Matthew Reath 
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
