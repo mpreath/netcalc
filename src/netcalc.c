@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 	if (argc == 3)
 	{
 		ip_address = (gchar *) malloc(1 + sizeof(gchar) * strlen(argv[argc - 2]));
-		netmask = (gchar *) malloc (sizeof(gchar) * strlen(argv[argc - 1])); 
+		netmask = (gchar *) malloc (1 + sizeof(gchar) * strlen(argv[argc - 1])); 
 		g_stpcpy(ip_address, argv[argc - 2]);
 		g_stpcpy(netmask, argv[argc - 1]);
 
@@ -177,7 +177,7 @@ void print_info()
 	fprintf(stderr, "This program comes with ABSOLUTELY NO WARRANTY;\n");
 	fprintf(stderr, "This is free software, and you are welcome to redistribute it\n");
 	fprintf(stderr, "under certain circumstances. See the included COPYING file\n");
-	fprintf(stderr, "for more information.\n");
+	fprintf(stderr, "for more information.\n\n");
 }
 
 void net_info(char *ip_address, char *mask)
@@ -188,7 +188,7 @@ void net_info(char *ip_address, char *mask)
 
 	initialize_host(&h1, ip_address, mask);
 	initialize_network(&n1, &h1);
-	print_network_info(&n1);
+	print_network_info(&n1, verbose);
 }
 
 void host_tree(char *ip_address, char *mask, int hosts)
@@ -274,7 +274,7 @@ void net_summary()
 	gchar* buffer;
 	gchar* cidr_tok = "/";
 	gchar* space_tok = " ";
-	size_t bufsize = 32;
+	size_t bufsize = 34;
 	int i;
 	int j;
 	int k;
@@ -306,7 +306,6 @@ void net_summary()
 			int length = strlen(buffer);
 			if (buffer[length-1] == '\n')
 				buffer[length-1]  = '\0';
-			//printf("%s\n", buffer);
 
 			if(g_strrstr(buffer,cidr_tok)) 
 			{
@@ -329,15 +328,12 @@ void net_summary()
 				networks[i]->left = NULL;
 				networks[i]->right = NULL;
 				networks[i]->parent = NULL;
-				//	printf("Added network %s %s\n", ip, mask);
 				g_strfreev(split_values);
 			}
 		}
 	}
 
 	g_free(buffer);
-
-	//printf("%i\n", i);
 
 	/* loop until there are no summarization left to do */
 	while (made_changes)
@@ -353,7 +349,6 @@ void net_summary()
 
 				if ((j != k) && (t1 = combine_networks(networks[j], networks[k])) != NULL)
 				{
-					//				printf("Combined networks\n[%i:%i]\n", j,k);
 					networks[j] = NULL;
 					networks[k] = NULL;
 

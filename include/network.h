@@ -35,7 +35,7 @@ typedef struct network_struct
 /* initialize network */
 void initialize_network(network *n, host *h);
 
-int print_network_info(network *n);
+int print_network_info(network *n, gboolean verbose);
 
 guint32 get_network_address(host *h);
 
