@@ -4,6 +4,7 @@ src/netcalc
 # temp files
 *.*~
 *~
+test.*
 
 # Prerequisites
 *.d
@@ -13,7 +14,6 @@ src/netcalc
 *.ko
 *.obj
 *.elf
-
 # Linker output
 *.ilk
 *.map
