@@ -281,6 +281,10 @@ void net_summary()
 	tnode *t1;
 	int made_changes = 1;
 
+	// FIXME: we can update this to be a much leaner 
+	// we can use just an array of unsigned 32-bit integers and
+	// store the ip addresses in them, less memory usage and better
+	// performance
 	networks = (tnode**) malloc(sizeof(tnode) * MAX_NUM_TREES);
 
 	/* initialize the nodes to NULL */
@@ -338,14 +342,14 @@ void net_summary()
 
 	g_free(buffer);
 
-	// FIXME: This O(N2) algorithm takes a very long time to run
-	// TODO: Need to create a new way of summarizing
+	// *** NEW WAY O(n) much better performance ***
 	// Sort by ip address -> create segments based on common bit patterns
 	// -> summarize in one calculation all of the common bits in the segment
 	// -> match mask to common bit boundry -> repeat for segments
 	/* loop until there are no summarization left to do */
 
 	guint32 common_bits = 0;
+	guint32 mask_bits = 0;
 
 	// loop through all networks
 	for (j = 0; j < i; j++)
@@ -357,6 +361,7 @@ void net_summary()
 		}
 		else 
 		{
+			mask_bits = common_bits ^ networks[j]->n.address.ip_address;
 			common_bits = common_bits & networks[j]->n.address.ip_address;
 		}
 
@@ -364,26 +369,26 @@ void net_summary()
 
 	guint32 summarized_bits = common_bits;
 	gchar* summarized_network;
+	gchar* summarized_mask;
+	guint32 val = 2147483648;
+
 	summarized_network = (gchar *) malloc (sizeof(gchar) * 16); 
 	inttodd(summarized_network, summarized_bits);
-	//printf("%s\n",summarized_network);
 
-	guint32 common_bit_count = 0; 
+	for (k = 0 ; (mask_bits & val) < 2147483648; mask_bits = mask_bits << 1, k++ ) 
+		;
+	// {
+	// 	summarized_mask = (gchar *) malloc (sizeof(gchar) * 16);
+	// 	inttodd(summarized_mask, mask_bits);
+	// 	printf("[%u][%u]%s\n", mask_bits, k, summarized_mask );
+	// }
+
+	summarized_mask = (gchar *) malloc (sizeof(gchar) * 16);
+	inttodd(summarized_mask, get_mask_from_bits(k));
 	
-	// determine number of bits in common
-	while ( common_bits != 0 )
-	{
-		common_bits = common_bits << 1; 
-		//printf("%u\n", common_bits);
-		common_bit_count++;
+	printf("%s/%u\n", summarized_network, k);
 
-	}
-	gchar* summarized_mask;
-	summarized_mask = (gchar *) malloc (sizeof(gchar) * 16); 
-	inttodd(summarized_mask, get_mask_from_bits(common_bit_count));
-
-	printf("%s/%u\n", summarized_network, common_bit_count);
-
+	// *** OLD WAY O(n2) ***
 	// while (made_changes)
 	// {
 

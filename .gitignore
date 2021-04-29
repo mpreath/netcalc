@@ -1,10 +1,11 @@
 src/netcalc
 .vscode
+test.txt
+src/test.txt
 
 # temp files
 *.*~
 *~
-test.*
 
 # Prerequisites
 *.d
