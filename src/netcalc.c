@@ -375,7 +375,7 @@ void net_summary()
 	summarized_network = (gchar *) malloc (sizeof(gchar) * 16); 
 	inttodd(summarized_network, summarized_bits);
 
-	for (k = 0 ; (mask_bits & val) < 2147483648; mask_bits = mask_bits << 1, k++ ) 
+	for (k = 0 ; (mask_bits & val) != 2147483648; mask_bits = mask_bits << 1, k++ ) 
 		;
 	// {
 	// 	summarized_mask = (gchar *) malloc (sizeof(gchar) * 16);
