@@ -273,6 +273,7 @@ void net_summary()
 	gchar* cidr_tok = "/";
 	gchar* space_tok = " ";
 	gchar* summarized_network;
+	gchar* summarized_mask;
 	guint32 val = 2147483648;
 	size_t bufsize = 34;
 	int i;
@@ -354,12 +355,23 @@ void net_summary()
 
 	for (k = 0 ; (mask_bits & val) != 2147483648; mask_bits = mask_bits << 1, k++ ) 
 		;
+
+	summarized_mask = (gchar *) g_malloc (sizeof(gchar) * 16); 
+	inttodd(summarized_mask, get_mask_from_bits(k));
 	
-	printf("%s/%u\n", summarized_network, k);
+	if (verbose) {
+		printf("%s\t%s\n", summarized_network, summarized_mask);
+	}
+	else 
+	{
+		printf("%s/%u\n", summarized_network, k);
+	}
+	
 
 	// memory cleanup
 	g_free(networks);
 	g_free(summarized_network);
+	g_free(summarized_mask);
 
 	// *** OLD WAY O(n2) ***
 	// while (made_changes)
