@@ -1,3 +1,310 @@
+commit 1ab57bff012392cc5560f2f177c10c88ecff3b65
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Thu Apr 29 15:34:37 2021 -0500
+
+    set smallest mask possible at /8 or 255.0.0.0
+
+commit b6513b6418104cf3e09ae3f95039bf0b0baad1f7
+Merge: 8a337d6 a5fa523
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Thu Apr 29 14:06:00 2021 -0500
+
+    Merge pull request #12 from mpreath/optimize-summarization
+    
+    Optimize summarization
+
+commit a5fa52365554612154cec16f58f8a3dc23e0a17f
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Thu Apr 29 14:05:31 2021 -0500
+
+    added a verbose option
+
+commit 0012e00d7131cff671720a682294a305ce70978e
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Thu Apr 29 14:00:39 2021 -0500
+
+    remplaced array of structs with array of guint32
+
+commit 7fa81b387afd510719e59521ab9ede263375ba2d
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Thu Apr 29 13:43:51 2021 -0500
+
+    Fixed a potential app breaking bug
+
+commit c51344957d7464fee48923704ea4fb13c063d554
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Thu Apr 29 12:47:05 2021 -0500
+
+    implemented new O(n) summarization algorithm
+
+commit e4ac28709496fe702d6afcaa61be8a421b1fd08a
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Thu Apr 29 08:23:25 2021 -0500
+
+    started new summarization algorithm
+
+commit 3c7e2805b3971a1700ee00929145353ee9f30c2b
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Thu Apr 29 00:41:47 2021 -0500
+
+    pseudocode updated algorithm
+
+commit 0c9a1255fc4dccf36e856d21bb1a1c424dff2910
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Wed Apr 28 22:44:43 2021 -0500
+
+    summarization tree now utilizes the heap - malloc
+
+commit 8a337d6a4ead3a7426ff9682cd0db2f3393773f1
+Merge: 7695baf 9f2bf22
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 21:35:35 2021 -0500
+
+    Merge pull request #11 from mpreath/error-handling-and-refinement
+    
+    Error handling and refinement
+
+commit 9f2bf227fa7c1231da8c5dfb4197831ae53b4196
+Merge: b98fd90 7695baf
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 21:35:28 2021 -0500
+
+    Merge branch 'master' into error-handling-and-refinement
+
+commit b98fd90acf921d0c6d4c3a632974ec7f4b942635
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 21:34:19 2021 -0500
+
+    cleaned up unused code
+
+commit 5243fa7e889da3ecfa0bc030bd25ba2993c89760
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 19:04:07 2021 -0500
+
+    cleaned up print_network_info
+
+commit 30f0f96d9b392be08621c178a6848e64dbd9e7d3
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 08:52:19 2021 -0500
+
+    memory management fixes
+
+commit 2cdbd32ba3fdfe790771fa73730af5f99fa0f0aa
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 08:41:57 2021 -0500
+
+    cleaned up help output
+
+commit c0bc229dd53d45c32318d4fe97c532a2d59ff043
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 08:36:48 2021 -0500
+
+    added version option, cleaned up print_info
+
+commit 0f9267dc0564651855c2c610d32fc9c3d50f4a42
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 07:18:23 2021 -0500
+
+    updated version number
+
+commit b4b7009a110a27fc2f5e1556243992ce0471d843
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 07:16:43 2021 -0500
+
+    updated copyright statements; added notice to host.c
+
+commit 66dbbbc9ccff20bd5d8be56a33fa9c7b37a73493
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Tue Apr 27 07:08:15 2021 -0500
+
+    rremoved an unused variable
+
+commit 7695bafd5072e359cc67514687d25a32d02c5dec
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Mon Apr 26 08:09:07 2021 -0500
+
+    removed unused variable
+
+commit 7aa5f4f029d63b9d6d6b81b7248571993c31efa8
+Merge: efa0b55 a04a7aa
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Mon Apr 26 07:16:57 2021 -0500
+
+    Merge pull request #10 from mpreath/cidr-prefix-support
+    
+    Cidr prefix support
+
+commit a04a7aa940956af9481ed0df3dac401edcee4049
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Mon Apr 26 07:16:19 2021 -0500
+
+    moved print_info() to not display when program fails
+
+commit b30c9b3c03f5f84f361ecb23aa64821cebe86a10
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Mon Apr 26 07:08:15 2021 -0500
+
+    added handling of cidr to ip_address command parameter
+
+commit 46f883be64cfc992dfdc763c9b052c79cd86c7a1
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sun Apr 25 22:57:30 2021 -0500
+
+    added verbose check in network summarization
+
+commit f141b78c61e232d68ea851b47370fd7fef954ccd
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sun Apr 25 22:50:19 2021 -0500
+
+    cidrtoint(), initialize hosts and network for summarization
+
+commit 0c22fba69aaa70595f44a2b9b3b7427fda9f7b82
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sun Apr 25 21:14:13 2021 -0500
+
+    getline(), check for cidr, and cidr split
+
+commit efa0b550d3ca326a87bb995f3ffa7810b5e34d58
+Merge: 13bb367 0863cb1
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sun Apr 18 20:22:11 2021 -0500
+
+    Merge pull request #9 from mpreath/update-version-copyright
+    
+    Updated version and copyright
+
+commit 0863cb104810eb2e2682683a0002f56cad1243af
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sun Apr 18 20:21:11 2021 -0500
+
+    Updated version and copyright
+
+commit 13bb3679d58e002707de91df5d2aa00f7b029eeb
+Merge: 8351a30 27d5abd
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sun Apr 18 20:15:47 2021 -0500
+
+    Merge pull request #8 from mpreath/reformat-all-files
+    
+    Reformat all source files
+
+commit 27d5abd27e228ae115b81f6af9c9b833e4423889
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sun Apr 18 20:15:16 2021 -0500
+
+    Reformat all source files
+
+commit 8351a3011c4066df2da228c02b113415fed598cf
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 22:20:29 2021 -0500
+
+    Removed unneeded printf statement (#7)
+
+commit 5fded8f1cefb283999d660726cb9b4116c875c8a
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 20:41:51 2021 -0500
+
+    Updated the version # in configure.ac (#6)
+
+commit a8d1a26f9de4172d17d60caad9cc6cef298c10d5
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 20:25:53 2021 -0500
+
+    changed the host option to fix help bug (#5)
+
+commit 9672725f765bf83c45248f312fc0e377f9a19e9f
+Merge: 2a586bd 7469032
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 20:22:18 2021 -0500
+
+    Merge pull request #4 from mpreath/update-command-line-options
+    
+    reworked the commandline parameters
+
+commit 74690328a27ba8b9fdb1019effc9375abd3305be
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 20:21:30 2021 -0500
+
+    reworked the commandline parameters
+
+commit 2a586bdfac3165af9f287a009b416e193c259e74
+Merge: 278f942 7ae565e
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 19:34:51 2021 -0500
+
+    Merge pull request #3 from mpreath/fix-help-cli-options
+    
+    updated usage hint
+
+commit 7ae565e08dce226de60fde77075e83f87fad85ce
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 19:33:44 2021 -0500
+
+    updated usage hint
+
+commit 278f942656f8a95719c7fac8da2472d571c02cc0
+Merge: e30d10b de20744
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 09:09:43 2021 -0500
+
+    Merge pull request #2 from mpreath/cleaning-up-repo
+    
+    Cleaning up repo
+
+commit de207444232ecef564acb94327039b1de9cc5e2b
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 08:57:33 2021 -0500
+
+    Removed .deps directory from Git
+
+commit ca4eac6eac7add486cef2f881aab818888f3ea91
+Author: Matt Reath <mattreath@icloud.com>
+Date:   Sat Apr 17 08:54:39 2021 -0500
+
+    Added .vscode to .gitignore
+
+commit f10ec0eec980765f1cdd9e3ea0e646a830e8fc93
+Author: Matt Reath <mpreath@glacier.mta>
+Date:   Sat Apr 17 08:53:16 2021 -0500
+
+    Added .gitignore and updated configure.ac
+
+commit e30d10bdf347b58c3b5b12321212351e8b97a76c
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Thu Apr 27 22:11:33 2017 -0500
+
+    Updated split_to_depth function with a host count option _hc to fix bug in splitting the network by host count requirement
+
+commit 0cb6db3622bbf147f44c7297a2f5bb325e733633
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Thu Apr 27 22:01:52 2017 -0500
+
+    Fixed host count tree building logic (still testing)
+
+commit c2d5c9f7712f630cd37f9c49159fd902d9c9775a
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Thu Apr 27 06:43:27 2017 -0500
+
+    additional code cleanup
+
+commit 5a8525cc788d353b71c98ce87cb9d40507c3cc85
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Wed Apr 26 15:53:25 2017 -0500
+
+    Updated README to match new CLI options
+
+commit 1769da9a6ecaf10b25c5f4f85d972f910ec17556
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Wed Apr 26 13:47:17 2017 -0500
+
+    Fixed CLI parsing logic and removed unneeded code.:
+
+commit e6a2fee58e2297583605f25bf5e5ea841d2f3e55
+Author: Matt Reath <mpreath@gmail.com>
+Date:   Wed Apr 26 11:26:39 2017 -0500
+
+    Updated ChangeLog using git log
+
 commit 41ac981ba9c7b393c3a4007376e98248c84691fb
 Author: Matt Reath <mpreath@gmail.com>
 Date:   Wed Apr 26 11:22:06 2017 -0500
