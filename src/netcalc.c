@@ -338,6 +338,11 @@ void net_summary()
 
 	g_free(buffer);
 
+	// FIXME: This O(N2) algorithm takes a very long time to run
+	// TODO: Need to create a new way of summarizing
+	// Sort by ip address -> create segments based on common bit patterns
+	// -> summarize in one calculation all of the common bits in the segment
+	// -> match mask to common bit boundry -> repeat for segments
 	/* loop until there are no summarization left to do */
 	while (made_changes)
 	{
