@@ -28,7 +28,7 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 
-#define MAX_NUM_TREES 256
+#define MAX_NUM_TREES 2000000
 
 void print_info();
 void print_usage();
@@ -268,22 +268,22 @@ void vlsm_tree(char *ip_address, char *mask, char *nets)
 void net_summary()
 {
 
-	tnode *networks[MAX_NUM_TREES];
-	host h1;
+	guint32 *networks = NULL;
 	gchar* buffer;
 	gchar* cidr_tok = "/";
 	gchar* space_tok = " ";
+	gchar* summarized_network;
+	gchar* summarized_mask;
+	guint32 val = 2147483648;
 	size_t bufsize = 34;
 	int i;
 	int j;
 	int k;
-	int l;
-	tnode *t1;
-	int made_changes = 1;
-
-	/* initialize the nodes to NULL */
-	for (i = 0; i < MAX_NUM_TREES; i++)
-		networks[i] = NULL;
+ 
+	// we can use just an array of unsigned 32-bit integers and
+	// store the ip addresses in them, less memory usage and better
+	// performance
+	networks = (guint32*) g_malloc(sizeof(guint32) * MAX_NUM_TREES);
 
 	/* 	read each line from stdin (using readline)
 		check for "/" denoting a CIDR format
@@ -295,7 +295,7 @@ void net_summary()
 			if true, split on space and initialize host as is done below */
 			
 
-	buffer = (gchar *)malloc(bufsize * sizeof(gchar));
+	buffer = (gchar *) g_malloc(bufsize * sizeof(gchar));
 	/* populate the array with the networks from the input */
 	for (i = 0; getline(&buffer, &bufsize, stdin) > 0; i++)
 	{
@@ -309,24 +309,14 @@ void net_summary()
 			if(g_strrstr(buffer,cidr_tok)) 
 			{
 				gchar** split_values = g_strsplit(buffer, cidr_tok, 2);
-				initialize_cidr_host(&h1, split_values[0], split_values[1]);
-				networks[i] = g_malloc(sizeof(tnode));
-				initialize_network(&networks[i]->n, &h1);
-				networks[i]->left = NULL;
-				networks[i]->right = NULL;
-				networks[i]->parent = NULL;
+				networks[i] = ddtoint(split_values[0]);
 				g_strfreev(split_values);
 				
 			}
-			else if(strstr(buffer,space_tok))
+			else if(g_strrstr(buffer,space_tok))
 			{
 				gchar** split_values = g_strsplit(buffer, space_tok, 2);
-				initialize_host(&h1, split_values[0], split_values[1]);
-				networks[i] = g_malloc(sizeof(tnode));
-				initialize_network(&networks[i]->n, &h1);
-				networks[i]->left = NULL;
-				networks[i]->right = NULL;
-				networks[i]->parent = NULL;
+				networks[i] = ddtoint(split_values[0]);
 				g_strfreev(split_values);
 			}
 		}
@@ -334,52 +324,101 @@ void net_summary()
 
 	g_free(buffer);
 
+	// *** NEW WAY O(n) much better performance ***
+	// Sort by ip address -> create segments based on common bit patterns
+	// -> summarize in one calculation all of the common bits in the segment
+	// -> match mask to common bit boundry -> repeat for segments
 	/* loop until there are no summarization left to do */
-	while (made_changes)
+
+	guint32 common_bits = 0;
+	guint32 mask_bits = 0;
+
+	// loop through all networks
+	for (j = 0; j < i; j++)
 	{
-
-		made_changes = 0;
-		/* loop through each member */
-		for (j = 0; j < i; j++)
+		if (j == 0)
 		{
-			/* compare each member for summarization*/
-			for (k = 0; k < i; k++)
-			{
-
-				if ((j != k) && (t1 = combine_networks(networks[j], networks[k])) != NULL)
-				{
-					networks[j] = NULL;
-					networks[k] = NULL;
-
-					for (l = 0; networks[l] != NULL; l++)
-						;
-
-					networks[l] = t1;
-					made_changes = 1;
-				}
-			}
+			// this is our first iteration
+			common_bits = networks[j];
 		}
+		else 
+		{
+			mask_bits = common_bits ^ networks[j];
+			common_bits = common_bits & networks[j];
+		}
+
 	}
 
-	if(verbose)
-		printf("Networks were summarized as follows:\n\n");
 
-	for (i = 0; i < MAX_NUM_TREES; i++)
-	{
-		if (networks[i] != NULL)
-		{
-			if (verbose)
-			{
-				print_network_tree(networks[i], 0, TRUE);
-				printf("\n");
-			}
-			else
-			{
-				char ip_address[16];
-				inttodd(ip_address, networks[i]->n.address.ip_address);
-				printf("%s/%i\n", ip_address, get_bits_in_mask(networks[i]->n.address.mask));
-			}
-			free_network_tree(networks[i]);
-		}
+	summarized_network = (gchar *) g_malloc (sizeof(gchar) * 16); 
+	inttodd(summarized_network, common_bits);
+
+	for (k = 0 ; (mask_bits & val) != 2147483648; mask_bits = mask_bits << 1, k++ ) 
+		;
+
+	summarized_mask = (gchar *) g_malloc (sizeof(gchar) * 16); 
+	inttodd(summarized_mask, get_mask_from_bits(k));
+	
+	if (verbose) {
+		printf("%s\t%s\n", summarized_network, summarized_mask);
 	}
+	else 
+	{
+		printf("%s/%u\n", summarized_network, k);
+	}
+	
+
+	// memory cleanup
+	g_free(networks);
+	g_free(summarized_network);
+	g_free(summarized_mask);
+
+	// *** OLD WAY O(n2) ***
+	// while (made_changes)
+	// {
+
+	// 	made_changes = 0;
+	// 	/* loop through each member */
+	// 	for (j = 0; j < i; j++)
+	// 	{
+	// 		/* compare each member for summarization*/
+	// 		for (k = 0; k < i; k++)
+	// 		{
+
+	// 			if ((j != k) && (t1 = combine_networks(networks[j], networks[k])) != NULL)
+	// 			{
+	// 				networks[j] = NULL;
+	// 				networks[k] = NULL;
+
+	// 				for (l = 0; networks[l] != NULL; l++)
+	// 					;
+
+	// 				networks[l] = t1;
+	// 				made_changes = 1;
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	// if(verbose)
+	// 	printf("Networks were summarized as follows:\n\n");
+
+	// for (i = 0; i < MAX_NUM_TREES; i++)
+	// {
+	// 	if (networks[i] != NULL)
+	// 	{
+	// 		if (verbose)
+	// 		{
+	// 			print_network_tree(networks[i], 0, TRUE);
+	// 			printf("\n");
+	// 		}
+	// 		else
+	// 		{
+	// 			char ip_address[16];
+	// 			inttodd(ip_address, networks[i]->n.address.ip_address);
+	// 			printf("%s/%i\n", ip_address, get_bits_in_mask(networks[i]->n.address.mask));
+	// 		}
+	// 		free_network_tree(networks[i]);
+	// 	}
+	// }
 }
