@@ -168,7 +168,7 @@ int is_valid_mask(guint32 mask)
 
 	int i;
 	int is_valid = 0;
-	for (i = 1; i <= 32; i++)
+	for (i = 8; i <= 32; i++)
 	{
 
 		if (mask == get_mask_from_bits(i))
