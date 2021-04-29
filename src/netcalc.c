@@ -28,7 +28,7 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 
-#define MAX_NUM_TREES 256
+#define MAX_NUM_TREES 2000000
 
 void print_info();
 void print_usage();
@@ -268,7 +268,7 @@ void vlsm_tree(char *ip_address, char *mask, char *nets)
 void net_summary()
 {
 
-	tnode *networks[MAX_NUM_TREES];
+	tnode **networks = NULL;
 	host h1;
 	gchar* buffer;
 	gchar* cidr_tok = "/";
@@ -280,6 +280,8 @@ void net_summary()
 	int l;
 	tnode *t1;
 	int made_changes = 1;
+
+	networks = (tnode**) malloc(sizeof(tnode) * MAX_NUM_TREES);
 
 	/* initialize the nodes to NULL */
 	for (i = 0; i < MAX_NUM_TREES; i++)
@@ -305,6 +307,8 @@ void net_summary()
 			int length = strlen(buffer);
 			if (buffer[length-1] == '\n')
 				buffer[length-1]  = '\0';
+
+			//printf("%d\n", i);
 
 			if(g_strrstr(buffer,cidr_tok)) 
 			{
@@ -382,4 +386,6 @@ void net_summary()
 			free_network_tree(networks[i]);
 		}
 	}
+
+	free(networks);
 }
