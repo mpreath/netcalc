@@ -26,20 +26,6 @@
 #include <stdlib.h>
 #include <glib.h>
 
-/*
-typedef struct network_tree_node *tptr;
-
-typedef struct network_tree_node {
-
-	network n;
-	tptr right;
-	tptr left;
-
-} tnode;
-
-int split_network(tptr n1);
-*/
-
 typedef struct network_tree_node
 {
 
