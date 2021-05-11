@@ -2,7 +2,7 @@
     netcalc - a simple CLI subnet calculator written in ANSI C
     utility.h - misc function definitions 
 
-    Copyright (C) 2009  Matthew Reath 
+    Copyright (C) 2021  Matthew Reath
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,6 +20,15 @@
 #ifndef __UTILITY_H__
 #define __UTILITY_H__
 #include <glib.h>
+
+typedef struct snode *summarization_node;
+struct snode
+{
+
+	guint32 address;
+	summarization_node *next;
+
+};
 
 /* dotted decimal string to integer */
 guint32 ddtoint(char *dd);

@@ -349,7 +349,6 @@ void net_summary()
 
 	}
 
-
 	summarized_network = (gchar *) g_malloc (sizeof(gchar) * 16); 
 	inttodd(summarized_network, common_bits);
 
@@ -373,52 +372,4 @@ void net_summary()
 	g_free(summarized_network);
 	g_free(summarized_mask);
 
-	// *** OLD WAY O(n2) ***
-	// while (made_changes)
-	// {
-
-	// 	made_changes = 0;
-	// 	/* loop through each member */
-	// 	for (j = 0; j < i; j++)
-	// 	{
-	// 		/* compare each member for summarization*/
-	// 		for (k = 0; k < i; k++)
-	// 		{
-
-	// 			if ((j != k) && (t1 = combine_networks(networks[j], networks[k])) != NULL)
-	// 			{
-	// 				networks[j] = NULL;
-	// 				networks[k] = NULL;
-
-	// 				for (l = 0; networks[l] != NULL; l++)
-	// 					;
-
-	// 				networks[l] = t1;
-	// 				made_changes = 1;
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// if(verbose)
-	// 	printf("Networks were summarized as follows:\n\n");
-
-	// for (i = 0; i < MAX_NUM_TREES; i++)
-	// {
-	// 	if (networks[i] != NULL)
-	// 	{
-	// 		if (verbose)
-	// 		{
-	// 			print_network_tree(networks[i], 0, TRUE);
-	// 			printf("\n");
-	// 		}
-	// 		else
-	// 		{
-	// 			char ip_address[16];
-	// 			inttodd(ip_address, networks[i]->n.address.ip_address);
-	// 			printf("%s/%i\n", ip_address, get_bits_in_mask(networks[i]->n.address.mask));
-	// 		}
-	// 		free_network_tree(networks[i]);
-	// 	}
-	// }
 }
