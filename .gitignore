@@ -1,0 +1,5 @@
+# vscode specifics
+.vscode/
+
+# build artifacts
+netcalc
