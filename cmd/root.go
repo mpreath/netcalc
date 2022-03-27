@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"netcalc/ipv4"
-	"netcalc/ipv4/network"
 
+	"github.com/mpreath/netcalc/ipv4"
+	"github.com/mpreath/netcalc/ipv4/network"
 	"github.com/spf13/cobra"
 )
 

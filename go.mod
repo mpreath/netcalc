@@ -1,4 +1,4 @@
-module netcalc
+module github.com/mpreath/netcalc
 
 go 1.18
 

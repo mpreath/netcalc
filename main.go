@@ -1,7 +1,7 @@
 package main
 
 import (
-	"netcalc/cmd"
+	"github.com/mpreath/netcalc/cmd"
 )
 
 func main() {
