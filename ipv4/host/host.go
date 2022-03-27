@@ -1,6 +1,6 @@
 package host
 
-import "netcalc/ipv4"
+import "github.com/mpreath/netcalc/ipv4"
 
 type Host struct {
 	Address uint32

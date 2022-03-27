@@ -2,8 +2,9 @@ package network
 
 import (
 	"fmt"
-	"netcalc/ipv4"
-	"netcalc/ipv4/host"
+
+	"github.com/mpreath/netcalc/ipv4"
+	"github.com/mpreath/netcalc/ipv4/host"
 )
 
 type Network struct {
