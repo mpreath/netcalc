@@ -9,10 +9,10 @@ import (
 func TestGenerateNetwork(t *testing.T) {
 	test_cases := []struct {
 		dd_address         string
-		dd_network_address string
 		dd_mask            string
+		dd_network_address string
 	}{
-		{"192.168.1.1", "192.168.1.0", "255.255.255.0"},
+		{"192.168.1.1", "255.255.255.0", "192.168.1.0"},
 	}
 
 	for _, test_case := range test_cases {
