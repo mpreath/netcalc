@@ -26,14 +26,16 @@ func Execute() error {
 }
 
 func printNetworkInformation(n *network.Network) {
-	n_dd_address, _ := ipv4.Itodd(n.Address)
-	n_dd_mask, _ := ipv4.Itodd(n.Mask)
-	n_dd_bcast, _ := ipv4.Itodd(n.BroadcastAddress)
+	if n != nil {
+		n_dd_address, _ := ipv4.Itodd(n.Address)
+		n_dd_mask, _ := ipv4.Itodd(n.Mask)
+		n_dd_bcast, _ := ipv4.Itodd(n.BroadcastAddress)
 
-	fmt.Printf("Network:\t%s\n", n_dd_address)
-	fmt.Printf("Mask:\t\t%s\n", n_dd_mask)
-	fmt.Printf("Broadcast:\t%s\n", n_dd_bcast)
-	fmt.Printf("Usable Hosts:\t%d\n", len(n.Hosts))
+		fmt.Printf("Network:\t%s\n", n_dd_address)
+		fmt.Printf("Mask:\t\t%s\n", n_dd_mask)
+		fmt.Printf("Broadcast:\t%s\n", n_dd_bcast)
+		fmt.Printf("Usable Hosts:\t%d\n", len(n.Hosts))
+	}
 }
 
 func printNetworkInformationJSON(network *network.Network) {
