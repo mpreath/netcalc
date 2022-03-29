@@ -12,13 +12,14 @@ var rootCmd = &cobra.Command{
 	Use:   "netcalc",
 	Short: "Netcalc is a IPv4/IPv6 network calculator",
 	Run: func(cmd *cobra.Command, args []string) {
+		// TODO: Get arguments for address and mask
 		n, err := network.GenerateNetwork("192.168.1.1", "255.255.255.0")
 		if err != nil {
 			fmt.Print(err)
 			return
 		}
 		// TODO: Add flags for verbosity and JSON
-		printNetworkInformation(n)
+		printNetworkInformation(n, false)
 	},
 }
 
@@ -26,7 +27,7 @@ func Execute() error {
 	return rootCmd.Execute()
 }
 
-func printNetworkInformation(n *network.Network) {
+func printNetworkInformation(n *network.Network, verbose bool) {
 	if n != nil {
 		n_dd_address, _ := ipv4.Itodd(n.Address)
 		n_dd_mask, _ := ipv4.Itodd(n.Mask)
@@ -36,6 +37,10 @@ func printNetworkInformation(n *network.Network) {
 		fmt.Printf("Mask:\t\t%s\n", n_dd_mask)
 		fmt.Printf("Broadcast:\t%s\n", n_dd_bcast)
 		fmt.Printf("Usable Hosts:\t%d\n", len(n.Hosts))
+
+		if verbose {
+			// TODO: Print out network hosts
+		}
 	}
 }
 
