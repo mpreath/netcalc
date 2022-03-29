@@ -17,6 +17,7 @@ var rootCmd = &cobra.Command{
 			fmt.Print(err)
 			return
 		}
+		// TODO: Add flags for verbosity and JSON
 		printNetworkInformation(n)
 	},
 }
@@ -39,4 +40,5 @@ func printNetworkInformation(n *network.Network) {
 }
 
 func printNetworkInformationJSON(network *network.Network) {
+	// TODO: Create appropriate marshalling for Network and Host structs
 }

@@ -52,6 +52,14 @@ func Itodd(address uint32) (string, error) {
 }
 
 func IsValidMask(mask uint32) bool {
-
+	// TODO: Check if the mask is valid
 	return true
+}
+
+func GetNetworkAddress(address uint32, mask uint32) uint32 {
+	return address & mask
+}
+
+func GetBroadcastAddress(address uint32, mask uint32) uint32 {
+	return address | (^mask)
 }

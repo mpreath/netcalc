@@ -27,8 +27,8 @@ func GenerateNetwork(address string, mask string) (*Network, error) {
 		return nil, fmt.Errorf("ipv4.network.GenerateNetwork: invalid subnet mask")
 	}
 
-	network_address := getNetworkAddress(host_address, network_mask)
-	broadcast_address := getBroadcastAddress(network_address, network_mask)
+	network_address := ipv4.GetNetworkAddress(host_address, network_mask)
+	broadcast_address := ipv4.GetBroadcastAddress(network_address, network_mask)
 
 	count := broadcast_address - network_address - 1
 
@@ -45,12 +45,4 @@ func GenerateNetwork(address string, mask string) (*Network, error) {
 	}
 
 	return &network, nil
-}
-
-func getNetworkAddress(address uint32, mask uint32) uint32 {
-	return address & mask
-}
-
-func getBroadcastAddress(address uint32, mask uint32) uint32 {
-	return address | (^mask)
 }
