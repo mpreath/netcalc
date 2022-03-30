@@ -28,24 +28,8 @@ following features:
 ### Compile and Install
 
 ```
+go test ./...
 go build
 go install
 ```
-
-### Usage
-
-```
-netcalc [OPTION?] [<ip_address/cidr> | <ip_address> <mask>] - calculate network information
-
-Help Options:
-  -h, --help               Show help options
-
-Application Options:
-  -v, --verbose            Use verbose output
-  -V, --version            Display version information
-  -o, --hosts=HOSTS        Specify the host count to use to subnet the network
-  -n, --nets=NETS          Specify the net count to use to subnet the network
-  -l, --vlsm=VLSM_LIST     Comma seperated list of host counts for VLSM network
-  -s, --summary            Summarize subnets into one or more supernets
- ```
 
