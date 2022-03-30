@@ -69,7 +69,7 @@ func TestIsValidMask(t *testing.T) {
 	for _, test_case := range test_cases {
 		uint_mask, _ := Ddtoi(test_case.dd_mask)
 		is_mask_valid := IsValidMask(uint_mask)
-		if !(is_mask_valid == test_case.is_valid) {
+		if is_mask_valid != test_case.is_valid {
 			t.Errorf("result for %s (%t) does not match spec (%t)", test_case.dd_mask, is_mask_valid, test_case.is_valid)
 		}
 
