@@ -46,16 +46,32 @@ func TestItodd(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_val, err := Itodd(test_case.uint_address)
-		if err != nil {
-			if err.Error() != test_case.error_string {
-				t.Fatalf("result (%s) does not match spec (%s)", err.Error(), test_case.error_string)
-			}
-		}
+		test_val := Itodd(test_case.uint_address)
 
 		if test_val != test_case.dd_address {
 			// function calculation is incorrect
 			t.Errorf("result (%s) does not match spec (%s)", test_val, test_case.dd_address)
 		}
+	}
+}
+
+func TestIsValidMask(t *testing.T) {
+	test_cases := []struct {
+		dd_mask  string
+		is_valid bool
+	}{
+		{"255.255.255.0", true},
+		{"192.168.1.0", false},
+		{"128.0.0.0", true},
+		{"0.0.0.128", false},
+	}
+
+	for _, test_case := range test_cases {
+		uint_mask, _ := Ddtoi(test_case.dd_mask)
+		is_mask_valid := IsValidMask(uint_mask)
+		if !(is_mask_valid == test_case.is_valid) {
+			t.Errorf("result for %s (%t) does not match spec (%t)", test_case.dd_mask, is_mask_valid, test_case.is_valid)
+		}
+
 	}
 }

@@ -1,6 +1,7 @@
 package ipv4
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -39,7 +40,7 @@ func Ddtoi(address_string string) (uint32, error) {
 	return address, nil
 }
 
-func Itodd(address uint32) (string, error) {
+func Itodd(address uint32) string {
 
 	first_octet := address >> 24
 	second_octet := address << 8 >> 24
@@ -48,12 +49,18 @@ func Itodd(address uint32) (string, error) {
 
 	dd_address := strconv.FormatUint(uint64(first_octet), 10) + "." + strconv.FormatUint(uint64(second_octet), 10) + "." + strconv.FormatUint(uint64(third_octet), 10) + "." + strconv.FormatUint(uint64(fourth_octet), 10)
 
-	return dd_address, nil
+	return dd_address
 }
 
 func IsValidMask(mask uint32) bool {
-	// TODO: Check if the mask is valid
-	return true
+	for i := 1; i <= 32; i++ {
+		calc_mask, _ := GetMaskFromBits(i)
+		if mask == calc_mask {
+			return true
+		}
+	}
+
+	return false
 }
 
 func GetNetworkAddress(address uint32, mask uint32) uint32 {
@@ -62,4 +69,26 @@ func GetNetworkAddress(address uint32, mask uint32) uint32 {
 
 func GetBroadcastAddress(address uint32, mask uint32) uint32 {
 	return address | (^mask)
+}
+
+func GetBitsInMask(mask uint32) int {
+	bc := 0
+	for mask != 0 {
+		mask = mask << 1
+		bc++
+	}
+	return bc
+}
+
+func GetMaskFromBits(bits int) (uint32, error) {
+	if bits <= 32 {
+		var mask uint32 = 0
+		mask = ^mask
+		bc := 32 - bits
+		mask = mask << bc
+		return mask, nil
+	} else {
+		return 0, errors.New("ipv4:GetMaskFromBits: bits must be 32 or less")
+	}
+
 }

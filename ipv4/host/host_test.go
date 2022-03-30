@@ -17,8 +17,8 @@ func TestGenerateHost(t *testing.T) {
 	for _, test_case := range test_cases {
 		test_host, _ := GenerateHost(test_case.dd_address, test_case.dd_mask)
 
-		dd_test_address, _ := ipv4.Itodd(test_host.Address)
-		dd_test_mask, _ := ipv4.Itodd(test_host.Mask)
+		dd_test_address := ipv4.Itodd(test_host.Address)
+		dd_test_mask := ipv4.Itodd(test_host.Mask)
 
 		if dd_test_address != test_case.dd_address {
 			t.Errorf("generated address (%s) doesn't match spec address (%s)", dd_test_address, test_case.dd_address)
