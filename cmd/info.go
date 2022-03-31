@@ -1,0 +1,59 @@
+package cmd
+
+import (
+	"fmt"
+
+	"github.com/mpreath/netcalc/ipv4"
+	"github.com/mpreath/netcalc/ipv4/network"
+	"github.com/spf13/cobra"
+)
+
+func init() {
+	rootCmd.AddCommand(infoCmd)
+}
+
+var infoCmd = &cobra.Command{
+	Use:   "info",
+	Short: "Displays information about a network",
+	Long: `
+This command displays information about an IPv4 network.
+Usage: netcalc info <ip_address> <subnet_mask>.`,
+	Args: cobra.MinimumNArgs(2),
+	Run: func(cmd *cobra.Command, args []string) {
+		n, err := network.GenerateNetwork(args[0], args[1])
+		if err != nil {
+			fmt.Print(err)
+			return
+		}
+
+		if json {
+			printNetworkInformationJSON(n)
+		} else {
+			printNetworkInformation(n)
+		}
+	},
+}
+
+func printNetworkInformation(n *network.Network) {
+	if n != nil {
+		n_dd_address := ipv4.Itodd(n.Address)
+		n_dd_mask := ipv4.Itodd(n.Mask)
+		n_dd_bcast := ipv4.Itodd(n.BroadcastAddress)
+
+		fmt.Printf("Network:\t%s\n", n_dd_address)
+		fmt.Printf("Mask:\t\t%s\n", n_dd_mask)
+		fmt.Printf("Broadcast:\t%s\n", n_dd_bcast)
+		fmt.Printf("Usable Hosts:\t%d\n", len(n.Hosts))
+
+		if verbose {
+			// TODO: Print out network hosts
+			for _, host := range n.Hosts {
+				fmt.Printf("%s\t%s\n", ipv4.Itodd(host.Address), ipv4.Itodd(host.Mask))
+			}
+		}
+	}
+}
+
+func printNetworkInformationJSON(network *network.Network) {
+	// TODO: Create appropriate marshalling for Network and Host structs
+}
