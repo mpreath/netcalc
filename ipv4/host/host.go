@@ -1,10 +1,27 @@
 package host
 
-import "github.com/mpreath/netcalc/ipv4"
+import (
+	"encoding/json"
+
+	"github.com/mpreath/netcalc/ipv4"
+)
 
 type Host struct {
-	Address uint32
-	Mask    uint32
+	Address uint32 `json:"address"`
+	Mask    uint32 `json:"mask"`
+}
+
+func (h *Host) MarshalJSON() ([]byte, error) {
+	type Alias Host
+	return json.Marshal(&struct {
+		Address string `json:"address"`
+		Mask    string `json:"mask"`
+		*Alias
+	}{
+		Address: ipv4.Itodd(h.Address),
+		Mask:    ipv4.Itodd(h.Mask),
+		Alias:   (*Alias)(h),
+	})
 }
 
 func GenerateHost(address string, mask string) (*Host, error) {

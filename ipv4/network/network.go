@@ -1,6 +1,7 @@
 package network
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/mpreath/netcalc/ipv4"
@@ -8,10 +9,25 @@ import (
 )
 
 type Network struct {
-	Address          uint32
-	Mask             uint32
-	BroadcastAddress uint32
-	Hosts            []host.Host
+	Address          uint32      `json:"address"`
+	Mask             uint32      `json:"mask"`
+	BroadcastAddress uint32      `json:"broadcast"`
+	Hosts            []host.Host `json:"hosts"`
+}
+
+func (n *Network) MarshalJSON() ([]byte, error) {
+	type Alias Network
+	return json.Marshal(&struct {
+		Address          string `json:"address"`
+		Mask             string `json:"mask"`
+		BroadcastAddress string `json:"broadcast"`
+		*Alias
+	}{
+		Address:          ipv4.Itodd(n.Address),
+		Mask:             ipv4.Itodd(n.Mask),
+		BroadcastAddress: ipv4.Itodd(n.BroadcastAddress),
+		Alias:            (*Alias)(n),
+	})
 }
 
 func GenerateNetwork(address string, mask string) (*Network, error) {

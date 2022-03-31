@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/mpreath/netcalc/ipv4"
@@ -26,7 +27,7 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 			return
 		}
 
-		if json {
+		if json_out {
 			printNetworkInformationJSON(n)
 		} else {
 			printNetworkInformation(n)
@@ -46,7 +47,6 @@ func printNetworkInformation(n *network.Network) {
 		fmt.Printf("Usable Hosts:\t%d\n", len(n.Hosts))
 
 		if verbose {
-			// TODO: Print out network hosts
 			for _, host := range n.Hosts {
 				fmt.Printf("%s\t%s\n", ipv4.Itodd(host.Address), ipv4.Itodd(host.Mask))
 			}
@@ -55,5 +55,10 @@ func printNetworkInformation(n *network.Network) {
 }
 
 func printNetworkInformationJSON(network *network.Network) {
-	// TODO: Create appropriate marshalling for Network and Host structs
+	s, err := json.MarshalIndent(network, "", "  ")
+	if err != nil {
+		fmt.Print(err)
+		return
+	}
+	fmt.Printf("%s\n", s)
 }

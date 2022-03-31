@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var json bool
+var json_out bool
 var verbose bool
 
 var rootCmd = &cobra.Command{
@@ -13,7 +13,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&json, "json", "j", false, "Turns on JSON output for commands")
+	rootCmd.PersistentFlags().BoolVarP(&json_out, "json", "j", false, "Turns on JSON output for commands")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Turns on verbose output for commands")
 }
 
