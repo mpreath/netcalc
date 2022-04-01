@@ -4,8 +4,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var json_out bool
-var verbose bool
+var JSON_FLAG bool
+var VERBOSE_FLAG bool
 
 var rootCmd = &cobra.Command{
 	Use:   "netcalc",
@@ -13,8 +13,8 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&json_out, "json", "j", false, "Turns on JSON output for commands")
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Turns on verbose output for commands")
+	rootCmd.PersistentFlags().BoolVarP(&JSON_FLAG, "json", "j", false, "Turns on JSON output for commands")
+	rootCmd.PersistentFlags().BoolVarP(&VERBOSE_FLAG, "verbose", "v", false, "Turns on verbose output for commands")
 }
 
 func Execute() error {

@@ -27,7 +27,7 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 			return
 		}
 
-		if json_out {
+		if JSON_FLAG {
 			printNetworkInformationJSON(n)
 		} else {
 			printNetworkInformation(n)
@@ -43,7 +43,7 @@ func printNetworkInformation(n *network.Network) {
 		fmt.Printf("Broadcast:\t%s\n", ipv4.Itodd(n.BroadcastAddress))
 		fmt.Printf("Usable Hosts:\t%d\n", len(n.Hosts))
 
-		if verbose {
+		if VERBOSE_FLAG {
 			for _, host := range n.Hosts {
 				fmt.Printf("%s\t%s\n", ipv4.Itodd(host.Address), ipv4.Itodd(host.Mask))
 			}
