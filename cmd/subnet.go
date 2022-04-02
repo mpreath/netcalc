@@ -28,8 +28,6 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 		// generate network from args
 		node := network_tree.NetworkNode{
 			Parent:  nil,
-			Left:    nil,
-			Right:   nil,
 			Network: network,
 		}
 		err = node.Split()
@@ -37,20 +35,29 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 			fmt.Println(err)
 			return
 		}
-		err = node.Left.Split()
+		err = node.Subnets[0].Split()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		err = node.Right.Split()
+		err = node.Subnets[1].Split()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		// s, _ := node.MarshalJSON()
-		// fmt.Println(string(s))
+		err = node.Subnets[0].Subnets[0].Split()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		err = node.Subnets[0].Subnets[0].Subnets[0].Split()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
+		//_ = json.NewEncoder(os.Stdout).Encode(node)
 		s, _ := json.MarshalIndent(node, "", "  ")
 		fmt.Println(string(s))
 

@@ -1,5 +1,6 @@
 # vscode specifics
 .vscode/
+*.json
 
 # build artifacts
 netcalc
