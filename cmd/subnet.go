@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/mpreath/netcalc/ipv4/network"
@@ -31,13 +32,27 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 			Right:   nil,
 			Network: network,
 		}
-		// err = node.Split()
-		// if err != nil {
-		// 	fmt.Println(err)
-		// 	return
-		// }
+		err = node.Split()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		err = node.Left.Split()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		err = node.Right.Split()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-		node.Print()
+		// s, _ := node.MarshalJSON()
+		// fmt.Println(string(s))
+
+		s, _ := json.MarshalIndent(node, "", "  ")
+		fmt.Println(string(s))
 
 	},
 }

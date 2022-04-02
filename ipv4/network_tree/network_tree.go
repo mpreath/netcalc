@@ -1,7 +1,6 @@
 package network_tree
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/mpreath/netcalc/ipv4"
@@ -9,27 +8,21 @@ import (
 )
 
 type NetworkNode struct {
-	Parent *NetworkNode
-	Left   *NetworkNode
-	Right  *NetworkNode
-	// wrap a network in each node struct
-	*network.Network
-}
-
-func (node *NetworkNode) Print() {
-	s, _ := json.MarshalIndent(node, " ", "    ")
-	fmt.Printf("%s\n", s)
+	Network *network.Network `json:"network,omitempty"`
+	Parent  *NetworkNode     `json:"-"`
+	Left    *NetworkNode     `json:"subnet_1,omitempty"`
+	Right   *NetworkNode     `json:"subnet_2,omitempty"`
 }
 
 func (node *NetworkNode) Split() error {
-	bc := ipv4.GetBitsInMask(node.Mask) + 1
+	bc := ipv4.GetBitsInMask(node.Network.Mask) + 1
 	if bc < 31 {
 		new_mask, err := ipv4.GetMaskFromBits(bc)
 		if err != nil {
 			return err
 		}
 		// left will contain the lower value
-		left_network, err := network.GenerateNetworkFromBits(node.Address, new_mask)
+		left_network, err := network.GenerateNetworkFromBits(node.Network.Address, new_mask)
 		if err != nil {
 			return err
 		}
@@ -52,7 +45,7 @@ func (node *NetworkNode) Split() error {
 			Network: right_network,
 		}
 
-		node.Hosts = nil
+		node.Network.Hosts = nil
 	} else {
 		return fmt.Errorf("Network doesn't support being split.\n")
 	}

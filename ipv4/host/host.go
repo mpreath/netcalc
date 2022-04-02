@@ -16,11 +16,9 @@ func (h *Host) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Address string `json:"address"`
 		Mask    string `json:"mask"`
-		*Alias
 	}{
 		Address: ipv4.Itodd(h.Address),
 		Mask:    ipv4.Itodd(h.Mask),
-		Alias:   (*Alias)(h),
 	})
 }
 
