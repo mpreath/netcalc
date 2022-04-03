@@ -54,13 +54,11 @@ func SplitToHostCount(node *NetworkNode, host_count int) {
 
 	current_bc := 32 - ipv4.GetBitsInMask(node.Network.Mask)
 	current_hc := int(math.Pow(2, float64(current_bc)))
-	future_bc := current_bc - 1
+	future_bc := current_bc - 1 // need to look ahead into the future
 	future_hc := int(math.Pow(2, float64(future_bc)))
 
-	// fmt.Printf("(%d,%d)(%d,%d)\n", current_bc, current_hc, future_bc, future_hc)
-
 	if current_hc >= host_count && future_hc < host_count {
-		// this is our base
+		// this is our recursive base case
 		return
 	} else if current_hc < host_count {
 		// requirements too large, raise an error
