@@ -30,32 +30,13 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 			Parent:  nil,
 			Network: network,
 		}
-		err = node.Split()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		err = node.Subnets[0].Split()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		err = node.Subnets[1].Split()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+		// err = node.Split()
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	return
+		// }
 
-		err = node.Subnets[0].Subnets[0].Split()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		err = node.Subnets[0].Subnets[0].Subnets[0].Split()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+		network_tree.SplitToHostCount(&node, 100)
 
 		//_ = json.NewEncoder(os.Stdout).Encode(node)
 		s, _ := json.MarshalIndent(node, "", "  ")

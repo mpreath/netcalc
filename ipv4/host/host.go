@@ -12,7 +12,6 @@ type Host struct {
 }
 
 func (h *Host) MarshalJSON() ([]byte, error) {
-	type Alias Host
 	return json.Marshal(&struct {
 		Address string `json:"address"`
 		Mask    string `json:"mask"`
