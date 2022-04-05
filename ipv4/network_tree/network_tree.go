@@ -27,8 +27,6 @@ func (node *NetworkNode) Split() error {
 			return err
 		}
 
-		// node.Subnets[0] = &NetworkNode{Parent: node, Network: left_network}
-
 		node.Subnets = append(node.Subnets, &NetworkNode{Parent: node, Network: left_network})
 
 		// right will contain the larger value
@@ -37,21 +35,21 @@ func (node *NetworkNode) Split() error {
 			return err
 		}
 
-		// node.Subnets[0] = &NetworkNode{Parent: node, Network: right_network}
-
 		node.Subnets = append(node.Subnets, &NetworkNode{Parent: node, Network: right_network})
 
 		// no usable hosts in this network
 		node.Network.Hosts = nil
 	} else {
-		return fmt.Errorf("Network doesn't support being split.\n")
+		return fmt.Errorf("network doesn't support being split")
 	}
 
 	return nil
 }
 
-func SplitToHostCount(node *NetworkNode, host_count int) {
+func SplitToHostCount(node *NetworkNode, host_count int) error {
 
+	// FIXME: Doesn't support host_count of 2
+	// TODO: Add error handling and edge case protection
 	current_bc := 32 - ipv4.GetBitsInMask(node.Network.Mask)
 	current_hc := int(math.Pow(2, float64(current_bc)))
 	future_bc := current_bc - 1 // need to look ahead into the future
@@ -59,13 +57,50 @@ func SplitToHostCount(node *NetworkNode, host_count int) {
 
 	if current_hc >= host_count && future_hc < host_count {
 		// this is our recursive base case
-		return
+		return nil
 	} else if current_hc < host_count {
 		// requirements too large, raise an error
-		fmt.Printf("ipv4:network_tree:SplitToHostCount: network doesn't support requirements\n")
+		return fmt.Errorf("network can't support that many hosts")
 	} else {
-		node.Split()
-		SplitToHostCount(node.Subnets[0], host_count)
-		SplitToHostCount(node.Subnets[1], host_count)
+		err := node.Split()
+		if err != nil {
+			return err
+		}
+		err = SplitToHostCount(node.Subnets[0], host_count)
+		if err != nil {
+			return err
+		}
+		err = SplitToHostCount(node.Subnets[1], host_count)
+		if err != nil {
+			return err
+		}
 	}
+
+	return nil
+}
+
+func SplitToNetCount(node *NetworkNode, net_count int) error {
+	longest_valid_mask, _ := ipv4.GetMaskFromBits(30)
+	if net_count <= 0 {
+		// this is our recursive base case
+		return nil
+	} else if node.Network.Mask == longest_valid_mask {
+		// can't split any more
+		return fmt.Errorf("network can't support that many subnetworks")
+	} else {
+		err := node.Split()
+		if err != nil {
+			return err
+		}
+		err = SplitToNetCount(node.Subnets[0], net_count-2)
+		if err != nil {
+			return err
+		}
+		err = SplitToNetCount(node.Subnets[1], net_count-2)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
