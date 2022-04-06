@@ -4,8 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mpreath/netcalc/ipv4/network"
-	"github.com/mpreath/netcalc/ipv4/network_tree"
+	"github.com/mpreath/netcalc/network"
 	"github.com/spf13/cobra"
 )
 
@@ -20,26 +19,26 @@ This command subnets a network based on host count and network count parameters.
 Usage: netcalc info <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		network, err := network.GenerateNetwork(args[0], args[1])
+		net, err := network.GenerateNetwork(args[0], args[1])
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		// generate network from args
-		node := network_tree.NetworkNode{
+		node := network.NetworkNode{
 			Parent:  nil,
-			Network: network,
+			Network: net,
 		}
 
 		if HOST_COUNT > 0 {
-			err = network_tree.SplitToHostCount(&node, HOST_COUNT)
+			err = network.SplitToHostCount(&node, HOST_COUNT)
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
 
 		} else if NET_COUNT > 0 {
-			err = network_tree.SplitToNetCount(&node, NET_COUNT)
+			err = network.SplitToNetCount(&node, NET_COUNT)
 			if err != nil {
 				fmt.Println(err)
 				return

@@ -3,7 +3,7 @@ package network
 import (
 	"testing"
 
-	"github.com/mpreath/netcalc/ipv4"
+	"github.com/mpreath/netcalc/utils"
 )
 
 func TestGenerateNetwork(t *testing.T) {
@@ -18,8 +18,8 @@ func TestGenerateNetwork(t *testing.T) {
 	for _, test_case := range test_cases {
 		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
 
-		dd_test_network := ipv4.Itodd(test_network.Address)
-		dd_test_mask := ipv4.Itodd(test_network.Mask)
+		dd_test_network := utils.Itodd(test_network.Address)
+		dd_test_mask := utils.Itodd(test_network.Mask)
 
 		if dd_test_network != test_case.dd_network_address {
 			t.Errorf("generated address (%s) doesn't match spec address (%s)", dd_test_network, test_case.dd_network_address)

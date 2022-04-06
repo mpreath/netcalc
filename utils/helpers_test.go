@@ -1,4 +1,4 @@
-package ipv4
+package utils
 
 import "testing"
 

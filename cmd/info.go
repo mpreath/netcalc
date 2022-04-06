@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mpreath/netcalc/ipv4"
-	"github.com/mpreath/netcalc/ipv4/network"
+	"github.com/mpreath/netcalc/network"
+	"github.com/mpreath/netcalc/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "Displays information about a network",
 	Long: `
-This command displays information about an IPv4 network.
+This command displays information about an utils network.
 Usage: netcalc info <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -38,14 +38,14 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 func printNetworkInformation(n *network.Network) {
 	if n != nil {
 
-		fmt.Printf("Network:\t%s\n", ipv4.Itodd(n.Address))
-		fmt.Printf("Mask:\t\t%s\n", ipv4.Itodd(n.Mask))
-		fmt.Printf("Broadcast:\t%s\n", ipv4.Itodd(n.BroadcastAddress))
+		fmt.Printf("Network:\t%s\n", utils.Itodd(n.Address))
+		fmt.Printf("Mask:\t\t%s\n", utils.Itodd(n.Mask))
+		fmt.Printf("Broadcast:\t%s\n", utils.Itodd(n.BroadcastAddress))
 		fmt.Printf("Usable Hosts:\t%d\n", len(n.Hosts))
 
 		if VERBOSE_FLAG {
 			for _, host := range n.Hosts {
-				fmt.Printf("%s\t%s\n", ipv4.Itodd(host.Address), ipv4.Itodd(host.Mask))
+				fmt.Printf("%s\t%s\n", utils.Itodd(host.Address), utils.Itodd(host.Mask))
 			}
 		}
 	}

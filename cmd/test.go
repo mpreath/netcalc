@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mpreath/netcalc/ipv4/network"
+	"github.com/mpreath/netcalc/network"
 	"github.com/spf13/cobra"
 )
 

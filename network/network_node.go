@@ -1,17 +1,16 @@
-package network_tree
+package network
 
 import (
 	"fmt"
 	"math"
 
-	"github.com/mpreath/netcalc/ipv4"
-	"github.com/mpreath/netcalc/ipv4/network"
+	ipv4 "github.com/mpreath/netcalc/utils"
 )
 
 type NetworkNode struct {
-	Network *network.Network `json:"network,omitempty"`
-	Parent  *NetworkNode     `json:"-"`
-	Subnets []*NetworkNode   `json:"subnets,omitempty"`
+	Network *Network       `json:"network,omitempty"`
+	Parent  *NetworkNode   `json:"-"`
+	Subnets []*NetworkNode `json:"subnets,omitempty"`
 }
 
 func (node *NetworkNode) Split() error {
@@ -22,7 +21,7 @@ func (node *NetworkNode) Split() error {
 			return err
 		}
 		// left will contain the lower value
-		left_network, err := network.GenerateNetworkFromBits(node.Network.Address, new_mask)
+		left_network, err := GenerateNetworkFromBits(node.Network.Address, new_mask)
 		if err != nil {
 			return err
 		}
@@ -30,7 +29,7 @@ func (node *NetworkNode) Split() error {
 		node.Subnets = append(node.Subnets, &NetworkNode{Parent: node, Network: left_network})
 
 		// right will contain the larger value
-		right_network, err := network.GenerateNetworkFromBits(left_network.BroadcastAddress+1, new_mask)
+		right_network, err := GenerateNetworkFromBits(left_network.BroadcastAddress+1, new_mask)
 		if err != nil {
 			return err
 		}

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mpreath/netcalc/ipv4"
-	"github.com/mpreath/netcalc/ipv4/host"
+	"github.com/mpreath/netcalc/host"
+	"github.com/mpreath/netcalc/utils"
 )
 
 type Network struct {
@@ -23,28 +23,28 @@ func (n *Network) MarshalJSON() ([]byte, error) {
 		BroadcastAddress string `json:"broadcast"`
 		*Alias
 	}{
-		Address:          ipv4.Itodd(n.Address),
-		Mask:             ipv4.Itodd(n.Mask),
-		BroadcastAddress: ipv4.Itodd(n.BroadcastAddress),
+		Address:          utils.Itodd(n.Address),
+		Mask:             utils.Itodd(n.Mask),
+		BroadcastAddress: utils.Itodd(n.BroadcastAddress),
 		Alias:            (*Alias)(n),
 	})
 }
 
 func GenerateNetwork(address string, mask string) (*Network, error) {
-	host_address, err := ipv4.Ddtoi(address)
+	host_address, err := utils.Ddtoi(address)
 	if err != nil {
 		return nil, err
 	}
 
-	network_mask, err := ipv4.Ddtoi(mask)
+	network_mask, err := utils.Ddtoi(mask)
 	if err != nil {
 		return nil, err
-	} else if !ipv4.IsValidMask(network_mask) {
-		return nil, fmt.Errorf("ipv4.network.GenerateNetwork: invalid subnet mask")
+	} else if !utils.IsValidMask(network_mask) {
+		return nil, fmt.Errorf("utils.network.GenerateNetwork: invalid subnet mask")
 	}
 
-	network_address := ipv4.GetNetworkAddress(host_address, network_mask)
-	broadcast_address := ipv4.GetBroadcastAddress(network_address, network_mask)
+	network_address := utils.GetNetworkAddress(host_address, network_mask)
+	broadcast_address := utils.GetBroadcastAddress(network_address, network_mask)
 
 	count := broadcast_address - network_address - 1
 
@@ -65,8 +65,8 @@ func GenerateNetwork(address string, mask string) (*Network, error) {
 
 func GenerateNetworkFromBits(address uint32, mask uint32) (*Network, error) {
 
-	network_address := ipv4.GetNetworkAddress(address, mask)
-	broadcast_address := ipv4.GetBroadcastAddress(address, mask)
+	network_address := utils.GetNetworkAddress(address, mask)
+	broadcast_address := utils.GetBroadcastAddress(address, mask)
 
 	count := broadcast_address - network_address - 1
 

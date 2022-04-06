@@ -3,7 +3,7 @@ package host
 import (
 	"encoding/json"
 
-	"github.com/mpreath/netcalc/ipv4"
+	"github.com/mpreath/netcalc/utils"
 )
 
 type Host struct {
@@ -16,18 +16,18 @@ func (h *Host) MarshalJSON() ([]byte, error) {
 		Address string `json:"address"`
 		Mask    string `json:"mask"`
 	}{
-		Address: ipv4.Itodd(h.Address),
-		Mask:    ipv4.Itodd(h.Mask),
+		Address: utils.Itodd(h.Address),
+		Mask:    utils.Itodd(h.Mask),
 	})
 }
 
 func GenerateHost(address string, mask string) (*Host, error) {
-	host_address, err := ipv4.Ddtoi(address)
+	host_address, err := utils.Ddtoi(address)
 	if err != nil {
 		return nil, err
 	}
 
-	host_mask, err := ipv4.Ddtoi(mask)
+	host_mask, err := utils.Ddtoi(mask)
 	if err != nil {
 		return nil, err
 	}
