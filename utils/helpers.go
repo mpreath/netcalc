@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"errors"
+	"fmt"
 )
 
 func GetNetworkAddress(address uint32, mask uint32) uint32 {
@@ -40,7 +40,7 @@ func GetMaskFromBits(bits int) (uint32, error) {
 		mask = mask << bc
 		return mask, nil
 	} else {
-		return 0, errors.New("ipv4:GetMaskFromBits: bits must be 32 or less")
+		return 0, fmt.Errorf("utils:GetMaskFromBits: bits must be 32 or less")
 	}
 
 }
