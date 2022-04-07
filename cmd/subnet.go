@@ -27,7 +27,6 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 		}
 		// generate network from args
 		node := network.NetworkNode{
-			Parent:  nil,
 			Network: net,
 		}
 

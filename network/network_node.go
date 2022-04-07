@@ -9,7 +9,6 @@ import (
 
 type NetworkNode struct {
 	Network *Network       `json:"network,omitempty"`
-	Parent  *NetworkNode   `json:"-"`
 	Subnets []*NetworkNode `json:"subnets,omitempty"`
 }
 
@@ -26,7 +25,7 @@ func (node *NetworkNode) Split() error {
 			return err
 		}
 
-		node.Subnets = append(node.Subnets, &NetworkNode{Parent: node, Network: left_network})
+		node.Subnets = append(node.Subnets, &NetworkNode{Network: left_network})
 
 		// right will contain the larger value
 		right_network, err := GenerateNetworkFromBits(left_network.BroadcastAddress+1, new_mask)
@@ -34,7 +33,7 @@ func (node *NetworkNode) Split() error {
 			return err
 		}
 
-		node.Subnets = append(node.Subnets, &NetworkNode{Parent: node, Network: right_network})
+		node.Subnets = append(node.Subnets, &NetworkNode{Network: right_network})
 
 		// no usable hosts in this network
 		node.Network.Hosts = nil
