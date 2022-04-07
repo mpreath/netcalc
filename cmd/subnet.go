@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/mpreath/netcalc/network"
+	"github.com/mpreath/netcalc/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -51,9 +52,7 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 			fmt.Println(string(s))
 		} else {
 			// std output
-			if VERBOSE_FLAG {
-				// verbose output
-			}
+			printNetworkTree(&node)
 		}
 
 	},
@@ -63,4 +62,48 @@ func init() {
 	subnetCmd.Flags().IntVar(&HOST_COUNT, "hosts", 0, "Specifies the number of hosts to include each subnet.")
 	subnetCmd.Flags().IntVar(&NET_COUNT, "networks", 0, "Specifies the number of subnets to create.")
 	rootCmd.AddCommand(subnetCmd)
+}
+
+func printNetworkTree(node *network.NetworkNode, opts ...int) {
+	var depth int
+
+	if len(opts) == 0 {
+		depth = 0
+	} else {
+		depth = opts[0]
+	}
+
+	if VERBOSE_FLAG {
+		if depth == 0 {
+			// fmt.Printf("* = assigned network\n")
+			fmt.Printf("+ = useable network\n")
+			fmt.Printf("[n] = # of useable hosts\n\n")
+		}
+
+		ip_address := utils.Itodd(node.Network.Address)
+		num_of_bits := utils.GetBitsInMask(node.Network.Mask)
+
+		for i := 0; i < depth; i++ {
+			fmt.Printf(" |")
+		}
+
+		fmt.Printf("__%s/%d", ip_address, num_of_bits)
+		if len(node.Subnets) == 0 {
+			fmt.Printf("+[%d]", len(node.Network.Hosts))
+		}
+		fmt.Printf("\n")
+	} else {
+		if len(node.Subnets) == 0 {
+			ip_address := utils.Itodd(node.Network.Address)
+			mask := utils.Itodd(node.Network.Mask)
+			fmt.Printf("%s\t%s\n", ip_address, mask)
+
+		}
+	}
+
+	if len(node.Subnets) > 0 {
+		printNetworkTree(node.Subnets[0], depth+1)
+		printNetworkTree(node.Subnets[1], depth+1)
+	}
+
 }
