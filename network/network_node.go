@@ -44,7 +44,7 @@ func (node *NetworkNode) Split() error {
 	return nil
 }
 
-func GetNetworkCount(node *NetworkNode) uint {
+func GetNetworkCount(node *NetworkNode) int {
 	if node == nil {
 		return 0
 	} else if len(node.Subnets) == 0 {

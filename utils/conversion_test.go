@@ -11,10 +11,10 @@ func TestDDtoi(t *testing.T) {
 		{"255.255.255.255", 4294967295, ""},
 		{"0.0.0.0", 0, ""},
 		{"192.168.1.1", 3232235777, ""},
-		{"192.168.1.256", 0, "ipv4:Ddtoi: parsing \"256\": number must be 255 or less"},
+		{"192.168.1.256", 0, "utils:Ddtoi: parsing \"256\": number must be 255 or less"},
 		{"192.168.1.A", 0, "strconv.ParseUint: parsing \"A\": invalid syntax"},
 		{"192.168.1.-1", 0, "strconv.ParseUint: parsing \"-1\": invalid syntax"},
-		{"192.168.1.1.8", 0, "ipv4:Ddtoi: parsing \"192.168.1.1.8\": too many octets"},
+		{"192.168.1.1.8", 0, "utils:Ddtoi: parsing \"192.168.1.1.8\": too many octets"},
 	}
 
 	for _, test_case := range test_cases {

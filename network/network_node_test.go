@@ -4,6 +4,29 @@ import (
 	"testing"
 )
 
+func TestSplit(t *testing.T) {
+	test_cases := []struct {
+		dd_address string
+		dd_mask    string
+	}{
+		{"192.168.1.1", "255.255.255.0"},
+		{"10.1.0.0", "255.255.0.0"},
+	}
+
+	for _, test_case := range test_cases {
+		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		test_node := &NetworkNode{
+			Network: test_network,
+		}
+
+		test_node.Split()
+
+		if len(test_node.Subnets) == 0 {
+			t.Errorf("unable to split network (%s %s)", test_case.dd_address, test_case.dd_mask)
+		}
+	}
+}
+
 func TestSplitToHostCount(t *testing.T) {
 	test_cases := []struct {
 		dd_address          string
@@ -54,7 +77,7 @@ func TestSplitToNetCount(t *testing.T) {
 		SplitToNetCount(test_node, test_case.net_count)
 
 		net_count := GetNetworkCount(test_node)
-		if net_count != uint(test_case.expected_net_count) {
+		if net_count != test_case.expected_net_count {
 			t.Errorf("network count (%d) doesn't match spec (%d)", net_count, test_case.expected_net_count)
 		}
 	}
