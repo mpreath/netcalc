@@ -44,6 +44,16 @@ func (node *NetworkNode) Split() error {
 	return nil
 }
 
+func GetNetworkCount(node *NetworkNode) uint {
+	if node == nil {
+		return 0
+	} else if len(node.Subnets) == 0 {
+		return 1
+	} else {
+		return GetNetworkCount(node.Subnets[0]) + GetNetworkCount(node.Subnets[1])
+	}
+}
+
 func SplitToHostCount(node *NetworkNode, host_count int) error {
 	current_mask_bc := utils.GetBitsInMask(node.Network.Mask)
 	if current_mask_bc >= 30 {
