@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/mpreath/netcalc/network"
 	"github.com/mpreath/netcalc/utils"
@@ -23,12 +24,14 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		n, err := network.GenerateNetwork(args[0], args[1])
 		if err != nil {
-			fmt.Print(err)
-			return
+			log.Fatal(err)
 		}
 
 		if JSON_FLAG {
-			printNetworkInformationJSON(n)
+			err := printNetworkInformationJSON(n)
+			if err != nil {
+				log.Fatal(err)
+			}
 		} else {
 			printNetworkInformation(n)
 		}
@@ -51,11 +54,11 @@ func printNetworkInformation(n *network.Network) {
 	}
 }
 
-func printNetworkInformationJSON(network *network.Network) {
+func printNetworkInformationJSON(network *network.Network) error {
 	s, err := json.MarshalIndent(network, "", "  ")
 	if err != nil {
-		fmt.Print(err)
-		return
+		return err
 	}
 	fmt.Printf("%s\n", s)
+	return nil
 }

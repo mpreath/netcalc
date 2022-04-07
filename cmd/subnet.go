@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/mpreath/netcalc/network"
 	"github.com/mpreath/netcalc/utils"
@@ -22,8 +23,7 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		net, err := network.GenerateNetwork(args[0], args[1])
 		if err != nil {
-			fmt.Println(err)
-			return
+			log.Fatal(err)
 		}
 		// generate network from args
 		node := network.NetworkNode{
@@ -33,15 +33,13 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 		if HOST_COUNT > 0 {
 			err = network.SplitToHostCount(&node, HOST_COUNT)
 			if err != nil {
-				fmt.Println(err)
-				return
+				log.Fatal(err)
 			}
 
 		} else if NET_COUNT > 0 {
 			err = network.SplitToNetCount(&node, NET_COUNT)
 			if err != nil {
-				fmt.Println(err)
-				return
+				log.Fatal(err)
 			}
 		}
 
