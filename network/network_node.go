@@ -38,7 +38,7 @@ func (node *NetworkNode) Split() error {
 		// no usable hosts in this network
 		node.Network.Hosts = nil
 	} else {
-		return fmt.Errorf("network doesn't support being split")
+		return fmt.Errorf("network:Split: network doesn't support being split")
 	}
 
 	return nil
@@ -60,7 +60,7 @@ func SplitToHostCount(node *NetworkNode, host_count int) error {
 		return nil
 	} else if current_hc < host_count {
 		// requirements too large, raise an error
-		return fmt.Errorf("network can't support that many hosts")
+		return fmt.Errorf("network.SplitToHostCount: network can't support that many hosts")
 	} else {
 		err := node.Split()
 		if err != nil {
@@ -86,7 +86,7 @@ func SplitToNetCount(node *NetworkNode, net_count int) error {
 		return nil
 	} else if node.Network.Mask == longest_valid_mask {
 		// can't split any more
-		return fmt.Errorf("network can't support that many subnetworks")
+		return fmt.Errorf("network.SplitToNetCount: network can't support that many subnetworks")
 	} else {
 		err := node.Split()
 		if err != nil {

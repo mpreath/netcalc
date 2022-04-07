@@ -24,7 +24,7 @@ func Ddtoi(address_string string) (uint32, error) {
 			val32 := uint32(val)
 
 			if val32 > 255 {
-				return 0, fmt.Errorf("ipv4:Ddtoi: parsing \"%s\": number must be 255 or less", octet)
+				return 0, fmt.Errorf("utils:Ddtoi: parsing \"%s\": number must be 255 or less", octet)
 			}
 
 			// we have a good number
@@ -33,7 +33,7 @@ func Ddtoi(address_string string) (uint32, error) {
 		}
 	} else {
 		// incorrect number of octets
-		return 0, fmt.Errorf("ipv4:Ddtoi: parsing \"%s\": too many octets", address_string)
+		return 0, fmt.Errorf("utils:Ddtoi: parsing \"%s\": too many octets", address_string)
 	}
 
 	return address, nil

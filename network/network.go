@@ -40,7 +40,7 @@ func GenerateNetwork(address string, mask string) (*Network, error) {
 	if err != nil {
 		return nil, err
 	} else if !utils.IsValidMask(network_mask) {
-		return nil, fmt.Errorf("utils.network.GenerateNetwork: invalid subnet mask")
+		return nil, fmt.Errorf("network.GenerateNetwork: invalid subnet mask")
 	}
 
 	network_address := utils.GetNetworkAddress(host_address, network_mask)
