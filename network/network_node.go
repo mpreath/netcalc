@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	ipv4 "github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/utils"
 )
 
 type NetworkNode struct {
@@ -14,9 +14,9 @@ type NetworkNode struct {
 }
 
 func (node *NetworkNode) Split() error {
-	bc := ipv4.GetBitsInMask(node.Network.Mask) + 1
+	bc := utils.GetBitsInMask(node.Network.Mask) + 1
 	if bc < 31 {
-		new_mask, err := ipv4.GetMaskFromBits(bc)
+		new_mask, err := utils.GetMaskFromBits(bc)
 		if err != nil {
 			return err
 		}
@@ -46,10 +46,12 @@ func (node *NetworkNode) Split() error {
 }
 
 func SplitToHostCount(node *NetworkNode, host_count int) error {
-
-	// FIXME: Doesn't support host_count of 2
-	// TODO: Add error handling and edge case protection
-	current_bc := 32 - ipv4.GetBitsInMask(node.Network.Mask)
+	current_mask_bc := utils.GetBitsInMask(node.Network.Mask)
+	if current_mask_bc >= 30 {
+		// this is the longest mask we support
+		return nil
+	}
+	current_bc := 32 - current_mask_bc
 	current_hc := int(math.Pow(2, float64(current_bc)))
 	future_bc := current_bc - 1 // need to look ahead into the future
 	future_hc := int(math.Pow(2, float64(future_bc)))
@@ -79,7 +81,7 @@ func SplitToHostCount(node *NetworkNode, host_count int) error {
 }
 
 func SplitToNetCount(node *NetworkNode, net_count int) error {
-	longest_valid_mask, _ := ipv4.GetMaskFromBits(30)
+	longest_valid_mask, _ := utils.GetMaskFromBits(30)
 	if net_count <= 0 {
 		// this is our recursive base case
 		return nil
