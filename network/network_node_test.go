@@ -6,11 +6,13 @@ import (
 
 func TestSplit(t *testing.T) {
 	test_cases := []struct {
-		dd_address string
-		dd_mask    string
+		dd_address   string
+		dd_mask      string
+		error_string string
 	}{
-		{"192.168.1.1", "255.255.255.0"},
-		{"10.1.0.0", "255.255.0.0"},
+		{"192.168.1.1", "255.255.255.0", ""},
+		{"10.1.0.0", "255.255.0.0", ""},
+		{"10.1.1.1", "255.255.255.252", "network:Split: network doesn't support being split"},
 	}
 
 	for _, test_case := range test_cases {
@@ -19,7 +21,14 @@ func TestSplit(t *testing.T) {
 			Network: test_network,
 		}
 
-		test_node.Split()
+		err := test_node.Split()
+
+		if err != nil {
+			if err.Error() != test_case.error_string {
+				t.Errorf(err.Error())
+			}
+			continue
+		}
 
 		if len(test_node.Subnets) == 0 {
 			t.Errorf("unable to split network (%s %s)", test_case.dd_address, test_case.dd_mask)
@@ -33,9 +42,11 @@ func TestSplitToHostCount(t *testing.T) {
 		dd_mask             string
 		host_count          int
 		expected_host_count int
+		error_string        string
 	}{
-		{"192.168.1.1", "255.255.255.0", 1, 2},
-		{"10.1.0.0", "255.255.0.0", 100, 126},
+		{"192.168.1.1", "255.255.255.0", 1, 2, ""},
+		{"10.1.0.0", "255.255.0.0", 100, 126, ""},
+		{"192.168.1.1", "255.255.255.0", 300, 0, "network.SplitToHostCount: network can't support that many hosts"},
 	}
 
 	for _, test_case := range test_cases {
@@ -44,7 +55,14 @@ func TestSplitToHostCount(t *testing.T) {
 			Network: test_network,
 		}
 
-		SplitToHostCount(test_node, test_case.host_count)
+		err := SplitToHostCount(test_node, test_case.host_count)
+
+		if err != nil {
+			if err.Error() != test_case.error_string {
+				t.Errorf(err.Error())
+			}
+			continue
+		}
 
 		// traverse to a leaf node
 		for len(test_node.Subnets) > 0 {
@@ -63,9 +81,11 @@ func TestSplitToNetCount(t *testing.T) {
 		dd_mask            string
 		net_count          int
 		expected_net_count int
+		error_string       string
 	}{
-		{"192.168.1.1", "255.255.255.0", 2, 2},
-		{"10.1.0.0", "255.255.0.0", 4, 4},
+		{"192.168.1.1", "255.255.255.0", 2, 2, ""},
+		{"10.1.0.0", "255.255.0.0", 4, 4, ""},
+		{"192.168.1.1", "255.255.255.252", 2, 0, "network.SplitToNetCount: network can't support that many subnetworks"},
 	}
 
 	for _, test_case := range test_cases {
@@ -74,7 +94,14 @@ func TestSplitToNetCount(t *testing.T) {
 			Network: test_network,
 		}
 
-		SplitToNetCount(test_node, test_case.net_count)
+		err := SplitToNetCount(test_node, test_case.net_count)
+
+		if err != nil {
+			if err.Error() != test_case.error_string {
+				t.Errorf(err.Error())
+			}
+			continue
+		}
 
 		net_count := GetNetworkCount(test_node)
 		if net_count != test_case.expected_net_count {

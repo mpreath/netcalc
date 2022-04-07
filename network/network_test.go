@@ -1,22 +1,53 @@
 package network
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/mpreath/netcalc/utils"
 )
+
+func TestMarshalJSON(t *testing.T) {
+	test_cases := []struct {
+		dd_address string
+		dd_mask    string
+	}{
+		{"192.168.1.1", "255.255.255.0"},
+	}
+
+	for _, test_case := range test_cases {
+		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+
+		s, err := json.Marshal(test_network)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+
+		if len(s) <= 0 {
+			t.Errorf("didn't receive any output from marshal")
+		}
+	}
+}
 
 func TestGenerateNetwork(t *testing.T) {
 	test_cases := []struct {
 		dd_address         string
 		dd_mask            string
 		dd_network_address string
+		error_string       string
 	}{
-		{"192.168.1.1", "255.255.255.0", "192.168.1.0"},
+		{"192.168.1.1", "255.255.255.0", "192.168.1.0", ""},
+		{"192.168.1.1", "255.0.255.0", "192.168.1.0", "network.GenerateNetwork: invalid subnet mask"},
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		test_network, err := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		if err != nil {
+			if err.Error() != test_case.error_string {
+				t.Errorf(err.Error())
+			}
+			continue
+		}
 
 		dd_test_network := utils.Itodd(test_network.Address)
 		dd_test_mask := utils.Itodd(test_network.Mask)
