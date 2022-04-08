@@ -9,7 +9,6 @@ following features:
 * provided an ip address, mask, and host count, it will calculate the network addresses, and mask in ord to subnet the network into smaller networks based on the number of hosts desired 
 * provided an ip address, mask, and a list of host count values, it will calculate a list of VLSM subnets that match the list of host count requirements. Instead of making the subnets all the same size, it only creates enough subnets to match the list, and they may all be different sizes
 * provided a list of subnets, it will try to summarize the subnets into one (or more) supernets if possible.
-* 
 
 *NOTE:* netcalc uses bit shifting and mask operators to work with ip addresses in their actual 32 bit integer form. It converts from dotted decimal notation to unsigned integer values, and then manipulates the integer values.
 
@@ -17,11 +16,11 @@ following features:
 
 ## Roadmap
 
-1. network info (in progress)
-2. basic subnetting (tbd)
-3. vlsm subnetting (tbd)
-4. supernetting (tbd)
-5. network info ipv6 (tbd)
+0.1 network info (complete)
+0.2 basic subnetting (complete)
+0.3 vlsm subnetting (tbd)
+0.4 supernetting (tbd)
+0.5 network info ipv6 (tbd)
 
 ## Quick Start
 
