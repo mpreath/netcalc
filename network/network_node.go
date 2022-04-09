@@ -35,8 +35,6 @@ func (node *NetworkNode) Split() error {
 
 		node.Subnets = append(node.Subnets, &NetworkNode{Network: right_network})
 
-		// no usable hosts in this network
-		node.Network.Hosts = nil
 	} else {
 		return fmt.Errorf("network:Split: network doesn't support being split")
 	}

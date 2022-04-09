@@ -86,7 +86,7 @@ func printNetworkTree(node *network.NetworkNode, opts ...int) {
 
 		fmt.Printf("__%s/%d", ip_address, num_of_bits)
 		if len(node.Subnets) == 0 {
-			fmt.Printf("+[%d]", len(node.Network.Hosts))
+			fmt.Printf("+[%d]", node.Network.HostCount)
 		}
 		fmt.Printf("\n")
 	} else {
