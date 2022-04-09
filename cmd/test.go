@@ -58,23 +58,71 @@ var testCmd = &cobra.Command{
 
 		for changes_made {
 			// outer loop
+			// once inside the outer loop assume no changes have been made
+			// if we sumamrize in the inner loop we will update
+			changes_made = false
 			for oidx := 0; oidx < len(networks); oidx++ {
+				//fmt.Printf("[%d] ", oidx)
 				if networks[oidx] == nil {
 					// if the network at the outer index is nil
 					// move onto the next
+					//fmt.Printf("(nil) \n")
 					continue
 				}
+
+				//fmt.Printf("\n")
 				// inner loop
 				for iidx := 0; iidx < len(networks); iidx++ {
+					//fmt.Printf("[%d] [%d] ", oidx, iidx)
 					// we compare the network at the outer index (oidx)
 					// to the network at the inner index (iidx) to determine
 					// if summarization is possible
-					if networks[iidx] == nil {
+					if networks[iidx] == nil || iidx == oidx {
 						// if the network at the inner index is nil
 						// move onto the next
+						if networks[iidx] == nil {
+							//fmt.Printf("(nil) \n")
+						}
+						if iidx == oidx {
+							//fmt.Printf("(same) \n")
+						}
 						continue
 					}
 
+					if networks[iidx].Mask != networks[oidx].Mask {
+						//fmt.Printf("(mask mismatch) \n")
+						continue
+					}
+
+					// determine if these two networks can be summarized
+					new_mask := GetCommonBitMask(networks[oidx].Address, networks[iidx].Address)
+
+					// if these two networks can be summarized new_mask will return
+					// a new mask and if not will return 0
+					if new_mask != 0 {
+						//fmt.Printf("(summarized) [%s][%s] [%s][%s]\n", utils.Itodd(networks[oidx].Address), utils.Itodd(networks[oidx].Mask), utils.Itodd(networks[iidx].Address), utils.Itodd(networks[iidx].Mask))
+						// update the base/outside network to be a summary
+						// of the two networks (outside/inside) by reducing the
+						// mask by a bit
+						networks[oidx] = &network.Network{
+							Address: utils.GetNetworkAddress(networks[oidx].Address, new_mask),
+							Mask:    new_mask,
+						}
+						// set the inside network to nil
+						// because it is now summarized into the outside network
+						networks[iidx] = nil
+
+						// set changes_made to true
+						changes_made = true
+
+						// since we made a summarization, lets move to the next outside network
+
+						break
+					} else {
+						//fmt.Printf("(can't summarize) [%s][%s] [%s][%s]\n", utils.Itodd(networks[oidx].Address), utils.Itodd(networks[oidx].Mask), utils.Itodd(networks[iidx].Address), utils.Itodd(networks[iidx].Mask))
+					}
+
+					//fmt.Printf("\n")
 				}
 			}
 		}
@@ -139,16 +187,16 @@ func SummarizeNetworkSlice(networks []network.Network) []network.Network {
 func GetCommonBitMask(n1 uint32, n2 uint32) uint32 {
 	common_bits := n1 ^ n2
 
-	fmt.Printf("\t%s <-> %s\n", utils.Itodd(n1), utils.Itodd(n2))
+	//fmt.Printf("\t%s <-> %s\n", utils.Itodd(n1), utils.Itodd(n2))
 
 	if CheckNumberPowerOfTwo(common_bits) {
 		// if its a power of two it means only one bit is set
 		// lets determine where that it
 		for idx := 0; idx < 32; idx++ {
-			fmt.Printf("(%d,%d)\n", idx, common_bits)
+			//fmt.Printf("(%d,%d)\n", idx, common_bits)
 			if common_bits == 0 {
 				// found it
-				fmt.Printf("found it\n")
+				// fmt.Printf("found it\n")
 				new_mask, _ := utils.GetMaskFromBits(32 - idx)
 				return new_mask
 			}
@@ -157,7 +205,7 @@ func GetCommonBitMask(n1 uint32, n2 uint32) uint32 {
 
 		return 0
 	} else {
-		fmt.Printf("not a power of two\n")
+		// fmt.Printf("not a power of two\n")
 		return 0
 	}
 }
