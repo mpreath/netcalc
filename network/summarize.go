@@ -79,7 +79,17 @@ func SummarizeNetworks(networks []*Network) []*Network {
 		}
 	}
 
-	return networks
+	return cleanupSummarization(networks)
+}
+
+func cleanupSummarization(dirty []*Network) []*Network {
+	var clean []*Network
+	for _, summary := range dirty {
+		if summary != nil {
+			clean = append(clean, summary)
+		}
+	}
+	return clean
 }
 
 func GetCommonBitMask(n1 uint32, n2 uint32) uint32 {
