@@ -16,11 +16,11 @@ following features:
 
 ## Roadmap
 
-0.1 network info (complete)
-0.2 basic subnetting (complete)
-0.3 vlsm subnetting (tbd)
-0.4 supernetting (tbd)
-0.5 network info ipv6 (tbd)
+* 0.1 network info (complete)
+* 0.2 basic subnetting (complete)
+* 0.3 vlsm subnetting (tbd)
+* 0.4 summarization (complete)
+* 0.5 network info ipv6 (tbd)
 
 ## Quick Start
 
