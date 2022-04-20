@@ -112,3 +112,14 @@ func SplitToNetCount(node *NetworkNode, net_count int) error {
 
 	return nil
 }
+
+func NetworkNodeToArray(node *NetworkNode) []*Network {
+	var narr []*Network
+	if len(node.Subnets) > 0 {
+		narr = append(narr, NetworkNodeToArray(node.Subnets[0])...)
+		narr = append(narr, NetworkNodeToArray(node.Subnets[1])...)
+	} else if len(node.Subnets) == 0 {
+		narr = append(narr, node.Network)
+	}
+	return narr
+}
