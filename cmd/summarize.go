@@ -13,12 +13,12 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(testCmd)
+	rootCmd.AddCommand(summarizeCmd)
 }
 
-var testCmd = &cobra.Command{
-	Use:   "test",
-	Short: "test",
+var summarizeCmd = &cobra.Command{
+	Use:   "summarize",
+	Short: "summarizes the networks provided to stdin",
 	Run: func(cmd *cobra.Command, args []string) {
 		var networks []*network.Network
 
