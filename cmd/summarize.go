@@ -43,9 +43,9 @@ var summarizeCmd = &cobra.Command{
 		}
 
 		// print
-		for idx, net := range network.SummarizeNetworks(networks) {
+		for _, net := range network.SummarizeNetworks(networks) {
 			if net != nil {
-				fmt.Printf("[%d]\t%s\t%s\n", idx, utils.Itodd(net.Address), utils.Itodd(net.Mask))
+				fmt.Printf("%s\t%s\n", utils.Itodd(net.Address), utils.Itodd(net.Mask))
 			}
 		}
 	},
