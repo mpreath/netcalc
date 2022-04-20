@@ -94,7 +94,6 @@ func printNetworkTree(node *network.NetworkNode, opts ...int) {
 			ip_address := utils.Itodd(node.Network.Address)
 			mask := utils.Itodd(node.Network.Mask)
 			fmt.Printf("%s\t%s\n", ip_address, mask)
-
 		}
 	}
 
