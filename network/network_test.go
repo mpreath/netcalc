@@ -84,3 +84,23 @@ func TestGenerateNetworkFromBits(t *testing.T) {
 		}
 	}
 }
+
+func TestGetHosts(t *testing.T) {
+	test_cases := []struct {
+		dd_network_address string
+		dd_mask            string
+		host_count         int
+	}{
+		{"192.168.1.0", "255.255.255.0", 254},
+		{"192.168.1.0", "255.255.255.128", 126},
+	}
+
+	for _, test_case := range test_cases {
+		test_network, _ := GenerateNetwork(test_case.dd_network_address, test_case.dd_mask)
+		test_hosts := GetHosts(test_network)
+
+		if len(test_hosts) != test_case.host_count {
+			t.Errorf("generated host count (%d) doesn't match spec count (%d)", len(test_hosts), test_case.host_count)
+		}
+	}
+}
