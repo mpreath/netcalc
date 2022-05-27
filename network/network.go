@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mpreath/netcalc/host"
 	"github.com/mpreath/netcalc/utils"
 )
 
@@ -54,11 +55,6 @@ func GenerateNetwork(address string, mask string) (*Network, error) {
 		HostCount:        uint(broadcast_address - network_address - 1),
 	}
 
-	// for i, n := 0, network_address+1; n < broadcast_address; i, n = i+1, n+1 {
-	// 	network.Hosts[i].Address = n
-	// 	network.Hosts[i].Mask = network_mask
-	// }
-
 	return &network, nil
 }
 
@@ -75,4 +71,14 @@ func GenerateNetworkFromBits(address uint32, mask uint32) (*Network, error) {
 	}
 
 	return &network, nil
+}
+
+func GetHosts(network *Network) []*host.Host {
+	var harr []*host.Host
+
+	for i, n := 0, network.Address+1; n < network.BroadcastAddress; i, n = i+1, n+1 {
+		harr = append(harr, &host.Host{Address: n, Mask: network.Mask})
+	}
+
+	return harr
 }

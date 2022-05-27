@@ -47,9 +47,9 @@ func printNetworkInformation(n *network.Network) {
 			fmt.Printf("%s\t%s *\n", utils.Itodd(n.Address), utils.Itodd(n.Mask))
 		}
 
-		// for _, host := range n.Hosts {
-		// 	fmt.Printf("%s\t%s\n", utils.Itodd(host.Address), utils.Itodd(host.Mask))
-		// }
+		for _, host := range network.GetHosts(n) {
+			fmt.Printf("%s\t%s\n", utils.Itodd(host.Address), utils.Itodd(host.Mask))
+		}
 
 		if VERBOSE_FLAG {
 			fmt.Printf("%s\t%s +\n", utils.Itodd(n.BroadcastAddress), utils.Itodd(n.Mask))
