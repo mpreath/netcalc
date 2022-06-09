@@ -13,6 +13,9 @@ type NetworkNode struct {
 }
 
 func (node *NetworkNode) Split() error {
+	if len(node.Subnets) > 0 {
+		return nil
+	}
 	bc := utils.GetBitsInMask(node.Network.Mask) + 1
 	if bc < 31 {
 		new_mask, err := utils.GetMaskFromBits(bc)
@@ -110,6 +113,39 @@ func SplitToNetCount(node *NetworkNode, net_count int) error {
 		}
 	}
 
+	return nil
+}
+
+func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
+
+	// if network supports requirements
+	// and network is not utilized, set utilized to true, return nil
+	// if network supports requirements, but is already utilized, then check the
+	// next subnet
+	// if network doesn't support network
+	longest_valid_mask, _ := utils.GetMaskFromBits(30)
+
+	if vlsm_count <= 0 {
+		return nil
+	} else if node.Network.Mask == longest_valid_mask {
+		return fmt.Errorf("network.SplitToVlsmCount: network can't support that many subnetworks")
+	} else {
+		// does the current network support our needs?
+
+		err := node.Split()
+		if err != nil {
+			return err
+		}
+
+		err = SplitToVlsmCount(node.Subnets[0], vlsm_count)
+		if err != nil {
+			err = SplitToVlsmCount(node.Subnets[1], vlsm_count)
+			if err != nil {
+				return err
+			}
+		}
+
+	}
 	return nil
 }
 
