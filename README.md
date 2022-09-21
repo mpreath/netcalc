@@ -16,11 +16,12 @@ following features:
 
 ## Roadmap
 
-* 0.1 network info (complete)
-* 0.2 basic subnetting (complete)
-* 0.3 vlsm subnetting (tbd)
-* 0.4 summarization (complete)
-* 0.5 network info ipv6 (tbd)
+* network info (complete)
+* basic subnetting (complete)
+* summarization (complete)
+* vlsm subnetting (in progress)
+* network info ipv6 (up next)
+* full IPv6 support (tbd)
 
 ## Quick Start
 
