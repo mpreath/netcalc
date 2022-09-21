@@ -1,4 +1,4 @@
-![Netcalc Logo](https://github.com/mpreath/public_files/blob/a4479bb9df0df97acb85af82b7457d3be12aff00/netcalc.png)
+![Netcalc Logo](https://github.com/mpreath/public_files/blob/25a6d05318b3ddfbf7b3d3835201aa1a0cfa48ab/netcalc.png)
 
 ## Overview
 netcalc is an advanced CLI-based network subnetting tool. It provides the
