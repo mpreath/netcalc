@@ -7,3 +7,4 @@ netcalc
 # testing artifacts
 *.json
 *.out
+test/
