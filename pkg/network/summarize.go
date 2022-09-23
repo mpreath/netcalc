@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 func SummarizeNetworks(networks []*Network) (*Network, error) {

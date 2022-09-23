@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mpreath/netcalc/host"
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/host"
+	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type Network struct {

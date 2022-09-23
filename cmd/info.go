@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mpreath/netcalc/network"
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/network"
+	"github.com/mpreath/netcalc/pkg/utils"
 	"github.com/spf13/cobra"
 )
 

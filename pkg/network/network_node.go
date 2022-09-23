@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type NetworkNode struct {

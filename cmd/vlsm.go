@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mpreath/netcalc/network"
+	"github.com/mpreath/netcalc/pkg/network"
 	"github.com/spf13/cobra"
 )
 
