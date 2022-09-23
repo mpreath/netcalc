@@ -21,10 +21,14 @@ func TestSummarizeNetworks(t *testing.T) {
 		}
 		SplitToHostCount(test_network_node, 2)
 		networks := NetworkNodeToArray(test_network_node)
-		summarized_networks := SummarizeNetworks(networks)
+		summarized_network, _ := SummarizeNetworks(networks)
 
-		if len(summarized_networks) != 1 {
-			t.Errorf("incorrect number of networks (%d) in summary", len(summarized_networks))
+		if summarized_network.Address != test_network.Address {
+			t.Errorf("summarized network doesn't match test network")
+		}
+
+		if summarized_network.Mask != test_network.Mask {
+			t.Errorf("summarized mask doesn't match test mask")
 		}
 
 	}

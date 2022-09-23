@@ -11,6 +11,7 @@ import (
 type Network struct {
 	Address          uint32 `json:"address"`
 	Mask             uint32 `json:"mask"`
+	MaskBits         uint32 `json:"mask_bits"`
 	BroadcastAddress uint32 `json:"broadcast"`
 	HostCount        uint   `json:"host_count"`
 }
