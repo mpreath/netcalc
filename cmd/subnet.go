@@ -72,7 +72,7 @@ func printNetworkTree(node *network.NetworkNode, opts ...int) {
 
 	if VERBOSE_FLAG {
 		if depth == 0 {
-			// fmt.Printf("* = assigned network\n")
+			fmt.Printf("* = assigned network\n")
 			fmt.Printf("+ = useable network\n")
 			fmt.Printf("[n] = # of useable hosts\n\n")
 		}
@@ -85,8 +85,10 @@ func printNetworkTree(node *network.NetworkNode, opts ...int) {
 		}
 
 		fmt.Printf("__%s/%d", ip_address, num_of_bits)
-		if len(node.Subnets) == 0 {
-			fmt.Printf("+[%d]", node.Network.HostCount)
+		if node.Utilized && len(node.Subnets) == 0 {
+			fmt.Printf("[%d]*", node.Network.HostCount)
+		} else if len(node.Subnets) == 0 {
+			fmt.Printf("[%d]+", node.Network.HostCount)
 		}
 		fmt.Printf("\n")
 	} else {

@@ -8,8 +8,9 @@ import (
 )
 
 type NetworkNode struct {
-	Network *Network       `json:"network,omitempty"`
-	Subnets []*NetworkNode `json:"subnets,omitempty"`
+	Network  *Network       `json:"network,omitempty"`
+	Utilized bool           `json:"utilized"`
+	Subnets  []*NetworkNode `json:"subnets,omitempty"`
 }
 
 func (node *NetworkNode) Split() error {
@@ -125,12 +126,45 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 	// if network doesn't support network
 	longest_valid_mask, _ := utils.GetMaskFromBits(30)
 
-	if vlsm_count <= 0 {
-		return nil
-	} else if node.Network.Mask == longest_valid_mask {
-		return fmt.Errorf("network.SplitToVlsmCount: network can't support that many subnetworks")
+	if vlsm_count < 2 {
+		return fmt.Errorf("network.SplitToVlsmCount: you must specify at least 2 hosts for count")
 	} else {
-		// does the current network support our needs?
+
+		// need to determine if this is our recursive base case
+		// does this network support our current vlsm_count requirements?
+		// 1. check our current host_count
+		// 2. look ahead to what the next host count would be
+		// 3. if our current host count meets the requirement but our next host count doesn't
+		//    then we have found our network
+		current_host_count := node.Network.HostCount
+		var lookahead_host_count uint
+		current_mask_bc := utils.GetBitsInMask(node.Network.Mask)
+		lookahead_mask_bc := current_mask_bc + 1
+		if lookahead_mask_bc <= 30 {
+			// the next split will be a legitimate network
+			lookahead_mask, _ := utils.GetMaskFromBits(lookahead_mask_bc)
+			lookahead_network, _ := GenerateNetworkFromBits(node.Network.Address, lookahead_mask)
+			lookahead_host_count = lookahead_network.HostCount
+		} else {
+			lookahead_host_count = 0
+		}
+
+		if current_host_count >= uint(vlsm_count) && lookahead_host_count < uint(vlsm_count) {
+			// our current_host_count meets the vlsm count requirements
+			// and the next network's count is too small
+			// we've found our spot
+
+			// if its not utilized mark it as utilized and return nil
+			// if it is utilized return error
+			if node.Utilized || len(node.Subnets) > 0 {
+				return fmt.Errorf("network.SplitToVlsmCount: network already utilized")
+			} else {
+				node.Utilized = true
+				return nil // no error, base case success
+			}
+		} else if node.Network.Mask == longest_valid_mask {
+			return fmt.Errorf("network.SplitToVlsmCount: network can't support that many subnetworks")
+		}
 
 		err := node.Split()
 		if err != nil {

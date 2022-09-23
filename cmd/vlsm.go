@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -28,12 +29,20 @@ Usage: netcalc vlsm <vlsm list> <ip_address> <subnet_mask>.`,
 			Network: net,
 		}
 
-		vlsm_list := strings.Split(args[0], ",")
+		vlsm_args := strings.Split(args[0], ",")
+		var vlsm_list = make([]int, len(vlsm_args))
+		for idx, val := range vlsm_args {
+			vlsm_list[idx], err = strconv.Atoi(val)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		sort.Slice(vlsm_list, func(i, j int) bool {
+			return vlsm_list[i] < vlsm_list[j]
+		})
 
 		for _, vlsm := range vlsm_list {
-			host_count, _ := strconv.ParseInt(vlsm, 10, 32)
-			fmt.Printf("%d\n", host_count)
-			err = network.SplitToHostCount(&node, int(host_count))
+			err = network.SplitToVlsmCount(&node, vlsm)
 
 			if err != nil {
 				log.Fatal(err)
