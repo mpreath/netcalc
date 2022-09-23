@@ -20,7 +20,6 @@ following features:
 * basic subnetting (complete)
 * summarization (complete)
 * vlsm subnetting (in progress)
-* network info ipv6 (up next)
 * full IPv6 support (tbd)
 
 ## Quick Start
