@@ -83,6 +83,20 @@ Bcast:          192.168.0.7
 #### Network Subnet Command
 
 ```
+Usage:
+  netcalc subnet [--hosts <hosts> | --networks <networks>] <ip_address> <subnet_mask> [flags]
+
+Flags:
+  -h, --help           help for subnet
+      --hosts int      Specifies the number of hosts to include each subnet.
+      --networks int   Specifies the number of subnets to create.
+
+Global Flags:
+  -j, --json      Turns on JSON output for commands
+  -v, --verbose   Turns on verbose output for commands
+```
+
+```
 > netcalc subnet --hosts 2 192.168.1.0 255.255.255.224
 192.168.1.0     255.255.255.252
 192.168.1.4     255.255.255.252
@@ -95,7 +109,7 @@ Bcast:          192.168.0.7
 ```
 
 ```
-> netcalc subnet --hosts 2 192.168.1.0 255.255.255.224 -v
+> netcalc subnet -v --hosts 2 192.168.1.0 255.255.255.224
 * = assigned network
 + = useable network
 [n] = # of useable hosts
@@ -115,6 +129,31 @@ __192.168.1.0/27
  | |__192.168.1.24/29
  | | |__192.168.1.24/30[2]+
  | | |__192.168.1.28/30[2]+
- ```
+```
 
- 
+```
+> netcalc subnet -j --hosts 2 192.168.1.0 255.255.255.248
+{
+  "network": {
+    "address": "192.168.1.0",
+    "mask": "255.255.255.248",
+    "broadcast": "192.168.1.7"
+  },
+  "subnets": [
+    {
+      "network": {
+        "address": "192.168.1.0",
+        "mask": "255.255.255.252",
+        "broadcast": "192.168.1.3"
+      }
+    },
+    {
+      "network": {
+        "address": "192.168.1.4",
+        "mask": "255.255.255.252",
+        "broadcast": "192.168.1.7"
+      }
+    }
+  ]
+}
+```

@@ -9,7 +9,7 @@ import (
 
 type NetworkNode struct {
 	Network  *Network       `json:"network,omitempty"`
-	Utilized bool           `json:"utilized"`
+	Utilized bool           `json:"-"`
 	Subnets  []*NetworkNode `json:"subnets,omitempty"`
 }
 
