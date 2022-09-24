@@ -42,7 +42,11 @@ var summarizeCmd = &cobra.Command{
 			})
 		}
 
-		networkSummary, _ := network.SummarizeNetworks(networks)
+		networkSummary, err := network.SummarizeNetworks(networks)
+
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		fmt.Printf("%s\t%s\n", utils.Itodd(networkSummary.Address), utils.Itodd(networkSummary.Mask))
 	},

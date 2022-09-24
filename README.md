@@ -32,9 +32,89 @@ go build
 go install
 ```
 ### Usage
+```
+Netcalc is a IPv4/IPv6 network calculator
 
-#### Network Info
+Usage:
+  netcalc [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  info        Displays information about a network
+  subnet      Given a network break it into smaller networks
+  summarize   summarizes the networks provided to stdin
+  version     Print the version number of netcalc
+  vlsm        Given a network and comma-separated list of subnet lengths break it into smaller networks
+
+Flags:
+  -h, --help      help for netcalc
+  -j, --json      Turns on JSON output for commands
+  -v, --verbose   Turns on verbose output for commands
+
+Use "netcalc [command] --help" for more information about a command.
 ```
-> netcalc info 192.168.1.0 255.255.255.0
-> 
+#### Network Info Command
 ```
+Usage:
+  netcalc info <ip_address> <subnet_mask> [flags]
+
+Flags:
+  -h, --help   help for info
+
+Global Flags:
+  -j, --json      Turns on JSON output for commands
+  -v, --verbose   Turns on verbose output for commands
+```
+
+```
+> netcalc info 192.168.0.0 255.255.255.248 -v
+Network:        192.168.0.0
+Mask:           255.255.255.248 (/29)
+Bcast:          192.168.0.7
+
+192.168.0.1     255.255.255.248
+192.168.0.2     255.255.255.248
+192.168.0.3     255.255.255.248
+192.168.0.4     255.255.255.248
+192.168.0.5     255.255.255.248
+192.168.0.6     255.255.255.248
+```
+#### Network Subnet Command
+
+```
+> netcalc subnet --hosts 2 192.168.1.0 255.255.255.224
+192.168.1.0     255.255.255.252
+192.168.1.4     255.255.255.252
+192.168.1.8     255.255.255.252
+192.168.1.12    255.255.255.252
+192.168.1.16    255.255.255.252
+192.168.1.20    255.255.255.252
+192.168.1.24    255.255.255.252
+192.168.1.28    255.255.255.252
+```
+
+```
+> netcalc subnet --hosts 2 192.168.1.0 255.255.255.224 -v
+* = assigned network
++ = useable network
+[n] = # of useable hosts
+
+__192.168.1.0/27
+ |__192.168.1.0/28
+ | |__192.168.1.0/29
+ | | |__192.168.1.0/30[2]+
+ | | |__192.168.1.4/30[2]+
+ | |__192.168.1.8/29
+ | | |__192.168.1.8/30[2]+
+ | | |__192.168.1.12/30[2]+
+ |__192.168.1.16/28
+ | |__192.168.1.16/29
+ | | |__192.168.1.16/30[2]+
+ | | |__192.168.1.20/30[2]+
+ | |__192.168.1.24/29
+ | | |__192.168.1.24/30[2]+
+ | | |__192.168.1.28/30[2]+
+ ```
+
+ 
