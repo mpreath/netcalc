@@ -54,7 +54,7 @@ Flags:
 
 Use "netcalc [command] --help" for more information about a command.
 ```
-#### Network Info Command
+#### `info` Command
 ```
 Usage:
   netcalc info <ip_address> <subnet_mask> [flags]
@@ -80,7 +80,7 @@ Bcast:          192.168.0.7
 192.168.0.5     255.255.255.248
 192.168.0.6     255.255.255.248
 ```
-#### Network Subnet Command
+#### `subnet` Command
 
 ```
 Usage:
@@ -157,3 +157,5 @@ __192.168.1.0/27
   ]
 }
 ```
+
+#### `vlsm` Command
