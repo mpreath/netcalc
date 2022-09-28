@@ -18,9 +18,7 @@ following features:
 * vlsm subnetting (in progress)
 * full IPv6 support (tbd)
 
-## Quick Start
-
-### Compile and Install
+## Install
 
 ```
 go test ./...
