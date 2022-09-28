@@ -27,7 +27,7 @@ go test ./...
 go build
 go install
 ```
-### Usage
+## Usage
 ```
 Netcalc is a IPv4/IPv6 network calculator
 
@@ -50,7 +50,7 @@ Flags:
 
 Use "netcalc [command] --help" for more information about a command.
 ```
-#### `info` Command
+### `info` Command
 ```
 Usage:
   netcalc info <ip_address> <subnet_mask> [flags]
@@ -76,7 +76,7 @@ Bcast:          192.168.0.7
 192.168.0.5     255.255.255.248
 192.168.0.6     255.255.255.248
 ```
-#### `subnet` Command
+### `subnet` Command
 
 ```
 Usage:
@@ -154,7 +154,7 @@ __192.168.1.0/27
 }
 ```
 
-#### `vlsm` Command
+### `vlsm` Command
 
 ```
 Usage:
@@ -211,7 +211,7 @@ __192.168.1.0/25
  | |__192.168.1.96/27[30]+
 ```
 
-#### `summarize` Command
+### `summarize` Command
 
 ```
 summarizes the networks provided to stdin
