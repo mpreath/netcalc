@@ -10,9 +10,9 @@ following features:
 * provided an ip address, mask, and a list of host count values, it will calculate a list of VLSM subnets that match the list of host count requirements. Instead of making the subnets all the same size, it only creates enough subnets to match the list, and they may all be different sizes
 * provided a list of subnets, it will try to summarize the subnets into one (or more) supernets if possible.
 
-*NOTE:* netcalc uses bit shifting and mask operators to work with ip addresses in their actual 32 bit integer form. It converts from dotted decimal notation to unsigned integer values, and then manipulates the integer values.
+**NOTE:** netcalc uses bit shifting and mask operators to work with ip addresses in their actual 32 bit integer form. It converts from dotted decimal notation to unsigned integer values, and then manipulates the integer values.
 
-*NOTE:* netcalc uses a binary tree structure to subnet networks by extending the mask by one bit and create two new networks as a nodes left and right child. Left is the lower half, right the upper half.
+**NOTE:** netcalc uses a binary tree structure to subnet networks by extending the mask by one bit and create two new networks as a nodes left and right child. Left is the lower half, right the upper half.
 
 ## Roadmap
 
@@ -216,4 +216,39 @@ __192.168.1.0/25
 ```
 
 #### `summarize` Command
+
+```
+summarizes the networks provided to stdin
+
+Usage:
+  netcalc summarize [flags]
+
+Flags:
+  -h, --help   help for summarize
+
+Global Flags:
+  -j, --json      Turns on JSON output for commands
+  -v, --verbose   Turns on verbose output for command
+```
+
+The summarize command takes a list of networks from `<stdin>` and summarizes them at the bit level into a single summary network.  This is useful for determining a common network route to configure in a routing environment to simplify routing advertisements. 
+
+In this example there is a text file (`test/vlsm_networks.txt`) containing the following networks:
+```
+192.168.1.0     255.255.255.252
+192.168.1.4     255.255.255.252
+192.168.1.8     255.255.255.252
+192.168.1.12    255.255.255.252
+192.168.1.16    255.255.255.240
+192.168.1.32    255.255.255.224
+192.168.1.64    255.255.255.224
+192.168.1.96    255.255.255.224
+```
+
+```
+> netcalc summarize < test/vlsm_networks.txt                                     
+192.168.1.0     255.255.255.128
+```
+
+The summarize command takes those networks and summarizes at the bit level to create the summary network of `192.168.1.0 255.255.255.128`. 
 
