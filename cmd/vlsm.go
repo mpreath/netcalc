@@ -13,11 +13,11 @@ import (
 )
 
 var vlsmCmd = &cobra.Command{
-	Use:   "vlsm <host_counts> <ip_address> <subnet_mask>",
-	Short: "Given a network and comma-separated list of subnet lengths break it into smaller networks",
+	Use:   "vlsm <host_counts_list> <ip_address> <subnet_mask>",
+	Short: "Given a network and comma-separated list of subnet host counts break it into smaller networks",
 	Long: `
-This command subnets a network based on a comma-separated list of subnet lengths.
-Usage: netcalc vlsm <host_counts> <ip_address> <subnet_mask>.`,
+This command subnets a network based on a comma-separated list of subnet host counts.
+Usage: netcalc vlsm <host_counts_list> <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
 		net, err := network.GenerateNetwork(args[1], args[2])
@@ -62,7 +62,5 @@ Usage: netcalc vlsm <host_counts> <ip_address> <subnet_mask>.`,
 }
 
 func init() {
-	// subnetCmd.Flags().IntVar(&HOST_COUNT, "hosts", 0, "Specifies the number of hosts to include each subnet.")
-	// subnetCmd.Flags().IntVar(&NET_COUNT, "networks", 0, "Specifies the number of subnets to create.")
 	rootCmd.AddCommand(vlsmCmd)
 }

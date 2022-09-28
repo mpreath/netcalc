@@ -160,4 +160,4 @@ __192.168.1.0/27
 
 #### `vlsm` Command
 
-The `subnet` command above splits the network provided into a smaller of number of networks based on either host count or number of networks desired, all networks created have the same length subnet mask.  The `vlsm` command also splits the network provided into a smaller number of networks but rather lets you provided a command-separated list of host counts.  
+The `subnet` command above splits the network provided into a smaller of number of networks based on either host count or number of networks desired, all networks created have the same length subnet mask.  The `vlsm` command also splits the network provided into a smaller number of networks but rather lets you provide a comma-separated list of host counts.  
