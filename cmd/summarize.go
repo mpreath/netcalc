@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -48,6 +49,17 @@ var summarizeCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%s\t%s\n", utils.Itodd(networkSummary.Address), utils.Itodd(networkSummary.Mask))
+		node := network.NetworkNode{
+			Network: networkSummary,
+		}
+
+		if JSON_FLAG {
+			// json output
+			s, _ := json.MarshalIndent(node, "", "  ")
+			fmt.Println(string(s))
+		} else {
+			// std output
+			printNetworkTree(&node)
+		}
 	},
 }

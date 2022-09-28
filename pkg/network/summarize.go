@@ -28,6 +28,6 @@ func SummarizeNetworks(networks []*Network) (*Network, error) {
 		commonBits = utils.GetNetworkAddress(commonBits, commonMask)
 	}
 
-	return &Network{Address: commonBits, Mask: commonMask}, nil
+	return &Network{Address: commonBits, Mask: commonMask, BroadcastAddress: utils.GetBroadcastAddress(commonBits, commonMask)}, nil
 
 }
