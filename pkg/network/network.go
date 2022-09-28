@@ -4,16 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mpreath/netcalc/host"
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/host"
+	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type Network struct {
 	Address          uint32 `json:"address"`
 	Mask             uint32 `json:"mask"`
-	MaskBits         uint32 `json:"mask_bits"`
+	MaskBits         uint32 `json:"-"`
 	BroadcastAddress uint32 `json:"broadcast"`
-	HostCount        uint   `json:"host_count"`
+	HostCount        uint   `json:"-"`
 }
 
 func (n *Network) MarshalJSON() ([]byte, error) {

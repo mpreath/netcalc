@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 func SummarizeNetworks(networks []*Network) (*Network, error) {
@@ -28,6 +28,6 @@ func SummarizeNetworks(networks []*Network) (*Network, error) {
 		commonBits = utils.GetNetworkAddress(commonBits, commonMask)
 	}
 
-	return &Network{Address: commonBits, Mask: commonMask}, nil
+	return &Network{Address: commonBits, Mask: commonMask, BroadcastAddress: utils.GetBroadcastAddress(commonBits, commonMask)}, nil
 
 }

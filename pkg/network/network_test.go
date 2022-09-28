@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 func TestMarshalJSON(t *testing.T) {

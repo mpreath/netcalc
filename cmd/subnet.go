@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mpreath/netcalc/network"
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/network"
+	"github.com/mpreath/netcalc/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -14,11 +14,11 @@ var HOST_COUNT int
 var NET_COUNT int
 
 var subnetCmd = &cobra.Command{
-	Use:   "subnet",
+	Use:   "subnet [--hosts <hosts> | --networks <networks>] <ip_address> <subnet_mask>",
 	Short: "Given a network break it into smaller networks",
 	Long: `
 This command subnets a network based on host count and network count parameters.
-Usage: netcalc info <ip_address> <subnet_mask>.`,
+Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		net, err := network.GenerateNetwork(args[0], args[1])

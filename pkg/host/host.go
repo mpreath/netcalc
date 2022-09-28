@@ -3,7 +3,7 @@ package host
 import (
 	"encoding/json"
 
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type Host struct {

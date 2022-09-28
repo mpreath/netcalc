@@ -2,13 +2,14 @@ package cmd
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/mpreath/netcalc/network"
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/network"
+	"github.com/mpreath/netcalc/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -42,8 +43,23 @@ var summarizeCmd = &cobra.Command{
 			})
 		}
 
-		networkSummary, _ := network.SummarizeNetworks(networks)
+		networkSummary, err := network.SummarizeNetworks(networks)
 
-		fmt.Printf("%s\t%s\n", utils.Itodd(networkSummary.Address), utils.Itodd(networkSummary.Mask))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		node := network.NetworkNode{
+			Network: networkSummary,
+		}
+
+		if JSON_FLAG {
+			// json output
+			s, _ := json.MarshalIndent(node, "", "  ")
+			fmt.Println(string(s))
+		} else {
+			// std output
+			printNetworkTree(&node)
+		}
 	},
 }

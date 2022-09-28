@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mpreath/netcalc/network"
-	"github.com/mpreath/netcalc/utils"
+	"github.com/mpreath/netcalc/pkg/network"
+	"github.com/mpreath/netcalc/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -15,11 +15,12 @@ func init() {
 }
 
 var infoCmd = &cobra.Command{
-	Use:   "info",
+	Use:   "info <ip_address> <subnet_mask>",
 	Short: "Displays information about a network",
 	Long: `
-This command displays information about an utils network.
+This command displays information about a network.
 Usage: netcalc info <ip_address> <subnet_mask>.`,
+
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		n, err := network.GenerateNetwork(args[0], args[1])
@@ -41,19 +42,18 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 func printNetworkInformation(n *network.Network) {
 	if n != nil {
 
-		if VERBOSE_FLAG {
-			fmt.Printf("* = network address\n")
-			fmt.Printf("+ = broadcast address\n\n")
-			fmt.Printf("%s\t%s *\n", utils.Itodd(n.Address), utils.Itodd(n.Mask))
-		}
-
-		for _, host := range network.GetHosts(n) {
-			fmt.Printf("%s\t%s\n", utils.Itodd(host.Address), utils.Itodd(host.Mask))
-		}
+		fmt.Printf("Network:\t%s\n", utils.Itodd(n.Address))
+		fmt.Printf("Mask:\t\t%s (/%d)\n", utils.Itodd(n.Mask), utils.GetBitsInMask(n.Mask))
+		fmt.Printf("Bcast:\t\t%s\n", utils.Itodd(n.BroadcastAddress))
 
 		if VERBOSE_FLAG {
-			fmt.Printf("%s\t%s +\n", utils.Itodd(n.BroadcastAddress), utils.Itodd(n.Mask))
+			fmt.Printf("\n")
+
+			for _, host := range network.GetHosts(n) {
+				fmt.Printf("%s\t%s\n", utils.Itodd(host.Address), utils.Itodd(host.Mask))
+			}
 		}
+
 	}
 }
 
