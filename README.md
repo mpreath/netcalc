@@ -174,7 +174,7 @@ Global Flags:
 
 The `subnet` command above splits the network provided into a smaller of number of networks based on either host count or number of networks desired, all networks created have the same length subnet mask.  The `vlsm` command also splits the network provided into a smaller number of networks but rather lets you provide a comma-separated list of host counts.  
 
-For example, for this example we start with `192.168.1.0 255.255.255.128` as your base network and have a need to subnet this further to support: 
+For example, for this example we start with `192.168.1.0 255.255.255.128` as our base network and have a need to subnet this further to support: 
 1. Four (4) /30 point-to-point links (links between routers)
 2. Two (2) 20 host count networks (two small office networks)
 
@@ -215,125 +215,5 @@ __192.168.1.0/25
  | |__192.168.1.96/27[30]+
 ```
 
-```
-netcalc vlsm -j 2,2,2,2,20,20 192.168.1.0 255.255.255.128
-{
-  "network": {
-    "address": "192.168.1.0",
-    "mask": "255.255.255.128",
-    "broadcast": "192.168.1.127"
-  },
-  "subnets": [
-    {
-      "network": {
-        "address": "192.168.1.0",
-        "mask": "255.255.255.192",
-        "broadcast": "192.168.1.63"
-      },
-      "subnets": [
-        {
-          "network": {
-            "address": "192.168.1.0",
-            "mask": "255.255.255.224",
-            "broadcast": "192.168.1.31"
-          },
-          "subnets": [
-            {
-              "network": {
-                "address": "192.168.1.0",
-                "mask": "255.255.255.240",
-                "broadcast": "192.168.1.15"
-              },
-              "subnets": [
-                {
-                  "network": {
-                    "address": "192.168.1.0",
-                    "mask": "255.255.255.248",
-                    "broadcast": "192.168.1.7"
-                  },
-                  "subnets": [
-                    {
-                      "network": {
-                        "address": "192.168.1.0",
-                        "mask": "255.255.255.252",
-                        "broadcast": "192.168.1.3"
-                      }
-                    },
-                    {
-                      "network": {
-                        "address": "192.168.1.4",
-                        "mask": "255.255.255.252",
-                        "broadcast": "192.168.1.7"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "network": {
-                    "address": "192.168.1.8",
-                    "mask": "255.255.255.248",
-                    "broadcast": "192.168.1.15"
-                  },
-                  "subnets": [
-                    {
-                      "network": {
-                        "address": "192.168.1.8",
-                        "mask": "255.255.255.252",
-                        "broadcast": "192.168.1.11"
-                      }
-                    },
-                    {
-                      "network": {
-                        "address": "192.168.1.12",
-                        "mask": "255.255.255.252",
-                        "broadcast": "192.168.1.15"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "network": {
-                "address": "192.168.1.16",
-                "mask": "255.255.255.240",
-                "broadcast": "192.168.1.31"
-              }
-            }
-          ]
-        },
-        {
-          "network": {
-            "address": "192.168.1.32",
-            "mask": "255.255.255.224",
-            "broadcast": "192.168.1.63"
-          }
-        }
-      ]
-    },
-    {
-      "network": {
-        "address": "192.168.1.64",
-        "mask": "255.255.255.192",
-        "broadcast": "192.168.1.127"
-      },
-      "subnets": [
-        {
-          "network": {
-            "address": "192.168.1.64",
-            "mask": "255.255.255.224",
-            "broadcast": "192.168.1.95"
-          }
-        },
-        {
-          "network": {
-            "address": "192.168.1.96",
-            "mask": "255.255.255.224",
-            "broadcast": "192.168.1.127"
-          }
-        }
-      ]
-    }
-  ]
-}
-```
+#### `summarize` Command
+
