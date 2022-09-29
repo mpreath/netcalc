@@ -10,13 +10,10 @@ following features:
 * provided an ip address, mask, and a list of host count values, it will calculate a list of VLSM subnets that match the list of host count requirements. Instead of making the subnets all the same size, it only creates enough subnets to match the list, and they may all be different sizes
 * provided a list of subnets, it will try to summarize the subnets into one (or more) supernets if possible.
 
-## Roadmap
+## Todo
 
-* network info (complete)
-* basic subnetting (complete)
-* summarization (complete)
-* vlsm subnetting (in progress)
-* full IPv6 support (tbd)
+* Refactor data structure to use less memory (in progress)
+* Implement IPv6 support (on roadmap)
 
 ## Install
 
