@@ -105,7 +105,7 @@ func (n *Network) Split() (*Network, *Network, error) {
 	return left_network, right_network, nil
 }
 
-func SplitToHostCountv2(net *Network, host_count int) ([]*Network, error) {
+func SplitToHostCount(net *Network, host_count int) ([]*Network, error) {
 	current_mask_bc := utils.GetBitsInMask(net.Mask)
 	if current_mask_bc >= 30 {
 		// this is the longest mask we support
@@ -127,11 +127,11 @@ func SplitToHostCountv2(net *Network, host_count int) ([]*Network, error) {
 		if err != nil {
 			return nil, err
 		}
-		res1, err := SplitToHostCountv2(net1, host_count)
+		res1, err := SplitToHostCount(net1, host_count)
 		if err != nil {
 			return nil, err
 		}
-		res2, err := SplitToHostCountv2(net2, host_count)
+		res2, err := SplitToHostCount(net2, host_count)
 		if err != nil {
 			return nil, err
 		}
@@ -140,7 +140,7 @@ func SplitToHostCountv2(net *Network, host_count int) ([]*Network, error) {
 	}
 }
 
-func SplitToNetCountv2(net *Network, net_count int) ([]*Network, error) {
+func SplitToNetCount(net *Network, net_count int) ([]*Network, error) {
 	longest_valid_mask, _ := utils.GetMaskFromBits(30)
 	if net_count <= 0 {
 		// this is our recursive base case
@@ -153,11 +153,11 @@ func SplitToNetCountv2(net *Network, net_count int) ([]*Network, error) {
 		if err != nil {
 			return nil, err
 		}
-		res1, err := SplitToNetCountv2(net1, net_count-2)
+		res1, err := SplitToNetCount(net1, net_count-2)
 		if err != nil {
 			return nil, err
 		}
-		res2, err := SplitToNetCountv2(net2, net_count-2)
+		res2, err := SplitToNetCount(net2, net_count-2)
 		if err != nil {
 			return nil, err
 		}
