@@ -30,13 +30,13 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 		var summarizedNetworks []*network.Network
 
 		if HOST_COUNT > 0 {
-			summarizedNetworks, err = network.SplitToHostCountv2(baseNetwork, HOST_COUNT)
+			summarizedNetworks, err = network.SplitToHostCount(baseNetwork, HOST_COUNT)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 		} else if NET_COUNT > 0 {
-			summarizedNetworks, err = network.SplitToNetCountv2(baseNetwork, NET_COUNT)
+			summarizedNetworks, err = network.SplitToNetCount(baseNetwork, NET_COUNT)
 			if err != nil {
 				log.Fatal(err)
 			}
