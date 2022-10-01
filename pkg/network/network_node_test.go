@@ -41,7 +41,7 @@ func TestSplitToHostCount(t *testing.T) {
 		dd_address          string
 		dd_mask             string
 		host_count          int
-		expected_host_count uint
+		expected_host_count int
 		error_string        string
 	}{
 		{"192.168.1.1", "255.255.255.0", 1, 2, ""},
@@ -69,8 +69,8 @@ func TestSplitToHostCount(t *testing.T) {
 			test_node = test_node.Subnets[0]
 		}
 
-		if test_node.Network.HostCount != test_case.expected_host_count {
-			t.Errorf("subnet host count (%d) doesn't match spec (%d)", test_node.Network.HostCount, test_case.host_count)
+		if test_node.Network.HostCount() != test_case.expected_host_count {
+			t.Errorf("subnet host count (%d) doesn't match spec (%d)", test_node.Network.HostCount(), test_case.host_count)
 		}
 	}
 }

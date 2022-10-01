@@ -21,23 +21,22 @@ This command subnets a network based on host count and network count parameters.
 Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		net, err := network.GenerateNetwork(args[0], args[1])
+		baseNetwork, err := network.GenerateNetwork(args[0], args[1])
 		if err != nil {
 			log.Fatal(err)
 		}
-		// generate network from args
-		node := network.NetworkNode{
-			Network: net,
-		}
+
+		// contains a list of summarized networks
+		var summarizedNetworks []*network.Network
 
 		if HOST_COUNT > 0 {
-			err = network.SplitToHostCount(&node, HOST_COUNT)
+			summarizedNetworks, err = network.SplitToHostCountv2(baseNetwork, HOST_COUNT)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 		} else if NET_COUNT > 0 {
-			err = network.SplitToNetCount(&node, NET_COUNT)
+			summarizedNetworks, err = network.SplitToNetCountv2(baseNetwork, NET_COUNT)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -45,11 +44,11 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 
 		if JSON_FLAG {
 			// json output
-			s, _ := json.MarshalIndent(node, "", "  ")
+			s, _ := json.MarshalIndent(summarizedNetworks, "", "  ")
 			fmt.Println(string(s))
 		} else {
 			// std output
-			printNetworkTree(&node)
+			printNetworkSlice(summarizedNetworks)
 		}
 
 	},
@@ -59,6 +58,16 @@ func init() {
 	subnetCmd.Flags().IntVar(&HOST_COUNT, "hosts", 0, "Specifies the number of hosts to include each subnet.")
 	subnetCmd.Flags().IntVar(&NET_COUNT, "networks", 0, "Specifies the number of subnets to create.")
 	rootCmd.AddCommand(subnetCmd)
+}
+
+func printNetworkSlice(summary []*network.Network) {
+
+	if VERBOSE_FLAG {
+		fmt.Printf("Summarized into %d network(s)\n", len(summary))
+	}
+	for _, net := range summary {
+		fmt.Printf("%s\t%s\n", utils.Itodd(net.Address), utils.Itodd(net.Mask))
+	}
 }
 
 func printNetworkTree(node *network.NetworkNode, opts ...int) {
@@ -86,9 +95,9 @@ func printNetworkTree(node *network.NetworkNode, opts ...int) {
 
 		fmt.Printf("__%s/%d", ip_address, num_of_bits)
 		if node.Utilized && len(node.Subnets) == 0 {
-			fmt.Printf("[%d]*", node.Network.HostCount)
+			fmt.Printf("[%d]*", node.Network.HostCount())
 		} else if len(node.Subnets) == 0 {
-			fmt.Printf("[%d]+", node.Network.HostCount)
+			fmt.Printf("[%d]+", node.Network.HostCount())
 		}
 		fmt.Printf("\n")
 	} else {
