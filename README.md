@@ -12,8 +12,6 @@ following features:
 
 ## Roadmap
 
-* Refactor data structure to use less memory (in progress)
-* Implement IPv6 support (tbd)
 #### 1.0
 Current Version
 
