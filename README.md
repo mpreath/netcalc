@@ -14,6 +14,14 @@ following features:
 
 * Refactor data structure to use less memory (in progress)
 * Implement IPv6 support (tbd)
+#### 1.0
+Current Version
+
+#### 1.1
+* Concurrency
+
+#### 2.0
+* IPv6 support
 
 ## Install
 
