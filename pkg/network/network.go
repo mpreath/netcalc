@@ -9,25 +9,20 @@ import (
 )
 
 type Network struct {
-	Address          uint32 `json:"address"`
-	Mask             uint32 `json:"mask"`
-	MaskBits         uint32 `json:"-"`
-	BroadcastAddress uint32 `json:"broadcast"`
-	HostCount        uint   `json:"-"`
+	Address uint32 `json:"address"`
+	Mask    uint32 `json:"mask"`
 }
 
 func (n *Network) MarshalJSON() ([]byte, error) {
 	type Alias Network
 	return json.Marshal(&struct {
-		Address          string `json:"address"`
-		Mask             string `json:"mask"`
-		BroadcastAddress string `json:"broadcast"`
+		Address string `json:"address"`
+		Mask    string `json:"mask"`
 		*Alias
 	}{
-		Address:          utils.Itodd(n.Address),
-		Mask:             utils.Itodd(n.Mask),
-		BroadcastAddress: utils.Itodd(n.BroadcastAddress),
-		Alias:            (*Alias)(n),
+		Address: utils.Itodd(n.Address),
+		Mask:    utils.Itodd(n.Mask),
+		Alias:   (*Alias)(n),
 	})
 }
 
@@ -44,16 +39,9 @@ func GenerateNetwork(address string, mask string) (*Network, error) {
 		return nil, fmt.Errorf("network.GenerateNetwork: invalid subnet mask")
 	}
 
-	network_address := utils.GetNetworkAddress(host_address, network_mask)
-	broadcast_address := utils.GetBroadcastAddress(network_address, network_mask)
-
-	// count := broadcast_address - network_address - 1
-
 	network := Network{
-		Address:          network_address,
-		Mask:             network_mask,
-		BroadcastAddress: broadcast_address,
-		HostCount:        uint(broadcast_address - network_address - 1),
+		Address: utils.GetNetworkAddress(host_address, network_mask),
+		Mask:    network_mask,
 	}
 
 	return &network, nil
@@ -61,14 +49,9 @@ func GenerateNetwork(address string, mask string) (*Network, error) {
 
 func GenerateNetworkFromBits(address uint32, mask uint32) (*Network, error) {
 
-	network_address := utils.GetNetworkAddress(address, mask)
-	broadcast_address := utils.GetBroadcastAddress(address, mask)
-
 	network := Network{
-		Address:          network_address,
-		Mask:             mask,
-		BroadcastAddress: broadcast_address,
-		HostCount:        uint(broadcast_address - network_address - 1),
+		Address: utils.GetNetworkAddress(address, mask),
+		Mask:    mask,
 	}
 
 	return &network, nil
@@ -77,9 +60,17 @@ func GenerateNetworkFromBits(address uint32, mask uint32) (*Network, error) {
 func GetHosts(network *Network) []*host.Host {
 	var harr []*host.Host
 
-	for i, n := 0, network.Address+1; n < network.BroadcastAddress; i, n = i+1, n+1 {
+	for i, n := 0, network.Address+1; n < network.BroadcastAddress(); i, n = i+1, n+1 {
 		harr = append(harr, &host.Host{Address: n, Mask: network.Mask})
 	}
 
 	return harr
+}
+
+func (n *Network) BroadcastAddress() uint32 {
+	return utils.GetBroadcastAddress(n.Address, n.Mask)
+}
+
+func (n *Network) HostCount() int {
+	return int(n.BroadcastAddress() - n.Address - 1)
 }

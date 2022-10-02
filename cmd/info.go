@@ -44,7 +44,7 @@ func printNetworkInformation(n *network.Network) {
 
 		fmt.Printf("Network:\t%s\n", utils.Itodd(n.Address))
 		fmt.Printf("Mask:\t\t%s (/%d)\n", utils.Itodd(n.Mask), utils.GetBitsInMask(n.Mask))
-		fmt.Printf("Bcast:\t\t%s\n", utils.Itodd(n.BroadcastAddress))
+		fmt.Printf("Bcast:\t\t%s\n", utils.Itodd(n.BroadcastAddress()))
 
 		if VERBOSE_FLAG {
 			fmt.Printf("\n")
