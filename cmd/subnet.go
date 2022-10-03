@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sync"
 
 	"github.com/mpreath/netcalc/pkg/network"
 	"github.com/mpreath/netcalc/pkg/utils"
@@ -31,7 +32,8 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 		}
 
 		if HOST_COUNT > 0 {
-			err = network.SplitToHostCount(&node, HOST_COUNT)
+			//err = network.SplitToHostCount(&node, HOST_COUNT)
+			SplitToHostCountThreaded(&node, HOST_COUNT)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -53,6 +55,23 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 		}
 
 	},
+}
+
+func SplitToHostCountThreaded(node *network.NetworkNode, host_count int) {
+	wg := new(sync.WaitGroup)
+	node.Split()
+	if len(node.Subnets) > 0 {
+		wg.Add(2)
+		go SplitToHostCountWrapper(wg, node.Subnets[0], host_count)
+		go SplitToHostCountWrapper(wg, node.Subnets[1], host_count)
+	}
+	wg.Wait()
+}
+
+func SplitToHostCountWrapper(wg *sync.WaitGroup, node *network.NetworkNode, host_count int) {
+	defer wg.Done()
+	network.SplitToHostCount(node, host_count)
+
 }
 
 func init() {
