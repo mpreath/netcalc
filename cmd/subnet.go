@@ -31,15 +31,7 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 			Network: net,
 		}
 
-		// cpuFile, err := os.Create("tmp/cpuProfile8xGo.pprof")
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-		// pprof.StartCPUProfile(cpuFile)
-		// defer pprof.StopCPUProfile()
-
 		if HOST_COUNT > 0 {
-			//err = network.SplitToHostCount(&node, HOST_COUNT)
 			SplitToHostCountThreaded(&node, HOST_COUNT)
 			if err != nil {
 				log.Fatal(err)
@@ -52,61 +44,57 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 			}
 		}
 
-		// pprof.StopCPUProfile()
-
 		if JSON_FLAG {
 			// json output
 			s, _ := json.MarshalIndent(node, "", "  ")
 			fmt.Println(string(s))
 		} else {
 			// std output
-			// printNetworkTree(&node)
+			printNetworkTree(&node)
 		}
 
 	},
 }
 
 func SplitToHostCountThreaded(node *network.NetworkNode, host_count int) error {
+	wg := new(sync.WaitGroup)
 
-	if node.Network.HostCount() >= 30 {
-		return nil
+	valid, err := network.ValidForHostCount(node.Network, host_count)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	wg := new(sync.WaitGroup)
-	node.Split()
-	if len(node.Subnets) > 0 {
-		// wg.Add(2)
-		// go SplitToHostCountWrapper(wg, node.Subnets[0], host_count)
-		// go SplitToHostCountWrapper(wg, node.Subnets[1], host_count)
-		node.Subnets[0].Split()
-		node.Subnets[1].Split()
+	if valid { // base network is already the best option
+		return nil
+	} else { // we can subnet another level
+		node.Split() // create two subnets
+		if len(node.Subnets) > 0 {
+			valid, err := network.ValidForHostCount(node.Subnets[0].Network, host_count)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		if len(node.Subnets[0].Subnets) > 0 && len(node.Subnets[1].Subnets) > 0 {
+			if valid { // these subnets are valid
+				wg.Add(2)
+				go SplitToHostCountWrapper(wg, node.Subnets[0], host_count)
+				go SplitToHostCountWrapper(wg, node.Subnets[1], host_count)
+			} else {
+				node.Subnets[0].Split()
+				node.Subnets[1].Split()
+				if len(node.Subnets[0].Subnets) > 0 && len(node.Subnets[1].Subnets) > 0 {
 
-			wg.Add(4)
-			go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0], host_count)
-			go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1], host_count)
-			go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0], host_count)
-			go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1], host_count)
-
-			// node.Subnets[0].Subnets[0].Split()
-			// node.Subnets[0].Subnets[1].Split()
-			// node.Subnets[1].Subnets[0].Split()
-			// node.Subnets[1].Subnets[1].Split()
-
-			// if len(node.Subnets[0].Subnets[0].Subnets) > 0 && len(node.Subnets[0].Subnets[1].Subnets) > 0 && len(node.Subnets[0].Subnets[0].Subnets) > 0 && len(node.Subnets[0].Subnets[0].Subnets) > 0 {
-			// 	wg.Add(8)
-			// 	go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0].Subnets[0], host_count)
-			// 	go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0].Subnets[1], host_count)
-			// 	go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1].Subnets[0], host_count)
-			// 	go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1].Subnets[1], host_count)
-			// 	go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0].Subnets[0], host_count)
-			// 	go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0].Subnets[1], host_count)
-			// 	go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1].Subnets[0], host_count)
-			// 	go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1].Subnets[1], host_count)
-			// }
+					wg.Add(4)
+					go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0], host_count)
+					go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1], host_count)
+					go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0], host_count)
+					go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1], host_count)
+				}
+			}
+		} else {
+			return nil
 		}
 	}
+
 	wg.Wait()
 
 	return nil
@@ -114,7 +102,10 @@ func SplitToHostCountThreaded(node *network.NetworkNode, host_count int) error {
 
 func SplitToHostCountWrapper(wg *sync.WaitGroup, node *network.NetworkNode, host_count int) {
 	defer wg.Done()
-	network.SplitToHostCount(node, host_count)
+	err := network.SplitToHostCount(node, host_count)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 
