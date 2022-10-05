@@ -8,3 +8,4 @@ netcalc
 *.json
 *.out
 test/
+tmp/
