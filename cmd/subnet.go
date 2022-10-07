@@ -74,7 +74,10 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, host_count int) err
 	if valid { // base network is already the best option
 		return nil
 	} else { // we can subnet another level
-		node.Split() // create two subnets
+		err = node.Split() // create two subnets
+		if err != nil {
+			log.Fatal(err)
+		}
 		if len(node.Subnets) > 0 {
 			valid, err := networknode.ValidForHostCount(node.Subnets[0].Network, host_count)
 			if err != nil {
@@ -84,8 +87,15 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, host_count int) err
 			if valid { // these subnets are valid
 				return nil
 			} else {
-				node.Subnets[0].Split()
-				node.Subnets[1].Split()
+				err = node.Subnets[0].Split()
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				err = node.Subnets[1].Split()
+				if err != nil {
+					log.Fatal(err)
+				}
 
 				if len(node.Subnets[0].Subnets) > 0 && len(node.Subnets[1].Subnets) > 0 {
 					valid, err := networknode.ValidForHostCount(node.Subnets[0].Subnets[0].Network, host_count)
