@@ -3,7 +3,6 @@ package network
 import (
 	"encoding/json"
 	"fmt"
-
 	"github.com/mpreath/netcalc/pkg/host"
 	"github.com/mpreath/netcalc/pkg/utils"
 )
@@ -37,21 +36,11 @@ func New(address uint32, mask uint32) (*Network, error) {
 	}, nil
 }
 
-func GenerateNetworkFromBits(address uint32, mask uint32) (*Network, error) {
-
-	network := Network{
-		Address: utils.GetNetworkAddress(address, mask),
-		Mask:    mask,
-	}
-
-	return &network, nil
-}
-
-func GetHosts(network *Network) []*host.Host {
+func (n *Network) Hosts() []*host.Host {
 	var harr []*host.Host
 
-	for i, n := 0, network.Address+1; n < network.BroadcastAddress(); i, n = i+1, n+1 {
-		harr = append(harr, &host.Host{Address: n, Mask: network.Mask})
+	for i, address := 0, n.Address+1; address < n.BroadcastAddress(); i, address = i+1, address+1 {
+		harr = append(harr, &host.Host{Address: address, Mask: n.Mask})
 	}
 
 	return harr

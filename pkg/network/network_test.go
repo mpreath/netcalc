@@ -102,7 +102,7 @@ func TestGetHosts(t *testing.T) {
 			t.Fatalf(err.Error())
 		}
 
-		test_hosts := GetHosts(test_network)
+		test_hosts := test_network.Hosts()
 
 		if len(test_hosts) != test_case.host_count {
 			t.Errorf("generated host count (%d) doesn't match spec count (%d)", len(test_hosts), test_case.host_count)

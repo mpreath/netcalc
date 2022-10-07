@@ -31,7 +31,7 @@ func (node *NetworkNode) Split() error {
 			return err
 		}
 		// left will contain the lower value
-		left_network, err := network.GenerateNetworkFromBits(node.Network.Address, new_mask)
+		left_network, err := network.New(node.Network.Address, new_mask)
 		if err != nil {
 			return err
 		}
@@ -39,7 +39,7 @@ func (node *NetworkNode) Split() error {
 		node.Subnets = append(node.Subnets, &NetworkNode{Network: left_network})
 
 		// right will contain the larger value
-		right_network, err := network.GenerateNetworkFromBits(left_network.BroadcastAddress()+1, new_mask)
+		right_network, err := network.New(left_network.BroadcastAddress()+1, new_mask)
 		if err != nil {
 			return err
 		}
@@ -162,7 +162,7 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 		if lookahead_mask_bc <= 30 {
 			// the next split will be a legitimate network
 			lookahead_mask, _ := utils.GetMaskFromBits(lookahead_mask_bc)
-			lookahead_network, _ := network.GenerateNetworkFromBits(node.Network.Address, lookahead_mask)
+			lookahead_network, _ := network.New(node.Network.Address, lookahead_mask)
 			lookahead_host_count = lookahead_network.HostCount()
 		} else {
 			lookahead_host_count = 0
@@ -200,15 +200,4 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 
 	}
 	return nil
-}
-
-func NetworkNodeToArray(node *NetworkNode) []*network.Network {
-	var narr []*network.Network
-	if len(node.Subnets) > 0 {
-		narr = append(narr, NetworkNodeToArray(node.Subnets[0])...)
-		narr = append(narr, NetworkNodeToArray(node.Subnets[1])...)
-	} else if len(node.Subnets) == 0 {
-		narr = append(narr, node.Network)
-	}
-	return narr
 }
