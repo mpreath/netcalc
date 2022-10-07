@@ -1,16 +1,23 @@
-package network
+package networknode
 
 import (
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/network"
 	"math"
 
 	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type NetworkNode struct {
-	Network  *Network       `json:"network,omitempty"`
-	Utilized bool           `json:"-"`
-	Subnets  []*NetworkNode `json:"subnets,omitempty"`
+	Network  *network.Network `json:"network,omitempty"`
+	Utilized bool             `json:"-"`
+	Subnets  []*NetworkNode   `json:"subnets,omitempty"`
+}
+
+func New(n *network.Network) *NetworkNode {
+	return &NetworkNode{
+		Network: n,
+	}
 }
 
 func (node *NetworkNode) Split() error {
@@ -24,7 +31,7 @@ func (node *NetworkNode) Split() error {
 			return err
 		}
 		// left will contain the lower value
-		left_network, err := GenerateNetworkFromBits(node.Network.Address, new_mask)
+		left_network, err := network.GenerateNetworkFromBits(node.Network.Address, new_mask)
 		if err != nil {
 			return err
 		}
@@ -32,7 +39,7 @@ func (node *NetworkNode) Split() error {
 		node.Subnets = append(node.Subnets, &NetworkNode{Network: left_network})
 
 		// right will contain the larger value
-		right_network, err := GenerateNetworkFromBits(left_network.BroadcastAddress()+1, new_mask)
+		right_network, err := network.GenerateNetworkFromBits(left_network.BroadcastAddress()+1, new_mask)
 		if err != nil {
 			return err
 		}
@@ -82,7 +89,7 @@ func SplitToHostCount(node *NetworkNode, host_count int) error {
 	}
 }
 
-func ValidForHostCount(n *Network, host_count int) (bool, error) {
+func ValidForHostCount(n *network.Network, host_count int) (bool, error) {
 
 	current_mask_bc := utils.GetBitsInMask(n.Mask)
 	current_bc := 32 - current_mask_bc
@@ -155,7 +162,7 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 		if lookahead_mask_bc <= 30 {
 			// the next split will be a legitimate network
 			lookahead_mask, _ := utils.GetMaskFromBits(lookahead_mask_bc)
-			lookahead_network, _ := GenerateNetworkFromBits(node.Network.Address, lookahead_mask)
+			lookahead_network, _ := network.GenerateNetworkFromBits(node.Network.Address, lookahead_mask)
 			lookahead_host_count = lookahead_network.HostCount()
 		} else {
 			lookahead_host_count = 0
@@ -195,8 +202,8 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 	return nil
 }
 
-func NetworkNodeToArray(node *NetworkNode) []*Network {
-	var narr []*Network
+func NetworkNodeToArray(node *NetworkNode) []*network.Network {
+	var narr []*network.Network
 	if len(node.Subnets) > 0 {
 		narr = append(narr, NetworkNodeToArray(node.Subnets[0])...)
 		narr = append(narr, NetworkNodeToArray(node.Subnets[1])...)

@@ -1,6 +1,7 @@
-package network
+package networknode
 
 import (
+	"github.com/mpreath/netcalc/pkg/network"
 	"testing"
 )
 
@@ -16,7 +17,7 @@ func TestSplit(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		test_network, _ := network.GenerateNetwork(test_case.dd_address, test_case.dd_mask)
 		test_node := &NetworkNode{
 			Network: test_network,
 		}
@@ -50,7 +51,7 @@ func TestSplitToHostCount(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		test_network, _ := network.GenerateNetwork(test_case.dd_address, test_case.dd_mask)
 		test_node := &NetworkNode{
 			Network: test_network,
 		}
@@ -64,7 +65,7 @@ func TestSplitToHostCount(t *testing.T) {
 			continue
 		}
 
-		// traverse to a leaf node
+		// traverse to a leaf networknode
 		for len(test_node.Subnets) > 0 {
 			test_node = test_node.Subnets[0]
 		}
@@ -89,7 +90,7 @@ func TestSplitToNetCount(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		test_network, _ := network.GenerateNetwork(test_case.dd_address, test_case.dd_mask)
 		test_node := &NetworkNode{
 			Network: test_network,
 		}

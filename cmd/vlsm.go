@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/network/networknode"
 	"log"
 	"sort"
 	"strconv"
@@ -25,7 +26,7 @@ Usage: netcalc vlsm <host_counts_list> <ip_address> <subnet_mask>.`,
 			log.Fatal(err)
 		}
 		// generate network from args
-		node := network.NetworkNode{
+		node := networknode.NetworkNode{
 			Network: net,
 		}
 
@@ -42,7 +43,7 @@ Usage: netcalc vlsm <host_counts_list> <ip_address> <subnet_mask>.`,
 		})
 
 		for _, vlsm := range vlsm_list {
-			err = network.SplitToVlsmCount(&node, vlsm)
+			err = networknode.SplitToVlsmCount(&node, vlsm)
 
 			if err != nil {
 				log.Fatal(err)

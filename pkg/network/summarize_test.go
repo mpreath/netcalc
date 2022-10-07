@@ -1,6 +1,7 @@
 package network
 
 import (
+	"github.com/mpreath/netcalc/pkg/network/networknode"
 	"testing"
 )
 
@@ -16,11 +17,11 @@ func TestSummarizeNetworks(t *testing.T) {
 
 	for _, test_case := range test_cases {
 		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.mask)
-		test_network_node := &NetworkNode{
+		test_network_node := &networknode.NetworkNode{
 			Network: test_network,
 		}
-		SplitToHostCount(test_network_node, 2)
-		networks := NetworkNodeToArray(test_network_node)
+		networknode.SplitToHostCount(test_network_node, 2)
+		networks := networknode.NetworkNodeToArray(test_network_node)
 		summarized_network, _ := SummarizeNetworks(networks)
 
 		if summarized_network.Address != test_network.Address {

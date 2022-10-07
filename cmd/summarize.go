@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/network/networknode"
 	"log"
 	"os"
 	"strings"
@@ -49,7 +50,7 @@ var summarizeCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		node := network.NetworkNode{
+		node := networknode.NetworkNode{
 			Network: networkSummary,
 		}
 
