@@ -1,11 +1,7 @@
 package main
 
-import (
-	"github.com/mpreath/netcalc/cmd"
-)
-
 func main() {
-	err := cmd.Execute()
+	err := Execute()
 	if err != nil {
 		return
 	}
