@@ -114,9 +114,7 @@ func TestSplitToNetCount(t *testing.T) {
 			t.Fatalf(err.Error())
 		}
 		test_network, _ := network.New(testNetworkAddress, testNetworkMask)
-		test_node := &NetworkNode{
-			Network: test_network,
-		}
+		test_node := New(test_network)
 
 		err = SplitToNetCount(test_node, test_case.net_count)
 
@@ -127,7 +125,7 @@ func TestSplitToNetCount(t *testing.T) {
 			continue
 		}
 
-		net_count := GetNetworkCount(test_node)
+		net_count := test_node.NetworkCount()
 		if net_count != test_case.expected_net_count {
 			t.Errorf("network count (%d) doesn't match spec (%d)", net_count, test_case.expected_net_count)
 		}

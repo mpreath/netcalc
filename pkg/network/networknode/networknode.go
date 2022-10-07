@@ -53,13 +53,13 @@ func (node *NetworkNode) Split() error {
 	return nil
 }
 
-func GetNetworkCount(node *NetworkNode) int {
+func (node *NetworkNode) NetworkCount() int {
 	if node == nil {
 		return 0
 	} else if len(node.Subnets) == 0 {
 		return 1
 	} else {
-		return GetNetworkCount(node.Subnets[0]) + GetNetworkCount(node.Subnets[1])
+		return node.Subnets[0].NetworkCount() + node.Subnets[1].NetworkCount()
 	}
 }
 
