@@ -1,16 +1,23 @@
-package network
+package networknode
 
 import (
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/network"
 	"math"
 
 	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type NetworkNode struct {
-	Network  *Network       `json:"network,omitempty"`
-	Utilized bool           `json:"-"`
-	Subnets  []*NetworkNode `json:"subnets,omitempty"`
+	Network  *network.Network `json:"network,omitempty"`
+	Utilized bool             `json:"-"`
+	Subnets  []*NetworkNode   `json:"subnets,omitempty"`
+}
+
+func New(n *network.Network) *NetworkNode {
+	return &NetworkNode{
+		Network: n,
+	}
 }
 
 func (node *NetworkNode) Split() error {
@@ -24,7 +31,7 @@ func (node *NetworkNode) Split() error {
 			return err
 		}
 		// left will contain the lower value
-		left_network, err := GenerateNetworkFromBits(node.Network.Address, new_mask)
+		left_network, err := network.GenerateNetworkFromBits(node.Network.Address, new_mask)
 		if err != nil {
 			return err
 		}
@@ -32,7 +39,7 @@ func (node *NetworkNode) Split() error {
 		node.Subnets = append(node.Subnets, &NetworkNode{Network: left_network})
 
 		// right will contain the larger value
-		right_network, err := GenerateNetworkFromBits(left_network.BroadcastAddress()+1, new_mask)
+		right_network, err := network.GenerateNetworkFromBits(left_network.BroadcastAddress()+1, new_mask)
 		if err != nil {
 			return err
 		}
@@ -57,22 +64,13 @@ func GetNetworkCount(node *NetworkNode) int {
 }
 
 func SplitToHostCount(node *NetworkNode, host_count int) error {
-	current_mask_bc := utils.GetBitsInMask(node.Network.Mask)
-	if current_mask_bc >= 30 {
-		// this is the longest mask we support
-		return nil
-	}
-	current_bc := 32 - current_mask_bc
-	current_hc := int(math.Pow(2, float64(current_bc)))
-	future_bc := current_bc - 1 // need to look ahead into the future
-	future_hc := int(math.Pow(2, float64(future_bc)))
 
-	if current_hc >= host_count && future_hc < host_count {
-		// this is our recursive base case
-		return nil
-	} else if current_hc < host_count {
-		// requirements too large, raise an error
-		return fmt.Errorf("network.SplitToHostCount: network can't support that many hosts")
+	valid, err := ValidForHostCount(node.Network, host_count)
+	if err != nil {
+		return err
+	}
+	if valid {
+		return nil // success
 	} else {
 		err := node.Split()
 		if err != nil {
@@ -86,9 +84,30 @@ func SplitToHostCount(node *NetworkNode, host_count int) error {
 		if err != nil {
 			return err
 		}
+
+		return nil
+	}
+}
+
+func ValidForHostCount(n *network.Network, host_count int) (bool, error) {
+
+	current_mask_bc := utils.GetBitsInMask(n.Mask)
+	current_bc := 32 - current_mask_bc
+	current_hc := int(math.Pow(2, float64(current_bc)))
+	future_bc := current_bc - 1 // need to look ahead into the future
+	future_hc := int(math.Pow(2, float64(future_bc)))
+
+	if current_hc >= host_count && future_hc < host_count {
+		// this is our recursive base case
+		return true, nil
+	} else if current_hc < host_count {
+		// requirements too large, raise an error
+		return false, fmt.Errorf("network.SplitToHostCount: network can't support that many hosts")
+	} else if current_mask_bc >= 30 {
+		return true, nil
 	}
 
-	return nil
+	return false, nil
 }
 
 func SplitToNetCount(node *NetworkNode, net_count int) error {
@@ -143,7 +162,7 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 		if lookahead_mask_bc <= 30 {
 			// the next split will be a legitimate network
 			lookahead_mask, _ := utils.GetMaskFromBits(lookahead_mask_bc)
-			lookahead_network, _ := GenerateNetworkFromBits(node.Network.Address, lookahead_mask)
+			lookahead_network, _ := network.GenerateNetworkFromBits(node.Network.Address, lookahead_mask)
 			lookahead_host_count = lookahead_network.HostCount()
 		} else {
 			lookahead_host_count = 0
@@ -183,8 +202,8 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 	return nil
 }
 
-func NetworkNodeToArray(node *NetworkNode) []*Network {
-	var narr []*Network
+func NetworkNodeToArray(node *NetworkNode) []*network.Network {
+	var narr []*network.Network
 	if len(node.Subnets) > 0 {
 		narr = append(narr, NetworkNodeToArray(node.Subnets[0])...)
 		narr = append(narr, NetworkNodeToArray(node.Subnets[1])...)

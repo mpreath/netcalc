@@ -1,10 +1,12 @@
 # vscode specifics
 .vscode/
+.idea/
 
 # build artifacts
-netcalc
+/netcalc
 
 # testing artifacts
 *.json
 *.out
 test/
+tmp/

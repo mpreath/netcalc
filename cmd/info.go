@@ -23,7 +23,7 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		n, err := network.GenerateNetwork(args[0], args[1])
+		n, err := network.New(args[0], args[1])
 		if err != nil {
 			log.Fatal(err)
 		}

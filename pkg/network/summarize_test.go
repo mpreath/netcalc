@@ -5,29 +5,57 @@ import (
 )
 
 func TestSummarizeNetworks(t *testing.T) {
-	test_cases := []struct {
-		dd_address string
-		mask       string
+	type NetworkMap struct {
+		Address string
+		Mask    string
+	}
+	testCases := []struct {
+		testNetworks    []NetworkMap // networks to be summarized
+		expectedNetwork NetworkMap   // what the summarization should be
 	}{
-		{"192.168.1.0", "255.255.255.0"},
-		{"10.1.0.0", "255.255.0.0"},
-		{"172.16.12.0", "255.255.248.0"},
+		{
+			[]NetworkMap{
+				{Address: "192.168.1.0", Mask: "255.255.255.252"},
+				{Address: "192.168.1.4", Mask: "255.255.255.252"},
+			},
+			NetworkMap{
+				Address: "192.168.1.0", Mask: "255.255.255.248",
+			},
+		},
+		{
+			[]NetworkMap{
+				{Address: "192.168.1.0", Mask: "255.255.255.192"},
+				{Address: "192.168.1.64", Mask: "255.255.255.192"},
+				{Address: "192.168.1.128", Mask: "255.255.255.192"},
+				{Address: "192.168.1.192", Mask: "255.255.255.192"},
+			},
+			NetworkMap{
+				Address: "192.168.1.0", Mask: "255.255.255.0",
+			},
+		},
 	}
 
-	for _, test_case := range test_cases {
-		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.mask)
-		test_network_node := &NetworkNode{
-			Network: test_network,
+	for _, testCase := range testCases {
+		var testNetworks []*Network
+		expectedNetwork, err := New(testCase.expectedNetwork.Address, testCase.expectedNetwork.Mask)
+		if err != nil {
+			t.Fatalf(err.Error())
 		}
-		SplitToHostCount(test_network_node, 2)
-		networks := NetworkNodeToArray(test_network_node)
-		summarized_network, _ := SummarizeNetworks(networks)
+		for _, networkMap := range testCase.testNetworks {
+			testNetwork, err := New(networkMap.Address, networkMap.Mask)
+			if err != nil {
+				t.Fatalf(err.Error())
+			}
+			testNetworks = append(testNetworks, testNetwork)
+		}
 
-		if summarized_network.Address != test_network.Address {
+		summarizedNetwork, err := SummarizeNetworks(testNetworks)
+
+		if summarizedNetwork.Address != expectedNetwork.Address {
 			t.Errorf("summarized network doesn't match test network")
 		}
 
-		if summarized_network.Mask != test_network.Mask {
+		if summarizedNetwork.Mask != expectedNetwork.Mask {
 			t.Errorf("summarized mask doesn't match test mask")
 		}
 

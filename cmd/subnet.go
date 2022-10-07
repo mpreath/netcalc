@@ -3,7 +3,9 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/network/networknode"
 	"log"
+	"sync"
 
 	"github.com/mpreath/netcalc/pkg/network"
 	"github.com/mpreath/netcalc/pkg/utils"
@@ -21,23 +23,21 @@ This command subnets a network based on host count and network count parameters.
 Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		net, err := network.GenerateNetwork(args[0], args[1])
+		net, err := network.New(args[0], args[1])
 		if err != nil {
 			log.Fatal(err)
 		}
 		// generate network from args
-		node := network.NetworkNode{
-			Network: net,
-		}
+		node := networknode.New(net)
 
 		if HOST_COUNT > 0 {
-			err = network.SplitToHostCount(&node, HOST_COUNT)
+			err := SplitToHostCountThreaded(node, HOST_COUNT)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 		} else if NET_COUNT > 0 {
-			err = network.SplitToNetCount(&node, NET_COUNT)
+			err = networknode.SplitToNetCount(node, NET_COUNT)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -49,10 +49,71 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 			fmt.Println(string(s))
 		} else {
 			// std output
-			printNetworkTree(&node)
+			printNetworkTree(node)
 		}
 
 	},
+}
+
+func SplitToHostCountThreaded(node *networknode.NetworkNode, host_count int) error {
+	wg := new(sync.WaitGroup)
+
+	valid, err := networknode.ValidForHostCount(node.Network, host_count)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if valid { // base network is already the best option
+		return nil
+	} else { // we can subnet another level
+		node.Split() // create two subnets
+		if len(node.Subnets) > 0 {
+			valid, err := networknode.ValidForHostCount(node.Subnets[0].Network, host_count)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if valid { // these subnets are valid
+				return nil
+			} else {
+				node.Subnets[0].Split()
+				node.Subnets[1].Split()
+
+				if len(node.Subnets[0].Subnets) > 0 && len(node.Subnets[1].Subnets) > 0 {
+					valid, err := networknode.ValidForHostCount(node.Subnets[0].Subnets[0].Network, host_count)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					if valid { // these subnets are valid
+						return nil
+					} else {
+						wg.Add(4)
+						go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0], host_count)
+						go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1], host_count)
+						go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0], host_count)
+						go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1], host_count)
+					}
+
+				}
+			}
+		} else {
+			return nil
+		}
+	}
+
+	wg.Wait()
+
+	return nil
+}
+
+func SplitToHostCountWrapper(wg *sync.WaitGroup, node *networknode.NetworkNode, host_count int) {
+	defer wg.Done()
+	err := networknode.SplitToHostCount(node, host_count)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }
 
 func init() {
@@ -61,7 +122,7 @@ func init() {
 	rootCmd.AddCommand(subnetCmd)
 }
 
-func printNetworkTree(node *network.NetworkNode, opts ...int) {
+func printNetworkTree(node *networknode.NetworkNode, opts ...int) {
 	var depth int
 
 	if len(opts) == 0 {

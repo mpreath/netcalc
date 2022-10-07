@@ -4,12 +4,12 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/network/networknode"
 	"log"
 	"os"
 	"strings"
 
 	"github.com/mpreath/netcalc/pkg/network"
-	"github.com/mpreath/netcalc/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -27,20 +27,12 @@ var summarizeCmd = &cobra.Command{
 		for scanner.Scan() {
 			input := strings.Split(scanner.Text(), "\t")
 
-			address, err := utils.Ddtoi(input[0])
+			net, err := network.New(input[0], input[1])
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			mask, err := utils.Ddtoi(input[1])
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			networks = append(networks, &network.Network{
-				Address: address,
-				Mask:    mask,
-			})
+			networks = append(networks, net)
 		}
 
 		networkSummary, err := network.SummarizeNetworks(networks)
@@ -49,7 +41,7 @@ var summarizeCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		node := network.NetworkNode{
+		node := networknode.NetworkNode{
 			Network: networkSummary,
 		}
 

@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/network/networknode"
 	"log"
 	"sort"
 	"strconv"
@@ -20,12 +21,12 @@ This command subnets a network based on a comma-separated list of subnet host co
 Usage: netcalc vlsm <host_counts_list> <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
-		net, err := network.GenerateNetwork(args[1], args[2])
+		net, err := network.New(args[1], args[2])
 		if err != nil {
 			log.Fatal(err)
 		}
 		// generate network from args
-		node := network.NetworkNode{
+		node := networknode.NetworkNode{
 			Network: net,
 		}
 
@@ -42,7 +43,7 @@ Usage: netcalc vlsm <host_counts_list> <ip_address> <subnet_mask>.`,
 		})
 
 		for _, vlsm := range vlsm_list {
-			err = network.SplitToVlsmCount(&node, vlsm)
+			err = networknode.SplitToVlsmCount(&node, vlsm)
 
 			if err != nil {
 				log.Fatal(err)
