@@ -32,7 +32,7 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 		}
 
 		if HOST_COUNT > 0 {
-			SplitToHostCountThreaded(&node, HOST_COUNT)
+			err := SplitToHostCountThreaded(&node, HOST_COUNT)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -75,19 +75,27 @@ func SplitToHostCountThreaded(node *network.NetworkNode, host_count int) error {
 			}
 
 			if valid { // these subnets are valid
-				wg.Add(2)
-				go SplitToHostCountWrapper(wg, node.Subnets[0], host_count)
-				go SplitToHostCountWrapper(wg, node.Subnets[1], host_count)
+				return nil
 			} else {
 				node.Subnets[0].Split()
 				node.Subnets[1].Split()
-				if len(node.Subnets[0].Subnets) > 0 && len(node.Subnets[1].Subnets) > 0 {
 
-					wg.Add(4)
-					go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0], host_count)
-					go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1], host_count)
-					go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0], host_count)
-					go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1], host_count)
+				if len(node.Subnets[0].Subnets) > 0 && len(node.Subnets[1].Subnets) > 0 {
+					valid, err := network.ValidForHostCount(node.Subnets[0].Subnets[0].Network, host_count)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					if valid { // these subnets are valid
+						return nil
+					} else {
+						wg.Add(4)
+						go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0], host_count)
+						go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1], host_count)
+						go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0], host_count)
+						go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1], host_count)
+					}
+
 				}
 			}
 		} else {

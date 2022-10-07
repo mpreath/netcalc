@@ -85,10 +85,6 @@ func SplitToHostCount(node *NetworkNode, host_count int) error {
 func ValidForHostCount(n *Network, host_count int) (bool, error) {
 
 	current_mask_bc := utils.GetBitsInMask(n.Mask)
-	if current_mask_bc >= 30 {
-		// this is the longest mask we support
-		return true, nil
-	}
 	current_bc := 32 - current_mask_bc
 	current_hc := int(math.Pow(2, float64(current_bc)))
 	future_bc := current_bc - 1 // need to look ahead into the future
@@ -100,6 +96,8 @@ func ValidForHostCount(n *Network, host_count int) (bool, error) {
 	} else if current_hc < host_count {
 		// requirements too large, raise an error
 		return false, fmt.Errorf("network.SplitToHostCount: network can't support that many hosts")
+	} else if current_mask_bc >= 30 {
+		return true, nil
 	}
 
 	return false, nil
