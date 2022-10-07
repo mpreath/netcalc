@@ -41,7 +41,7 @@ func TestMarshalJSON(t *testing.T) {
 	}
 }
 
-func TestGenerateHost(t *testing.T) {
+func TestNew(t *testing.T) {
 	test_cases := []struct {
 		dd_address string
 		dd_mask    string
