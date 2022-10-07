@@ -16,7 +16,7 @@ func TestMarshalJSON(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		test_network, _ := New(test_case.dd_address, test_case.dd_mask)
 
 		s, err := json.Marshal(test_network)
 		if err != nil {
@@ -41,7 +41,7 @@ func TestGenerateNetwork(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, err := GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		test_network, err := New(test_case.dd_address, test_case.dd_mask)
 		if err != nil {
 			if err.Error() != test_case.error_string {
 				t.Errorf(err.Error())
@@ -71,7 +71,7 @@ func TestGenerateNetworkFromBits(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		tmp_network, _ := GenerateNetwork(test_case.dd_network_address, test_case.dd_mask)
+		tmp_network, _ := New(test_case.dd_network_address, test_case.dd_mask)
 
 		test_network, _ := GenerateNetworkFromBits(tmp_network.Address, tmp_network.Mask)
 
@@ -96,7 +96,7 @@ func TestGetHosts(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := GenerateNetwork(test_case.dd_network_address, test_case.dd_mask)
+		test_network, _ := New(test_case.dd_network_address, test_case.dd_mask)
 		test_hosts := GetHosts(test_network)
 
 		if len(test_hosts) != test_case.host_count {

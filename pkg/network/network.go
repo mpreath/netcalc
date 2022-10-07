@@ -26,7 +26,7 @@ func (n *Network) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func GenerateNetwork(address string, mask string) (*Network, error) {
+func New(address string, mask string) (*Network, error) {
 	host_address, err := utils.Ddtoi(address)
 	if err != nil {
 		return nil, err
