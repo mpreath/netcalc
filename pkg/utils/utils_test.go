@@ -93,33 +93,32 @@ func TestGetBitsInMask(t *testing.T) {
 	}
 }
 
-func TestGetMaskFromBits(t *testing.T) {
-	test_cases := []struct {
-		dd_mask      string
-		bits         int
-		error_string string
+func TestGetCommonBitMask(t *testing.T) {
+	testCases := []struct {
+		testNetworks          [2]string
+		expectedCommonBitMask string
 	}{
-		{"255.255.255.252", 30, ""},
-		{"255.255.255.255", 32, ""},
-		{"128.0.0.0", 1, ""},
-		{"0.0.0.0", 33, "utils:GetMaskFromBits: bits must be 32 or less"},
+		{[2]string{"192.168.1.0", "192.168.2.0"}, "255.255.252.0"},
 	}
 
-	for _, test_case := range test_cases {
-
-		test_case_mask, _ := Ddtoi(test_case.dd_mask)
-		mask, err := GetMaskFromBits(test_case.bits)
-
+	for _, testCase := range testCases {
+		testNetwork1, err := Ddtoi(testCase.testNetworks[0])
 		if err != nil {
-			// error encountered
-			if err.Error() != test_case.error_string {
-				t.Fatalf("result (%s) does not match spec (%s)", err.Error(), test_case.error_string)
-			}
-			continue
+			t.Fatalf(err.Error())
+		}
+		testNetwork2, err := Ddtoi(testCase.testNetworks[1])
+		if err != nil {
+			t.Fatalf(err.Error())
 		}
 
-		if mask != test_case_mask {
-			t.Errorf("generated mask (%s) doesn't match expected mask (%s)", Itodd(mask), test_case.dd_mask)
+		commonBitMask := GetCommonBitMask(testNetwork1, testNetwork2)
+		expectedBitMask, err := Ddtoi(testCase.expectedCommonBitMask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+
+		if commonBitMask != expectedBitMask {
+			t.Errorf("results (%s) don't match expectations (%s)", Itodd(commonBitMask), Itodd(expectedBitMask))
 		}
 
 	}

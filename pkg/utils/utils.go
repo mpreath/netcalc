@@ -59,33 +59,3 @@ func GetCommonBitMask(n1 uint32, n2 uint32) uint32 {
 
 	return new_mask
 }
-
-func CheckNumberPowerOfTwo(n uint32) bool {
-	val := n & (n - 1)
-	if val == 0 {
-		return true
-	} else {
-		return false
-	}
-}
-
-func GetBinaryString(value uint32) string {
-
-	var bitValue uint32 = 1
-	// 000000000000000000000000000000000001
-	bitString := ""
-
-	for bitIndex := 0; bitIndex < 32; bitIndex++ {
-		if (bitValue & value) != 0 {
-			bitString = "1" + bitString
-		} else {
-			bitString = "0" + bitString
-		}
-		bitValue = bitValue << 1
-		if (bitIndex+1)%8 == 0 && bitIndex+1 < 32 {
-			bitString = "." + bitString
-		}
-	}
-
-	return bitString
-}
