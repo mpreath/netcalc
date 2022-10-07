@@ -2,6 +2,7 @@ package host
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/mpreath/netcalc/pkg/utils"
 )
@@ -21,16 +22,11 @@ func (h *Host) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func GenerateHost(address string, mask string) (*Host, error) {
-	host_address, err := utils.Ddtoi(address)
-	if err != nil {
-		return nil, err
+func New(address uint32, mask uint32) (*Host, error) {
+
+	if !utils.IsValidMask(mask) {
+		return nil, fmt.Errorf("host.New: invalid subnet mask")
 	}
 
-	host_mask, err := utils.Ddtoi(mask)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Host{Address: host_address, Mask: host_mask}, nil
+	return &Host{Address: address, Mask: mask}, nil
 }

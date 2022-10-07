@@ -16,7 +16,19 @@ func TestMarshalJSON(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_host, _ := GenerateHost(test_case.dd_address, test_case.dd_mask)
+		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+
+		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		test_host, err := New(testAddress, testMask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
 
 		s, err := json.Marshal(test_host)
 		if err != nil {
@@ -38,7 +50,19 @@ func TestGenerateHost(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_host, _ := GenerateHost(test_case.dd_address, test_case.dd_mask)
+		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+
+		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		test_host, err := New(testAddress, testMask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
 
 		dd_test_address := utils.Itodd(test_host.Address)
 		dd_test_mask := utils.Itodd(test_host.Mask)
