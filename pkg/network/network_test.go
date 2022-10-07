@@ -16,7 +16,15 @@ func TestMarshalJSON(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := New(test_case.dd_address, test_case.dd_mask)
+		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		test_network, _ := New(testAddress, testMask)
 
 		s, err := json.Marshal(test_network)
 		if err != nil {
@@ -41,7 +49,15 @@ func TestGenerateNetwork(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, err := New(test_case.dd_address, test_case.dd_mask)
+		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		test_network, err := New(testAddress, testMask)
 		if err != nil {
 			if err.Error() != test_case.error_string {
 				t.Errorf(err.Error())
@@ -62,41 +78,30 @@ func TestGenerateNetwork(t *testing.T) {
 	}
 }
 
-func TestGenerateNetworkFromBits(t *testing.T) {
-	test_cases := []struct {
-		dd_network_address string
-		dd_mask            string
-	}{
-		{"192.168.1.0", "255.255.255.0"},
-	}
-
-	for _, test_case := range test_cases {
-		tmp_network, _ := New(test_case.dd_network_address, test_case.dd_mask)
-
-		test_network, _ := GenerateNetworkFromBits(tmp_network.Address, tmp_network.Mask)
-
-		if test_network.Address != tmp_network.Address {
-			t.Errorf("generated address (%s) doesn't match spec address (%s)", utils.Itodd(test_network.Address), utils.Itodd(tmp_network.Address))
-		}
-
-		if test_network.Mask != tmp_network.Mask {
-			t.Errorf("generated mask (%s) doesn't match spec mask (%s)", utils.Itodd(test_network.Mask), utils.Itodd(tmp_network.Mask))
-		}
-	}
-}
-
 func TestGetHosts(t *testing.T) {
 	test_cases := []struct {
-		dd_network_address string
-		dd_mask            string
-		host_count         int
+		dd_address string
+		dd_mask    string
+		host_count int
 	}{
 		{"192.168.1.0", "255.255.255.0", 254},
 		{"192.168.1.0", "255.255.255.128", 126},
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := New(test_case.dd_network_address, test_case.dd_mask)
+		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		test_network, err := New(testAddress, testMask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+
 		test_hosts := GetHosts(test_network)
 
 		if len(test_hosts) != test_case.host_count {

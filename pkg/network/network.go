@@ -26,25 +26,15 @@ func (n *Network) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func New(address string, mask string) (*Network, error) {
-	host_address, err := utils.Ddtoi(address)
-	if err != nil {
-		return nil, err
-	}
-
-	network_mask, err := utils.Ddtoi(mask)
-	if err != nil {
-		return nil, err
-	} else if !utils.IsValidMask(network_mask) {
+func New(address uint32, mask uint32) (*Network, error) {
+	if !utils.IsValidMask(mask) {
 		return nil, fmt.Errorf("network.GenerateNetwork: invalid subnet mask")
 	}
 
-	network := Network{
-		Address: utils.GetNetworkAddress(host_address, network_mask),
-		Mask:    network_mask,
-	}
-
-	return &network, nil
+	return &Network{
+		Address: utils.GetNetworkAddress(address, mask),
+		Mask:    mask,
+	}, nil
 }
 
 func GenerateNetworkFromBits(address uint32, mask uint32) (*Network, error) {

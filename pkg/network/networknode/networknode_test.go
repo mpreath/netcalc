@@ -2,6 +2,7 @@ package networknode
 
 import (
 	"github.com/mpreath/netcalc/pkg/network"
+	"github.com/mpreath/netcalc/pkg/utils"
 	"testing"
 )
 
@@ -17,13 +18,21 @@ func TestSplit(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := network.GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+
+		test_network, _ := network.New(testAddress, testMask)
 		test_node := &NetworkNode{
 			Network: test_network,
 		}
 
-		err := test_node.Split()
-
+		err = test_node.Split()
 		if err != nil {
 			if err.Error() != test_case.error_string {
 				t.Errorf(err.Error())
@@ -51,12 +60,18 @@ func TestSplitToHostCount(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := network.GenerateNetwork(test_case.dd_address, test_case.dd_mask)
-		test_node := &NetworkNode{
-			Network: test_network,
+		testNetworkAddress, err := utils.Ddtoi(test_case.dd_address)
+		if err != nil {
+			t.Fatalf(err.Error())
 		}
+		testNetworkMask, err := utils.Ddtoi(test_case.dd_mask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		test_network, _ := network.New(testNetworkAddress, testNetworkMask)
+		test_node := New(test_network)
 
-		err := SplitToHostCount(test_node, test_case.host_count)
+		err = SplitToHostCount(test_node, test_case.host_count)
 
 		if err != nil {
 			if err.Error() != test_case.error_string {
@@ -90,12 +105,20 @@ func TestSplitToNetCount(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_network, _ := network.GenerateNetwork(test_case.dd_address, test_case.dd_mask)
+		testNetworkAddress, err := utils.Ddtoi(test_case.dd_address)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		testNetworkMask, err := utils.Ddtoi(test_case.dd_mask)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		test_network, _ := network.New(testNetworkAddress, testNetworkMask)
 		test_node := &NetworkNode{
 			Network: test_network,
 		}
 
-		err := SplitToNetCount(test_node, test_case.net_count)
+		err = SplitToNetCount(test_node, test_case.net_count)
 
 		if err != nil {
 			if err.Error() != test_case.error_string {

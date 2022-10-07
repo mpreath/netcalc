@@ -23,7 +23,15 @@ This command subnets a network based on host count and network count parameters.
 Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		net, err := network.New(args[0], args[1])
+		networkAddress, err := utils.Ddtoi(args[0])
+		if err != nil {
+			log.Fatal(err)
+		}
+		networkMask, err := utils.Ddtoi(args[1])
+		if err != nil {
+			log.Fatal(err)
+		}
+		net, err := network.New(networkAddress, networkMask)
 		if err != nil {
 			log.Fatal(err)
 		}

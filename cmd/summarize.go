@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mpreath/netcalc/pkg/network/networknode"
+	"github.com/mpreath/netcalc/pkg/utils"
 	"log"
 	"os"
 	"strings"
@@ -27,7 +28,15 @@ var summarizeCmd = &cobra.Command{
 		for scanner.Scan() {
 			input := strings.Split(scanner.Text(), "\t")
 
-			net, err := network.New(input[0], input[1])
+			networkAddress, err := utils.Ddtoi(input[0])
+			if err != nil {
+				log.Fatal(err)
+			}
+			networkMask, err := utils.Ddtoi(input[1])
+			if err != nil {
+				log.Fatal(err)
+			}
+			net, err := network.New(networkAddress, networkMask)
 			if err != nil {
 				log.Fatal(err)
 			}
