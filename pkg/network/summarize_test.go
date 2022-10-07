@@ -10,12 +10,29 @@ func TestSummarizeNetworks(t *testing.T) {
 		Mask    string
 	}
 	testCases := []struct {
-		testNetworks    []NetworkMap
-		expectedNetwork NetworkMap
+		testNetworks    []NetworkMap // networks to be summarized
+		expectedNetwork NetworkMap   // what the summarization should be
 	}{
-		{[]NetworkMap{{Address: "192.168.1.0", Mask: "255.255.255.252"},
-			{Address: "192.168.1.4", Mask: "255.255.255.252"}},
-			NetworkMap{Address: "192.168.1.0", Mask: "255.255.255.248"}},
+		{
+			[]NetworkMap{
+				{Address: "192.168.1.0", Mask: "255.255.255.252"},
+				{Address: "192.168.1.4", Mask: "255.255.255.252"},
+			},
+			NetworkMap{
+				Address: "192.168.1.0", Mask: "255.255.255.248",
+			},
+		},
+		{
+			[]NetworkMap{
+				{Address: "192.168.1.0", Mask: "255.255.255.192"},
+				{Address: "192.168.1.64", Mask: "255.255.255.192"},
+				{Address: "192.168.1.128", Mask: "255.255.255.192"},
+				{Address: "192.168.1.192", Mask: "255.255.255.192"},
+			},
+			NetworkMap{
+				Address: "192.168.1.0", Mask: "255.255.255.0",
+			},
+		},
 	}
 
 	for _, testCase := range testCases {
