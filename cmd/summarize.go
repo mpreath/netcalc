@@ -28,11 +28,11 @@ var summarizeCmd = &cobra.Command{
 		for scanner.Scan() {
 			input := strings.Split(scanner.Text(), "\t")
 
-			networkAddress, err := utils.Ddtoi(input[0])
+			networkAddress, err := utils.ParseAddress(input[0])
 			if err != nil {
 				log.Fatal(err)
 			}
-			networkMask, err := utils.Ddtoi(input[1])
+			networkMask, err := utils.ParseAddress(input[1])
 			if err != nil {
 				log.Fatal(err)
 			}

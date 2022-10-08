@@ -18,11 +18,11 @@ func TestSplit(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		testAddress, err := utils.ParseAddress(test_case.dd_address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(test_case.dd_mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
@@ -60,11 +60,11 @@ func TestSplitToHostCount(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		testNetworkAddress, err := utils.Ddtoi(test_case.dd_address)
+		testNetworkAddress, err := utils.ParseAddress(test_case.dd_address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetworkMask, err := utils.Ddtoi(test_case.dd_mask)
+		testNetworkMask, err := utils.ParseAddress(test_case.dd_mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
@@ -105,11 +105,11 @@ func TestSplitToNetCount(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		testNetworkAddress, err := utils.Ddtoi(test_case.dd_address)
+		testNetworkAddress, err := utils.ParseAddress(test_case.dd_address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetworkMask, err := utils.Ddtoi(test_case.dd_mask)
+		testNetworkMask, err := utils.ParseAddress(test_case.dd_mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}

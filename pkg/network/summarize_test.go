@@ -1,6 +1,7 @@
 package network
 
 import (
+	"github.com/mpreath/netcalc/pkg/host"
 	"github.com/mpreath/netcalc/pkg/utils"
 	"testing"
 )
@@ -38,24 +39,24 @@ func TestSummarizeNetworks(t *testing.T) {
 
 	for _, testCase := range testCases {
 		var testNetworks []*Network
-		expectedNetworkAddress, err := utils.Ddtoi(testCase.expectedNetwork.Address)
+		expectedNetworkAddress, err := utils.ParseAddress(testCase.expectedNetwork.Address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		expectedNetworkMask, err := utils.Ddtoi(testCase.expectedNetwork.Mask)
+		expectedNetworkMask, err := utils.ParseAddress(testCase.expectedNetwork.Mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		expectedNetwork, err := New(expectedNetworkAddress, expectedNetworkMask)
+		expectedNetwork, err := host.New(expectedNetworkAddress, expectedNetworkMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 		for _, networkMap := range testCase.testNetworks {
-			testNetworkAddress, err := utils.Ddtoi(networkMap.Address)
+			testNetworkAddress, err := utils.ParseAddress(networkMap.Address)
 			if err != nil {
 				t.Fatalf(err.Error())
 			}
-			testNetworkMask, err := utils.Ddtoi(networkMap.Mask)
+			testNetworkMask, err := utils.ParseAddress(networkMap.Mask)
 			if err != nil {
 				t.Fatalf(err.Error())
 			}

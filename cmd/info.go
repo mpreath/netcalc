@@ -23,11 +23,11 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		networkAddress, err := utils.Ddtoi(args[0])
+		networkAddress, err := utils.ParseAddress(args[0])
 		if err != nil {
 			log.Fatal(err)
 		}
-		networkMask, err := utils.Ddtoi(args[1])
+		networkMask, err := utils.ParseAddress(args[1])
 		if err != nil {
 			log.Fatal(err)
 		}

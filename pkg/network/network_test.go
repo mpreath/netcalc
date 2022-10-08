@@ -2,6 +2,7 @@ package network
 
 import (
 	"encoding/json"
+	"github.com/mpreath/netcalc/pkg/host"
 	"testing"
 
 	"github.com/mpreath/netcalc/pkg/utils"
@@ -16,15 +17,15 @@ func TestMarshalJSON(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		testAddress, err := utils.ParseAddress(test_case.dd_address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(test_case.dd_mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		test_network, _ := New(testAddress, testMask)
+		test_network, _ := host.New(testAddress, testMask)
 
 		s, err := json.Marshal(test_network)
 		if err != nil {
@@ -49,15 +50,15 @@ func TestNew(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		testAddress, err := utils.ParseAddress(test_case.dd_address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(test_case.dd_mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		test_network, err := New(testAddress, testMask)
+		test_network, err := host.New(testAddress, testMask)
 		if err != nil {
 			if err.Error() != test_case.error_string {
 				t.Errorf(err.Error())
@@ -89,11 +90,11 @@ func TestGetHosts(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		testAddress, err := utils.ParseAddress(test_case.dd_address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(test_case.dd_mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}

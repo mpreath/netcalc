@@ -16,7 +16,7 @@ func TestIsValidMask(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		uint_mask, _ := Ddtoi(test_case.dd_mask)
+		uint_mask, _ := ParseAddress(test_case.dd_mask)
 		is_mask_valid := IsValidMask(uint_mask)
 		if is_mask_valid != test_case.is_valid {
 			t.Errorf("result for %s (%t) does not match spec (%t)", test_case.dd_mask, is_mask_valid, test_case.is_valid)
@@ -35,9 +35,9 @@ func TestGetNetworkAddress(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		address, _ := Ddtoi(test_case.dd_address)
-		mask, _ := Ddtoi(test_case.dd_mask)
-		network_address, _ := Ddtoi(test_case.dd_network_address)
+		address, _ := ParseAddress(test_case.dd_address)
+		mask, _ := ParseAddress(test_case.dd_mask)
+		network_address, _ := ParseAddress(test_case.dd_network_address)
 
 		test_network_address := GetNetworkAddress(address, mask)
 
@@ -58,9 +58,9 @@ func TestGetBroadcastAddress(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		address, _ := Ddtoi(test_case.dd_address)
-		mask, _ := Ddtoi(test_case.dd_mask)
-		broadcast_address, _ := Ddtoi(test_case.dd_broadcast_address)
+		address, _ := ParseAddress(test_case.dd_address)
+		mask, _ := ParseAddress(test_case.dd_mask)
+		broadcast_address, _ := ParseAddress(test_case.dd_broadcast_address)
 
 		test_broadcast_address := GetBroadcastAddress(address, mask)
 
@@ -82,7 +82,7 @@ func TestGetBitsInMask(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		mask, _ := Ddtoi(test_case.dd_mask)
+		mask, _ := ParseAddress(test_case.dd_mask)
 
 		test_bits_in_mask := GetBitsInMask(mask)
 
@@ -102,17 +102,17 @@ func TestGetCommonBitMask(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testNetwork1, err := Ddtoi(testCase.testNetworks[0])
+		testNetwork1, err := ParseAddress(testCase.testNetworks[0])
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork2, err := Ddtoi(testCase.testNetworks[1])
+		testNetwork2, err := ParseAddress(testCase.testNetworks[1])
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
 		commonBitMask := GetCommonBitMask(testNetwork1, testNetwork2)
-		expectedBitMask, err := Ddtoi(testCase.expectedCommonBitMask)
+		expectedBitMask, err := ParseAddress(testCase.expectedCommonBitMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}

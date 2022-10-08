@@ -16,12 +16,12 @@ func TestMarshalJSON(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		testAddress, err := utils.ParseAddress(test_case.dd_address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(test_case.dd_mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
@@ -50,12 +50,12 @@ func TestNew(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		testAddress, err := utils.Ddtoi(test_case.dd_address)
+		testAddress, err := utils.ParseAddress(test_case.dd_address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		testMask, err := utils.Ddtoi(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(test_case.dd_mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
