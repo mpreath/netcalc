@@ -12,8 +12,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var HOST_COUNT int
-var NET_COUNT int
+var HostCount int
+var NetCount int
 
 var subnetCmd = &cobra.Command{
 	Use:   "subnet [--hosts <hosts> | --networks <networks>] <ip_address> <subnet_mask>",
@@ -38,14 +38,14 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 		// generate network from args
 		node := networknode.New(net)
 
-		if HOST_COUNT > 0 {
-			err := SplitToHostCountThreaded(node, HOST_COUNT)
+		if HostCount > 0 {
+			err := SplitToHostCountThreaded(node, HostCount)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-		} else if NET_COUNT > 0 {
-			err = networknode.SplitToNetCount(node, NET_COUNT)
+		} else if NetCount > 0 {
+			err = networknode.SplitToNetCount(node, NetCount)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -135,8 +135,8 @@ func SplitToHostCountWrapper(wg *sync.WaitGroup, node *networknode.NetworkNode, 
 }
 
 func init() {
-	subnetCmd.Flags().IntVar(&HOST_COUNT, "hosts", 0, "Specifies the number of hosts to include each subnet.")
-	subnetCmd.Flags().IntVar(&NET_COUNT, "networks", 0, "Specifies the number of subnets to create.")
+	subnetCmd.Flags().IntVar(&HostCount, "hosts", 0, "Specifies the number of hosts to include each subnet.")
+	subnetCmd.Flags().IntVar(&NetCount, "networks", 0, "Specifies the number of subnets to create.")
 	rootCmd.AddCommand(subnetCmd)
 }
 
@@ -156,14 +156,14 @@ func printNetworkTree(node *networknode.NetworkNode, opts ...int) {
 			fmt.Printf("[n] = # of useable hosts\n\n")
 		}
 
-		ip_address := utils.Itodd(node.Network.Address)
-		num_of_bits := utils.GetBitsInMask(node.Network.Mask)
+		ipAddress := utils.ExportAddress(node.Network.Address)
+		numOfBits := utils.GetBitsInMask(node.Network.Mask)
 
 		for i := 0; i < depth; i++ {
 			fmt.Printf(" |")
 		}
 
-		fmt.Printf("__%s/%d", ip_address, num_of_bits)
+		fmt.Printf("__%s/%d", ipAddress, numOfBits)
 		if node.Utilized && len(node.Subnets) == 0 {
 			fmt.Printf("[%d]*", node.Network.HostCount())
 		} else if len(node.Subnets) == 0 {
@@ -172,9 +172,9 @@ func printNetworkTree(node *networknode.NetworkNode, opts ...int) {
 		fmt.Printf("\n")
 	} else {
 		if len(node.Subnets) == 0 {
-			ip_address := utils.Itodd(node.Network.Address)
-			mask := utils.Itodd(node.Network.Mask)
-			fmt.Printf("%s\t%s\n", ip_address, mask)
+			ipAddress := utils.ExportAddress(node.Network.Address)
+			mask := utils.ExportAddress(node.Network.Mask)
+			fmt.Printf("%s\t%s\n", ipAddress, mask)
 		}
 	}
 

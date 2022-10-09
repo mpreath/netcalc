@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-func ParseAddress(address_string string) (uint32, error) {
-	octets := strings.Split(address_string, ".")
+func ParseAddress(addressString string) (uint32, error) {
+	octets := strings.Split(addressString, ".")
 	var address uint32 = 0
 	if len(octets) == 4 {
 		// correct number of octets
@@ -33,20 +33,20 @@ func ParseAddress(address_string string) (uint32, error) {
 		}
 	} else {
 		// incorrect number of octets
-		return 0, fmt.Errorf("utils:ParseAddress: parsing \"%s\": too many octets", address_string)
+		return 0, fmt.Errorf("utils:ParseAddress: parsing \"%s\": too many octets", addressString)
 	}
 
 	return address, nil
 }
 
-func Itodd(address uint32) string {
+func ExportAddress(address uint32) string {
 
-	first_octet := address >> 24
-	second_octet := address << 8 >> 24
-	third_octet := address << 16 >> 24
-	fourth_octet := address << 24 >> 24
+	firstOctet := address >> 24
+	secondOctet := address << 8 >> 24
+	thirdOctet := address << 16 >> 24
+	fourthOctet := address << 24 >> 24
 
-	dd_address := strconv.FormatUint(uint64(first_octet), 10) + "." + strconv.FormatUint(uint64(second_octet), 10) + "." + strconv.FormatUint(uint64(third_octet), 10) + "." + strconv.FormatUint(uint64(fourth_octet), 10)
+	ddAddress := strconv.FormatUint(uint64(firstOctet), 10) + "." + strconv.FormatUint(uint64(secondOctet), 10) + "." + strconv.FormatUint(uint64(thirdOctet), 10) + "." + strconv.FormatUint(uint64(fourthOctet), 10)
 
-	return dd_address
+	return ddAddress
 }

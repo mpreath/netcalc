@@ -19,8 +19,8 @@ func (n *Network) MarshalJSON() ([]byte, error) {
 		Mask    string `json:"mask"`
 		*Alias
 	}{
-		Address: utils.Itodd(n.Address),
-		Mask:    utils.Itodd(n.Mask),
+		Address: utils.ExportAddress(n.Address),
+		Mask:    utils.ExportAddress(n.Mask),
 		Alias:   (*Alias)(n),
 	})
 }

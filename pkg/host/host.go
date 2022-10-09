@@ -17,8 +17,8 @@ func (h *Host) MarshalJSON() ([]byte, error) {
 		Address string `json:"address"`
 		Mask    string `json:"mask"`
 	}{
-		Address: utils.Itodd(h.Address),
-		Mask:    utils.Itodd(h.Mask),
+		Address: utils.ExportAddress(h.Address),
+		Mask:    utils.ExportAddress(h.Mask),
 	})
 }
 

@@ -46,7 +46,7 @@ func TestItodd(t *testing.T) {
 	}
 
 	for _, test_case := range test_cases {
-		test_val := Itodd(test_case.uint_address)
+		test_val := ExportAddress(test_case.uint_address)
 
 		if test_val != test_case.dd_address {
 			// function calculation is incorrect

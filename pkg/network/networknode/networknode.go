@@ -26,25 +26,25 @@ func (node *NetworkNode) Split() error {
 	}
 	bc := utils.GetBitsInMask(node.Network.Mask) + 1
 	if bc < 31 {
-		new_mask, err := utils.GetMaskFromBits(bc)
+		newMask, err := utils.GetMaskFromBits(bc)
 		if err != nil {
 			return err
 		}
 		// left will contain the lower value
-		left_network, err := network.New(node.Network.Address, new_mask)
+		leftNetwork, err := network.New(node.Network.Address, newMask)
 		if err != nil {
 			return err
 		}
 
-		node.Subnets = append(node.Subnets, &NetworkNode{Network: left_network})
+		node.Subnets = append(node.Subnets, &NetworkNode{Network: leftNetwork})
 
 		// right will contain the larger value
-		right_network, err := network.New(left_network.BroadcastAddress()+1, new_mask)
+		rightNetwork, err := network.New(leftNetwork.BroadcastAddress()+1, newMask)
 		if err != nil {
 			return err
 		}
 
-		node.Subnets = append(node.Subnets, &NetworkNode{Network: right_network})
+		node.Subnets = append(node.Subnets, &NetworkNode{Network: rightNetwork})
 
 	} else {
 		return fmt.Errorf("network:Split: network doesn't support being split")
@@ -89,33 +89,33 @@ func SplitToHostCount(node *NetworkNode, host_count int) error {
 	}
 }
 
-func ValidForHostCount(n *network.Network, host_count int) (bool, error) {
+func ValidForHostCount(n *network.Network, hostCount int) (bool, error) {
 
-	current_mask_bc := utils.GetBitsInMask(n.Mask)
-	current_bc := 32 - current_mask_bc
-	current_hc := int(math.Pow(2, float64(current_bc)))
-	future_bc := current_bc - 1 // need to look ahead into the future
-	future_hc := int(math.Pow(2, float64(future_bc)))
+	currentMaskBc := utils.GetBitsInMask(n.Mask)
+	currentBc := 32 - currentMaskBc
+	currentHc := int(math.Pow(2, float64(currentBc)))
+	futureBc := currentBc - 1 // need to look ahead into the future
+	futureHc := int(math.Pow(2, float64(futureBc)))
 
-	if current_hc >= host_count && future_hc < host_count {
+	if currentHc >= hostCount && futureHc < hostCount {
 		// this is our recursive base case
 		return true, nil
-	} else if current_hc < host_count {
+	} else if currentHc < hostCount {
 		// requirements too large, raise an error
 		return false, fmt.Errorf("network.SplitToHostCount: network can't support that many hosts")
-	} else if current_mask_bc >= 30 {
+	} else if currentMaskBc >= 30 {
 		return true, nil
 	}
 
 	return false, nil
 }
 
-func SplitToNetCount(node *NetworkNode, net_count int) error {
-	longest_valid_mask, _ := utils.GetMaskFromBits(30)
-	if net_count <= 0 {
+func SplitToNetCount(node *NetworkNode, netCount int) error {
+	longestValidMask, _ := utils.GetMaskFromBits(30)
+	if netCount <= 0 {
 		// this is our recursive base case
 		return nil
-	} else if node.Network.Mask == longest_valid_mask {
+	} else if node.Network.Mask == longestValidMask {
 		// can't split any more
 		return fmt.Errorf("network.SplitToNetCount: network can't support that many subnetworks")
 	} else {
@@ -123,11 +123,11 @@ func SplitToNetCount(node *NetworkNode, net_count int) error {
 		if err != nil {
 			return err
 		}
-		err = SplitToNetCount(node.Subnets[0], net_count-2)
+		err = SplitToNetCount(node.Subnets[0], netCount-2)
 		if err != nil {
 			return err
 		}
-		err = SplitToNetCount(node.Subnets[1], net_count-2)
+		err = SplitToNetCount(node.Subnets[1], netCount-2)
 		if err != nil {
 			return err
 		}
@@ -136,40 +136,40 @@ func SplitToNetCount(node *NetworkNode, net_count int) error {
 	return nil
 }
 
-func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
+func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 
 	// if network supports requirements
 	// and network is not utilized, set utilized to true, return nil
 	// if network supports requirements, but is already utilized, then check the
 	// next subnet
 	// if network doesn't support network
-	longest_valid_mask, _ := utils.GetMaskFromBits(30)
+	longestValidMask, _ := utils.GetMaskFromBits(30)
 
-	if vlsm_count < 2 {
+	if vlsmCount < 2 {
 		return fmt.Errorf("network.SplitToVlsmCount: you must specify at least 2 hosts for count")
 	} else {
 
 		// need to determine if this is our recursive base case
-		// does this network support our current vlsm_count requirements?
+		// does this network support our current vlsmCount requirements?
 		// 1. check our current host_count
 		// 2. look ahead to what the next host count would be
 		// 3. if our current host count meets the requirement but our next host count doesn't
 		//    then we have found our network
-		current_host_count := node.Network.HostCount()
-		var lookahead_host_count int
-		current_mask_bc := utils.GetBitsInMask(node.Network.Mask)
-		lookahead_mask_bc := current_mask_bc + 1
-		if lookahead_mask_bc <= 30 {
+		currentHostCount := node.Network.HostCount()
+		var lookaheadHostCount int
+		currentMaskBc := utils.GetBitsInMask(node.Network.Mask)
+		lookaheadMaskBc := currentMaskBc + 1
+		if lookaheadMaskBc <= 30 {
 			// the next split will be a legitimate network
-			lookahead_mask, _ := utils.GetMaskFromBits(lookahead_mask_bc)
-			lookahead_network, _ := network.New(node.Network.Address, lookahead_mask)
-			lookahead_host_count = lookahead_network.HostCount()
+			lookaheadMask, _ := utils.GetMaskFromBits(lookaheadMaskBc)
+			lookaheadNetwork, _ := network.New(node.Network.Address, lookaheadMask)
+			lookaheadHostCount = lookaheadNetwork.HostCount()
 		} else {
-			lookahead_host_count = 0
+			lookaheadHostCount = 0
 		}
 
-		if current_host_count >= vlsm_count && lookahead_host_count < vlsm_count {
-			// our current_host_count meets the vlsm count requirements
+		if currentHostCount >= vlsmCount && lookaheadHostCount < vlsmCount {
+			// our currentHostCount meets the vlsm count requirements
 			// and the next network's count is too small
 			// we've found our spot
 
@@ -181,7 +181,7 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 				node.Utilized = true
 				return nil // no error, base case success
 			}
-		} else if node.Network.Mask == longest_valid_mask {
+		} else if node.Network.Mask == longestValidMask {
 			return fmt.Errorf("network.SplitToVlsmCount: network can't support that many subnetworks")
 		}
 
@@ -190,9 +190,9 @@ func SplitToVlsmCount(node *NetworkNode, vlsm_count int) error {
 			return err
 		}
 
-		err = SplitToVlsmCount(node.Subnets[0], vlsm_count)
+		err = SplitToVlsmCount(node.Subnets[0], vlsmCount)
 		if err != nil {
-			err = SplitToVlsmCount(node.Subnets[1], vlsm_count)
+			err = SplitToVlsmCount(node.Subnets[1], vlsmCount)
 			if err != nil {
 				return err
 			}

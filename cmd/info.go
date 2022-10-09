@@ -50,15 +50,15 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 func printNetworkInformation(n *network.Network) {
 	if n != nil {
 
-		fmt.Printf("Network:\t%s\n", utils.Itodd(n.Address))
-		fmt.Printf("Mask:\t\t%s (/%d)\n", utils.Itodd(n.Mask), utils.GetBitsInMask(n.Mask))
-		fmt.Printf("Bcast:\t\t%s\n", utils.Itodd(n.BroadcastAddress()))
+		fmt.Printf("Network:\t%s\n", utils.ExportAddress(n.Address))
+		fmt.Printf("Mask:\t\t%s (/%d)\n", utils.ExportAddress(n.Mask), utils.GetBitsInMask(n.Mask))
+		fmt.Printf("Bcast:\t\t%s\n", utils.ExportAddress(n.BroadcastAddress()))
 
 		if VERBOSE_FLAG {
 			fmt.Printf("\n")
 
 			for _, host := range n.Hosts() {
-				fmt.Printf("%s\t%s\n", utils.Itodd(host.Address), utils.Itodd(host.Mask))
+				fmt.Printf("%s\t%s\n", utils.ExportAddress(host.Address), utils.ExportAddress(host.Mask))
 			}
 		}
 

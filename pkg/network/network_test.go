@@ -9,25 +9,25 @@ import (
 )
 
 func TestMarshalJSON(t *testing.T) {
-	test_cases := []struct {
-		dd_address string
-		dd_mask    string
+	testCases := []struct {
+		ddAddress string
+		ddMask    string
 	}{
 		{"192.168.1.1", "255.255.255.0"},
 	}
 
-	for _, test_case := range test_cases {
-		testAddress, err := utils.ParseAddress(test_case.dd_address)
+	for _, testCase := range testCases {
+		testAddress, err := utils.ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.ParseAddress(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		test_network, _ := host.New(testAddress, testMask)
+		testNetwork, _ := host.New(testAddress, testMask)
 
-		s, err := json.Marshal(test_network)
+		s, err := json.Marshal(testNetwork)
 		if err != nil {
 			t.Errorf(err.Error())
 		}
@@ -39,74 +39,74 @@ func TestMarshalJSON(t *testing.T) {
 }
 
 func TestNew(t *testing.T) {
-	test_cases := []struct {
-		dd_address         string
-		dd_mask            string
-		dd_network_address string
-		error_string       string
+	testCases := []struct {
+		ddAddress        string
+		ddMask           string
+		ddNetworkAddress string
+		errorString      string
 	}{
 		{"192.168.1.1", "255.255.255.0", "192.168.1.0", ""},
 		{"192.168.1.1", "255.0.255.0", "192.168.1.0", "network.GenerateNetwork: invalid subnet mask"},
 	}
 
-	for _, test_case := range test_cases {
-		testAddress, err := utils.ParseAddress(test_case.dd_address)
+	for _, testCase := range testCases {
+		testAddress, err := utils.ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.ParseAddress(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		test_network, err := host.New(testAddress, testMask)
+		testNetwork, err := host.New(testAddress, testMask)
 		if err != nil {
-			if err.Error() != test_case.error_string {
+			if err.Error() != testCase.errorString {
 				t.Errorf(err.Error())
 			}
 			continue
 		}
 
-		dd_test_network := utils.Itodd(test_network.Address)
-		dd_test_mask := utils.Itodd(test_network.Mask)
+		ddTestNetwork := utils.ExportAddress(testNetwork.Address)
+		ddTestMask := utils.ExportAddress(testNetwork.Mask)
 
-		if dd_test_network != test_case.dd_network_address {
-			t.Errorf("generated address (%s) doesn't match spec address (%s)", dd_test_network, test_case.dd_network_address)
+		if ddTestNetwork != testCase.ddNetworkAddress {
+			t.Errorf("generated address (%s) doesn't match spec address (%s)", ddTestNetwork, testCase.ddNetworkAddress)
 		}
 
-		if dd_test_mask != test_case.dd_mask {
-			t.Errorf("generated mask (%s) doesn't match spec mask (%s)", dd_test_mask, test_case.dd_mask)
+		if ddTestMask != testCase.ddMask {
+			t.Errorf("generated mask (%s) doesn't match spec mask (%s)", ddTestMask, testCase.ddMask)
 		}
 	}
 }
 
 func TestGetHosts(t *testing.T) {
-	test_cases := []struct {
-		dd_address string
-		dd_mask    string
-		host_count int
+	testCases := []struct {
+		ddAddress string
+		ddMask    string
+		hostCount int
 	}{
 		{"192.168.1.0", "255.255.255.0", 254},
 		{"192.168.1.0", "255.255.255.128", 126},
 	}
 
-	for _, test_case := range test_cases {
-		testAddress, err := utils.ParseAddress(test_case.dd_address)
+	for _, testCase := range testCases {
+		testAddress, err := utils.ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.ParseAddress(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		test_network, err := New(testAddress, testMask)
+		testNetwork, err := New(testAddress, testMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		test_hosts := test_network.Hosts()
+		testHosts := testNetwork.Hosts()
 
-		if len(test_hosts) != test_case.host_count {
-			t.Errorf("generated host count (%d) doesn't match spec count (%d)", len(test_hosts), test_case.host_count)
+		if len(testHosts) != testCase.hostCount {
+			t.Errorf("generated host count (%d) doesn't match spec count (%d)", len(testHosts), testCase.hostCount)
 		}
 	}
 }

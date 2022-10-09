@@ -42,7 +42,7 @@ func TestGetNetworkAddress(t *testing.T) {
 		test_network_address := GetNetworkAddress(address, mask)
 
 		if test_network_address != network_address {
-			t.Errorf("network %s doesn't match spec network %s", Itodd(test_network_address), Itodd(network_address))
+			t.Errorf("network %s doesn't match spec network %s", ExportAddress(test_network_address), ExportAddress(network_address))
 		}
 
 	}
@@ -65,7 +65,7 @@ func TestGetBroadcastAddress(t *testing.T) {
 		test_broadcast_address := GetBroadcastAddress(address, mask)
 
 		if test_broadcast_address != broadcast_address {
-			t.Errorf("broadcast %s doesn't match spec broadcast %s", Itodd(test_broadcast_address), Itodd(broadcast_address))
+			t.Errorf("broadcast %s doesn't match spec broadcast %s", ExportAddress(test_broadcast_address), ExportAddress(broadcast_address))
 		}
 
 	}
@@ -118,7 +118,7 @@ func TestGetCommonBitMask(t *testing.T) {
 		}
 
 		if commonBitMask != expectedBitMask {
-			t.Errorf("results (%s) don't match expectations (%s)", Itodd(commonBitMask), Itodd(expectedBitMask))
+			t.Errorf("results (%s) don't match expectations (%s)", ExportAddress(commonBitMask), ExportAddress(expectedBitMask))
 		}
 
 	}

@@ -39,19 +39,19 @@ Usage: netcalc vlsm <host_counts_list> <ip_address> <subnet_mask>.`,
 			Network: net,
 		}
 
-		vlsm_args := strings.Split(args[0], ",")
-		var vlsm_list = make([]int, len(vlsm_args))
-		for idx, val := range vlsm_args {
-			vlsm_list[idx], err = strconv.Atoi(val)
+		vlsmArgs := strings.Split(args[0], ",")
+		var vlsmList = make([]int, len(vlsmArgs))
+		for idx, val := range vlsmArgs {
+			vlsmList[idx], err = strconv.Atoi(val)
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
-		sort.Slice(vlsm_list, func(i, j int) bool {
-			return vlsm_list[i] < vlsm_list[j]
+		sort.Slice(vlsmList, func(i, j int) bool {
+			return vlsmList[i] < vlsmList[j]
 		})
 
-		for _, vlsm := range vlsm_list {
+		for _, vlsm := range vlsmList {
 			err = networknode.SplitToVlsmCount(&node, vlsm)
 
 			if err != nil {

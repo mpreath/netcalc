@@ -8,29 +8,29 @@ import (
 )
 
 func TestMarshalJSON(t *testing.T) {
-	test_cases := []struct {
-		dd_address string
-		dd_mask    string
+	testCases := []struct {
+		ddAddress string
+		ddMask    string
 	}{
 		{"192.168.1.1", "255.255.255.0"},
 	}
 
-	for _, test_case := range test_cases {
-		testAddress, err := utils.ParseAddress(test_case.dd_address)
+	for _, testCase := range testCases {
+		testAddress, err := utils.ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		testMask, err := utils.ParseAddress(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		test_host, err := New(testAddress, testMask)
+		testHost, err := New(testAddress, testMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		s, err := json.Marshal(test_host)
+		s, err := json.Marshal(testHost)
 		if err != nil {
 			t.Errorf(err.Error())
 		}
@@ -42,37 +42,37 @@ func TestMarshalJSON(t *testing.T) {
 }
 
 func TestNew(t *testing.T) {
-	test_cases := []struct {
-		dd_address string
-		dd_mask    string
+	testCases := []struct {
+		ddAddress string
+		ddMask    string
 	}{
 		{"192.168.1.1", "255.255.255.0"},
 	}
 
-	for _, test_case := range test_cases {
-		testAddress, err := utils.ParseAddress(test_case.dd_address)
+	for _, testCase := range testCases {
+		testAddress, err := utils.ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		testMask, err := utils.ParseAddress(test_case.dd_mask)
+		testMask, err := utils.ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		test_host, err := New(testAddress, testMask)
+		testHost, err := New(testAddress, testMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		dd_test_address := utils.Itodd(test_host.Address)
-		dd_test_mask := utils.Itodd(test_host.Mask)
+		ddTestAddress := utils.ExportAddress(testHost.Address)
+		ddTestMask := utils.ExportAddress(testHost.Mask)
 
-		if dd_test_address != test_case.dd_address {
-			t.Errorf("generated address (%s) doesn't match spec address (%s)", dd_test_address, test_case.dd_address)
+		if ddTestAddress != testCase.ddAddress {
+			t.Errorf("generated address (%s) doesn't match spec address (%s)", ddTestAddress, testCase.ddAddress)
 		}
 
-		if dd_test_mask != test_case.dd_mask {
-			t.Errorf("generated mask (%s) doesn't match spec mask (%s)", dd_test_mask, test_case.dd_mask)
+		if ddTestMask != testCase.ddMask {
+			t.Errorf("generated mask (%s) doesn't match spec mask (%s)", ddTestMask, testCase.ddMask)
 		}
 	}
 }
