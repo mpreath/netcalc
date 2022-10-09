@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var VERSION = "0.2"
+var Version = "0.2"
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
@@ -21,5 +21,5 @@ var versionCmd = &cobra.Command{
 }
 
 func printVersionInformation() {
-	fmt.Printf("netcalc %s\n", VERSION)
+	fmt.Printf("netcalc %s\n", Version)
 }

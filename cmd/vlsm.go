@@ -59,7 +59,7 @@ Usage: netcalc vlsm <host_counts_list> <ip_address> <subnet_mask>.`,
 			}
 		}
 
-		if JSON_FLAG {
+		if JsonFlag {
 			// json output
 			s, _ := json.MarshalIndent(node, "", "  ")
 			fmt.Println(string(s))

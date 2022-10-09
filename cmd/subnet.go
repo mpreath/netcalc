@@ -51,7 +51,7 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 			}
 		}
 
-		if JSON_FLAG {
+		if JsonFlag {
 			// json output
 			s, _ := json.MarshalIndent(node, "", "  ")
 			fmt.Println(string(s))
@@ -149,7 +149,7 @@ func printNetworkTree(node *networknode.NetworkNode, opts ...int) {
 		depth = opts[0]
 	}
 
-	if VERBOSE_FLAG {
+	if VerboseFlag {
 		if depth == 0 {
 			fmt.Printf("* = assigned network\n")
 			fmt.Printf("+ = useable network\n")

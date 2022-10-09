@@ -36,7 +36,7 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 			log.Fatal(err)
 		}
 
-		if JSON_FLAG {
+		if JsonFlag {
 			err := printNetworkInformationJSON(n)
 			if err != nil {
 				log.Fatal(err)
@@ -54,7 +54,7 @@ func printNetworkInformation(n *network.Network) {
 		fmt.Printf("Mask:\t\t%s (/%d)\n", utils.ExportAddress(n.Mask), utils.GetBitsInMask(n.Mask))
 		fmt.Printf("Bcast:\t\t%s\n", utils.ExportAddress(n.BroadcastAddress()))
 
-		if VERBOSE_FLAG {
+		if VerboseFlag {
 			fmt.Printf("\n")
 
 			for _, host := range n.Hosts() {
