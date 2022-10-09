@@ -27,7 +27,7 @@ func (n *Network) MarshalJSON() ([]byte, error) {
 
 func New(address uint32, mask uint32) (*Network, error) {
 	if !utils.IsValidMask(mask) {
-		return nil, fmt.Errorf("network.GenerateNetwork: invalid subnet mask")
+		return nil, fmt.Errorf("network.New: invalid subnet mask")
 	}
 
 	return &Network{

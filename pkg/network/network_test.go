@@ -46,7 +46,7 @@ func TestNew(t *testing.T) {
 		errorString      string
 	}{
 		{"192.168.1.1", "255.255.255.0", "192.168.1.0", ""},
-		{"192.168.1.1", "255.0.255.0", "192.168.1.0", "network.GenerateNetwork: invalid subnet mask"},
+		{"192.168.1.1", "255.0.255.0", "192.168.1.0", "network.New: invalid subnet mask"},
 	}
 
 	for _, testCase := range testCases {
@@ -58,7 +58,7 @@ func TestNew(t *testing.T) {
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork, err := host.New(testAddress, testMask)
+		testNetwork, err := New(testAddress, testMask)
 		if err != nil {
 			if err.Error() != testCase.errorString {
 				t.Errorf(err.Error())
