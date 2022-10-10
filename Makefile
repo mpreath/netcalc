@@ -1,9 +1,19 @@
-all: build
+all: test build
 
-build:
-	go build ./cmd/netcalc/
-	go build ./cmd/netcalc-api/
+build: netcalc netcalc-api
+
+netcalc:
+	go build -o bin/netcalc ./cmd/netcalc/
+
+netcalc-api:
+	go build -o bin/netcalc-api ./cmd/netcalc-api/
+
+test:
+	go test ./...
+
+run-api:
+	go run ./cmd/netcalc-api/
 
 clean:
-	rm netcalc
-	rm netcalc-api
+	rm bin/*
+	rmdir bin/

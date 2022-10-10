@@ -3,8 +3,7 @@
 .idea/
 
 # build artifacts
-/netcalc
-/netcalc-api
+/bin/
 
 # testing artifacts
 *.json
