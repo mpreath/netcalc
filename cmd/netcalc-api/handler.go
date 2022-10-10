@@ -39,8 +39,7 @@ func Info(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := Response{Status: "ok", Data: net}
-	writeJsonResponse(w, http.StatusOK, response)
+	writeJsonResponse(w, http.StatusOK, net)
 
 }
 
@@ -82,8 +81,7 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	response := Response{Status: "ok", Data: flattenResults(node)}
-	writeJsonResponse(w, http.StatusOK, response)
+	writeJsonResponse(w, http.StatusOK, flattenResults(node))
 }
 
 func Summarize(w http.ResponseWriter, r *http.Request) {
@@ -97,12 +95,8 @@ func Summarize(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeErrorResponse(w, err)
 	}
-	response := Response{Status: "ok", Data: summarizedNetwork}
 
-	err = json.NewEncoder(w).Encode(response)
-	if err != nil {
-		writeErrorResponse(w, err)
-	}
+	writeJsonResponse(w, http.StatusOK, summarizedNetwork)
 }
 
 func Vlsm(w http.ResponseWriter, r *http.Request) {
@@ -124,10 +118,8 @@ func Vlsm(w http.ResponseWriter, r *http.Request) {
 		writeErrorResponse(w, err)
 		return
 	}
-	// generate network from args
-	node := &networknode.NetworkNode{
-		Network: net,
-	}
+
+	node := networknode.New(net)
 
 	vlsmArgs := strings.Split(r.URL.Query().Get("vlsmList"), ",")
 	var vlsmList = make([]int, len(vlsmArgs))
@@ -151,8 +143,7 @@ func Vlsm(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	response := Response{Status: "ok", Data: flattenResults(node)}
-	writeJsonResponse(w, http.StatusOK, response)
+	writeJsonResponse(w, http.StatusOK, flattenResults(node))
 }
 
 func flattenResults(node *networknode.NetworkNode) []*network.Network {
@@ -166,21 +157,19 @@ func flattenResults(node *networknode.NetworkNode) []*network.Network {
 	}
 }
 
-func writeJsonResponse(w http.ResponseWriter, status int, response Response) {
-	jsonResponse, err := json.Marshal(response)
-	if err != nil {
-		return
-	}
-
+func writeJsonResponse(w http.ResponseWriter, status int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	_, _ = w.Write(jsonResponse)
+	_ = json.NewEncoder(w).Encode(Response{
+		Status: "ok",
+		Data:   data,
+	})
 }
 
 func writeErrorResponse(w http.ResponseWriter, err error) {
-	response := Response{}
-	response.Status = "error"
-	response.Error = err.Error()
-	response.ErrorCode = http.StatusInternalServerError
-	writeJsonResponse(w, response.ErrorCode, response)
+	writeJsonResponse(w, http.StatusInternalServerError, Response{
+		Status:    "error",
+		Error:     err.Error(),
+		ErrorCode: http.StatusInternalServerError,
+	})
 }
