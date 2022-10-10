@@ -4,7 +4,7 @@
 
 # build artifacts
 /netcalc
-/netcalc-server
+/netcalc-api
 
 # testing artifacts
 *.json
