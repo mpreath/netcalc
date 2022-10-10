@@ -167,7 +167,9 @@ func writeJsonResponse(w http.ResponseWriter, status int, data interface{}) {
 }
 
 func writeErrorResponse(w http.ResponseWriter, err error) {
-	writeJsonResponse(w, http.StatusInternalServerError, Response{
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusInternalServerError)
+	_ = json.NewEncoder(w).Encode(Response{
 		Status:    "error",
 		Error:     err.Error(),
 		ErrorCode: http.StatusInternalServerError,
