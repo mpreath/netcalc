@@ -81,7 +81,7 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	writeJsonResponse(w, http.StatusOK, flattenResults(node))
+	writeJsonResponse(w, http.StatusOK, node.Flatten())
 }
 
 func Summarize(w http.ResponseWriter, r *http.Request) {
@@ -143,18 +143,7 @@ func Vlsm(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	writeJsonResponse(w, http.StatusOK, flattenResults(node))
-}
-
-func flattenResults(node *networknode.NetworkNode) []*network.Network {
-	var networkList []*network.Network
-	if len(node.Subnets) == 0 {
-		return append(networkList, node.Network)
-	} else {
-		networkList = append(networkList, flattenResults(node.Subnets[0])...)
-		networkList = append(networkList, flattenResults(node.Subnets[1])...)
-		return networkList
-	}
+	writeJsonResponse(w, http.StatusOK, node.Flatten())
 }
 
 func writeJsonResponse(w http.ResponseWriter, status int, data interface{}) {

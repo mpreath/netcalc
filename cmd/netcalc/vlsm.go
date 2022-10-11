@@ -66,6 +66,8 @@ Usage: netcalc vlsm <host_counts_list> <ip_address> <subnet_mask>.`,
 		} else {
 			// std output
 			printNetworkTree(&node)
+			s, _ := json.MarshalIndent(node.FlattenUtilized(), "", "  ")
+			fmt.Println(string(s))
 		}
 
 	},

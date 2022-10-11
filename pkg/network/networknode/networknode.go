@@ -63,9 +63,9 @@ func (node *NetworkNode) NetworkCount() int {
 	}
 }
 
-func SplitToHostCount(node *NetworkNode, host_count int) error {
+func SplitToHostCount(node *NetworkNode, hostCount int) error {
 
-	valid, err := ValidForHostCount(node.Network, host_count)
+	valid, err := ValidForHostCount(node.Network, hostCount)
 	if err != nil {
 		return err
 	}
@@ -76,11 +76,11 @@ func SplitToHostCount(node *NetworkNode, host_count int) error {
 		if err != nil {
 			return err
 		}
-		err = SplitToHostCount(node.Subnets[0], host_count)
+		err = SplitToHostCount(node.Subnets[0], hostCount)
 		if err != nil {
 			return err
 		}
-		err = SplitToHostCount(node.Subnets[1], host_count)
+		err = SplitToHostCount(node.Subnets[1], hostCount)
 		if err != nil {
 			return err
 		}
@@ -151,7 +151,7 @@ func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 
 		// need to determine if this is our recursive base case
 		// does this network support our current vlsmCount requirements?
-		// 1. check our current host_count
+		// 1. check our current hostCount
 		// 2. look ahead to what the next host count would be
 		// 3. if our current host count meets the requirement but our next host count doesn't
 		//    then we have found our network
@@ -200,4 +200,26 @@ func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 
 	}
 	return nil
+}
+
+func (node *NetworkNode) Flatten() []*network.Network {
+	var networkList []*network.Network
+	if len(node.Subnets) == 0 {
+		return append(networkList, node.Network)
+	} else {
+		networkList = append(networkList, node.Subnets[0].Flatten()...)
+		networkList = append(networkList, node.Subnets[1].Flatten()...)
+	}
+	return networkList
+}
+
+func (node *NetworkNode) FlattenUtilized() []*network.Network {
+	var networkList []*network.Network
+	if node.Utilized {
+		return append(networkList, node.Network)
+	} else if len(node.Subnets) > 0 {
+		networkList = append(networkList, node.Subnets[0].FlattenUtilized()...)
+		networkList = append(networkList, node.Subnets[1].FlattenUtilized()...)
+	}
+	return networkList
 }

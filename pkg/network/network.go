@@ -22,15 +22,11 @@ func (n *Network) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Address string `json:"address"`
 		Mask    string `json:"mask"`
-		//Broadcast string `json:"broadcastAddress"`
-		//HostCount int    `json:"hostCount"`
 		*Alias
 	}{
 		Address: utils.ExportAddress(n.Address),
 		Mask:    utils.ExportAddress(n.Mask),
-		//Broadcast: utils.ExportAddress(n.BroadcastAddress()),
-		//HostCount: n.HostCount(),
-		Alias: (*Alias)(n),
+		Alias:   (*Alias)(n),
 	})
 }
 
