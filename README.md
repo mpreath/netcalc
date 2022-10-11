@@ -14,7 +14,7 @@ following features:
 
 ```
 go test ./...
-go build
+go build ./cmd/netcalc
 go install
 ```
 ## Usage
