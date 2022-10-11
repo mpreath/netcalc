@@ -22,9 +22,9 @@ func SummarizeNetworks(networks []*Network) (*Network, error) {
 	commonBits := networks[0].Address
 	var commonMask uint32
 
-	for oidx := 1; oidx < len(networks); oidx++ {
-		commonBits = commonBits & networks[oidx].Address
-		commonMask = utils.GetCommonBitMask(commonBits, networks[oidx].Address)
+	for idx := 1; idx < len(networks); idx++ {
+		commonBits = commonBits & networks[idx].Address
+		commonMask = utils.GetCommonBitMask(commonBits, networks[idx].Address)
 		commonBits = utils.GetNetworkAddress(commonBits, commonMask)
 	}
 

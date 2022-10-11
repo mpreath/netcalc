@@ -43,10 +43,12 @@ func TestMarshalJSON(t *testing.T) {
 
 func TestNew(t *testing.T) {
 	testCases := []struct {
-		ddAddress string
-		ddMask    string
+		ddAddress     string
+		ddMask        string
+		errorExpected bool
 	}{
-		{"192.168.1.1", "255.255.255.0"},
+		{"192.168.1.1", "255.255.255.0", false},
+		{"192.168.1.1", "255.255.255.134", true},
 	}
 
 	for _, testCase := range testCases {
@@ -61,7 +63,11 @@ func TestNew(t *testing.T) {
 		}
 		testHost, err := New(testAddress, testMask)
 		if err != nil {
-			t.Fatalf(err.Error())
+			if !testCase.errorExpected {
+				t.Fatalf(err.Error())
+			} else {
+				continue
+			}
 		}
 
 		ddTestAddress := utils.ExportAddress(testHost.Address)
