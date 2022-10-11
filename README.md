@@ -10,12 +10,11 @@ following features:
 * provided an ip address, mask, and a list of host count values, it will calculate a list of VLSM subnets that match the list of host count requirements. Instead of making the subnets all the same size, it only creates enough subnets to match the list, and they may all be different sizes
 * provided a list of subnets, it will try to summarize the subnets into one (or more) supernets if possible.
 
-## Install
+## Build
 
 ```
 go test ./...
 go build ./cmd/netcalc
-go install
 ```
 ## Usage
 ```
