@@ -63,9 +63,9 @@ func (node *NetworkNode) NetworkCount() int {
 	}
 }
 
-func SplitToHostCount(node *NetworkNode, host_count int) error {
+func SplitToHostCount(node *NetworkNode, hostCount int) error {
 
-	valid, err := ValidForHostCount(node.Network, host_count)
+	valid, err := ValidForHostCount(node.Network, hostCount)
 	if err != nil {
 		return err
 	}
@@ -76,11 +76,11 @@ func SplitToHostCount(node *NetworkNode, host_count int) error {
 		if err != nil {
 			return err
 		}
-		err = SplitToHostCount(node.Subnets[0], host_count)
+		err = SplitToHostCount(node.Subnets[0], hostCount)
 		if err != nil {
 			return err
 		}
-		err = SplitToHostCount(node.Subnets[1], host_count)
+		err = SplitToHostCount(node.Subnets[1], hostCount)
 		if err != nil {
 			return err
 		}

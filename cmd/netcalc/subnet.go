@@ -63,10 +63,10 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 	},
 }
 
-func SplitToHostCountThreaded(node *networknode.NetworkNode, host_count int) error {
+func SplitToHostCountThreaded(node *networknode.NetworkNode, hostCount int) error {
 	wg := new(sync.WaitGroup)
 
-	valid, err := networknode.ValidForHostCount(node.Network, host_count)
+	valid, err := networknode.ValidForHostCount(node.Network, hostCount)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -79,7 +79,7 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, host_count int) err
 			log.Fatal(err)
 		}
 		if len(node.Subnets) > 0 {
-			valid, err := networknode.ValidForHostCount(node.Subnets[0].Network, host_count)
+			valid, err := networknode.ValidForHostCount(node.Subnets[0].Network, hostCount)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -98,7 +98,7 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, host_count int) err
 				}
 
 				if len(node.Subnets[0].Subnets) > 0 && len(node.Subnets[1].Subnets) > 0 {
-					valid, err := networknode.ValidForHostCount(node.Subnets[0].Subnets[0].Network, host_count)
+					valid, err := networknode.ValidForHostCount(node.Subnets[0].Subnets[0].Network, hostCount)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -107,10 +107,10 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, host_count int) err
 						return nil
 					} else {
 						wg.Add(4)
-						go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0], host_count)
-						go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1], host_count)
-						go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0], host_count)
-						go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1], host_count)
+						go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[0], hostCount)
+						go SplitToHostCountWrapper(wg, node.Subnets[0].Subnets[1], hostCount)
+						go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[0], hostCount)
+						go SplitToHostCountWrapper(wg, node.Subnets[1].Subnets[1], hostCount)
 					}
 
 				}
@@ -125,9 +125,9 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, host_count int) err
 	return nil
 }
 
-func SplitToHostCountWrapper(wg *sync.WaitGroup, node *networknode.NetworkNode, host_count int) {
+func SplitToHostCountWrapper(wg *sync.WaitGroup, node *networknode.NetworkNode, hostCount int) {
 	defer wg.Done()
-	err := networknode.SplitToHostCount(node, host_count)
+	err := networknode.SplitToHostCount(node, hostCount)
 	if err != nil {
 		log.Fatal(err)
 	}

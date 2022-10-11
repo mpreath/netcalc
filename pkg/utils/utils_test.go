@@ -5,9 +5,9 @@ import (
 )
 
 func TestIsValidMask(t *testing.T) {
-	test_cases := []struct {
-		dd_mask  string
-		is_valid bool
+	testCases := []struct {
+		ddMask  string
+		isValid bool
 	}{
 		{"255.255.255.0", true},
 		{"192.168.1.0", false},
@@ -15,79 +15,79 @@ func TestIsValidMask(t *testing.T) {
 		{"0.0.0.128", false},
 	}
 
-	for _, test_case := range test_cases {
-		uint_mask, _ := ParseAddress(test_case.dd_mask)
-		is_mask_valid := IsValidMask(uint_mask)
-		if is_mask_valid != test_case.is_valid {
-			t.Errorf("result for %s (%t) does not match spec (%t)", test_case.dd_mask, is_mask_valid, test_case.is_valid)
+	for _, testCase := range testCases {
+		uintMask, _ := ParseAddress(testCase.ddMask)
+		isMaskValid := IsValidMask(uintMask)
+		if isMaskValid != testCase.isValid {
+			t.Errorf("result for %s (%t) does not match spec (%t)", testCase.ddMask, isMaskValid, testCase.isValid)
 		}
 
 	}
 }
 
 func TestGetNetworkAddress(t *testing.T) {
-	test_cases := []struct {
-		dd_address         string
-		dd_mask            string
-		dd_network_address string
+	testCases := []struct {
+		ddAddress        string
+		ddMask           string
+		ddNetworkAddress string
 	}{
 		{"192.168.1.1", "255.255.255.0", "192.168.1.0"},
 	}
 
-	for _, test_case := range test_cases {
-		address, _ := ParseAddress(test_case.dd_address)
-		mask, _ := ParseAddress(test_case.dd_mask)
-		network_address, _ := ParseAddress(test_case.dd_network_address)
+	for _, testCase := range testCases {
+		address, _ := ParseAddress(testCase.ddAddress)
+		mask, _ := ParseAddress(testCase.ddMask)
+		networkAddress, _ := ParseAddress(testCase.ddNetworkAddress)
 
-		test_network_address := GetNetworkAddress(address, mask)
+		testNetworkAddress := GetNetworkAddress(address, mask)
 
-		if test_network_address != network_address {
-			t.Errorf("network %s doesn't match spec network %s", ExportAddress(test_network_address), ExportAddress(network_address))
+		if testNetworkAddress != networkAddress {
+			t.Errorf("network %s doesn't match spec network %s", ExportAddress(testNetworkAddress), ExportAddress(networkAddress))
 		}
 
 	}
 }
 
 func TestGetBroadcastAddress(t *testing.T) {
-	test_cases := []struct {
-		dd_address           string
-		dd_mask              string
-		dd_broadcast_address string
+	testCases := []struct {
+		ddAddress          string
+		ddMask             string
+		ddBroadcastAddress string
 	}{
 		{"192.168.1.1", "255.255.255.0", "192.168.1.255"},
 	}
 
-	for _, test_case := range test_cases {
-		address, _ := ParseAddress(test_case.dd_address)
-		mask, _ := ParseAddress(test_case.dd_mask)
-		broadcast_address, _ := ParseAddress(test_case.dd_broadcast_address)
+	for _, testCase := range testCases {
+		address, _ := ParseAddress(testCase.ddAddress)
+		mask, _ := ParseAddress(testCase.ddMask)
+		broadcastAddress, _ := ParseAddress(testCase.ddBroadcastAddress)
 
-		test_broadcast_address := GetBroadcastAddress(address, mask)
+		testBroadcastAddress := GetBroadcastAddress(address, mask)
 
-		if test_broadcast_address != broadcast_address {
-			t.Errorf("broadcast %s doesn't match spec broadcast %s", ExportAddress(test_broadcast_address), ExportAddress(broadcast_address))
+		if testBroadcastAddress != broadcastAddress {
+			t.Errorf("broadcast %s doesn't match spec broadcast %s", ExportAddress(testBroadcastAddress), ExportAddress(broadcastAddress))
 		}
 
 	}
 }
 
 func TestGetBitsInMask(t *testing.T) {
-	test_cases := []struct {
-		dd_mask       string
-		expected_bits int
+	testCases := []struct {
+		ddMask       string
+		expectedBits int
 	}{
 		{"255.255.255.252", 30},
 		{"255.255.255.255", 32},
 		{"128.0.0.0", 1},
 	}
 
-	for _, test_case := range test_cases {
-		mask, _ := ParseAddress(test_case.dd_mask)
+	for _, testCase := range testCases {
+		mask, _ := ParseAddress(testCase.ddMask)
 
-		test_bits_in_mask := GetBitsInMask(mask)
+		testBitsInMask := GetBitsInMask(mask)
 
-		if test_bits_in_mask != test_case.expected_bits {
-			t.Errorf("mask %s [%d] doesn't contain the expected number of bits [%d]", test_case.dd_mask, test_bits_in_mask, test_case.expected_bits)
+		if testBitsInMask != testCase.expectedBits {
+			t.Errorf("mask %s [%d] doesn't contain the expected number of bits [%d]", testCase.ddMask, testBitsInMask, testCase.expectedBits)
 		}
 
 	}

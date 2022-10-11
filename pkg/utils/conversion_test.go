@@ -3,10 +3,10 @@ package utils
 import "testing"
 
 func TestDDtoi(t *testing.T) {
-	test_cases := []struct {
-		dd_address   string
-		uint_address uint32
-		error_string string
+	testCases := []struct {
+		ddAddress   string
+		uintAddress uint32
+		errorString string
 	}{
 		{"255.255.255.255", 4294967295, ""},
 		{"0.0.0.0", 0, ""},
@@ -17,40 +17,40 @@ func TestDDtoi(t *testing.T) {
 		{"192.168.1.1.8", 0, "utils:ParseAddress: parsing \"192.168.1.1.8\": too many octets"},
 	}
 
-	for _, test_case := range test_cases {
-		test_val, err := ParseAddress(test_case.dd_address)
+	for _, testCase := range testCases {
+		testVal, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			// error encountered
-			if err.Error() != test_case.error_string {
-				t.Fatalf("result (%s) does not match spec (%s)", err.Error(), test_case.error_string)
+			if err.Error() != testCase.errorString {
+				t.Fatalf("result (%s) does not match spec (%s)", err.Error(), testCase.errorString)
 			}
 		}
 
-		if test_val != test_case.uint_address {
+		if testVal != testCase.uintAddress {
 			// function calculation is incorrect
-			t.Errorf("result (%d) does not match spec (%d)", test_val, test_case.uint_address)
+			t.Errorf("result (%d) does not match spec (%d)", testVal, testCase.uintAddress)
 		}
 	}
 
 }
 
 func TestItodd(t *testing.T) {
-	test_cases := []struct {
-		dd_address   string
-		uint_address uint32
-		error_string string
+	testCases := []struct {
+		ddAddress   string
+		uintAddress uint32
+		errorString string
 	}{
 		{"255.255.255.255", 4294967295, ""},
 		{"0.0.0.0", 0, ""},
 		{"192.168.1.1", 3232235777, ""},
 	}
 
-	for _, test_case := range test_cases {
-		test_val := ExportAddress(test_case.uint_address)
+	for _, testCase := range testCases {
+		testVal := ExportAddress(testCase.uintAddress)
 
-		if test_val != test_case.dd_address {
+		if testVal != testCase.ddAddress {
 			// function calculation is incorrect
-			t.Errorf("result (%s) does not match spec (%s)", test_val, test_case.dd_address)
+			t.Errorf("result (%s) does not match spec (%s)", testVal, testCase.ddAddress)
 		}
 	}
 }
