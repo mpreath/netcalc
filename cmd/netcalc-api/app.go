@@ -11,6 +11,10 @@ type App struct {
 	Router *mux.Router
 }
 
+func NewApp() *App {
+	return &App{Router: mux.NewRouter()}
+}
+
 func (app *App) InitializeRoutes() {
 	app.Router.Path("/info").Methods(http.MethodGet).HandlerFunc(Info)
 	app.Router.Path("/subnet").Methods(http.MethodGet).HandlerFunc(Subnet)

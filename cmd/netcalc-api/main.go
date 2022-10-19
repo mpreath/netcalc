@@ -6,10 +6,8 @@ import (
 
 func main() {
 
-	app := &App{}
-
+	app := NewApp()
 	app.Router = mux.NewRouter()
 	app.InitializeRoutes()
-
 	app.Run()
 }
