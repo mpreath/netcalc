@@ -90,10 +90,12 @@ func Summarize(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&networkList)
 	if err != nil {
 		writeErrorResponse(w, err)
+		return
 	}
 	summarizedNetwork, err := network.SummarizeNetworks(networkList)
 	if err != nil {
 		writeErrorResponse(w, err)
+		return
 	}
 
 	writeJsonResponse(w, http.StatusOK, summarizedNetwork)
