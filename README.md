@@ -322,12 +322,9 @@ The summarize command takes those networks and summarizes at the bit level to cr
 }
 ```
 
-### `vlsm` Command
+### `summarize` Command
 
-```
-curl \
--X POST http://localhost:3000/summarize \
--H 'Content-Type: application/json' \
---data-raw '[{ "address": "192.168.1.0", "mask": "255.255.255.128" },{ "address": "192.168.1.128", "mask": "255.255.255.128" },]' \
+See the `example_summarize_w_curl.txt` file for a curl command example. 
 
-```
+This is POST call and the raw body is a JSON array of network hashes (address and mask). 
+
