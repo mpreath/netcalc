@@ -8,7 +8,7 @@ netcalc:
 netcalc-api:
 	go build -o bin/netcalc-api ./cmd/netcalc-api/
 
-test:
+go-test:
 	go test ./...
 
 run-api:
