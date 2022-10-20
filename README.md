@@ -324,7 +324,28 @@ The summarize command takes those networks and summarizes at the bit level to cr
 
 ### `summarize` Command
 
-See the `example_summarize_w_curl.txt` file for a curl command example. 
+```
+curl --location --request POST 'http://localhost:3000/summarize' \
+--header 'Content-Type: application/json' \
+--data-raw '[
+    {
+        "address": "192.168.1.0",
+        "mask": "255.255.255.252"
+    },
+    {
+        "address": "192.168.1.4",
+        "mask": "255.255.255.252"
+    },
+    {
+        "address": "192.168.1.8",
+        "mask": "255.255.255.252"
+    },
+    {
+        "address": "192.168.1.12",
+        "mask": "255.255.255.252"
+    }
+]'
+```
 
 This is POST call and the raw body is a JSON array of network hashes (address and mask). 
 
