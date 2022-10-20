@@ -14,9 +14,10 @@ following features:
 
 ```
 go test ./...
-go build ./cmd/netcalc
+# running make will generate  netcalc and netcalc-api in bin/
+make
 ```
-## Usage
+## Netcalc Usage
 ```
 Netcalc is a IPv4/IPv6 network calculator
 
@@ -237,3 +238,96 @@ In this example there is a text file (`test/vlsm_networks.txt`) containing the f
 
 The summarize command takes those networks and summarizes at the bit level to create the summary network of `192.168.1.0 255.255.255.128`. 
 
+## Netcalc API Usage
+
+### `info` Command
+
+```
+> curl http://localhost:3000/info?address=192.168.1.0&mask=255.255.255.0
+{
+  "status": "ok",
+  "data": {
+    "address": "192.168.1.0",
+    "mask": "255.255.255.0"
+  }
+}
+
+```
+
+### `subnet` Command
+
+```
+> curl http://localhost:3000/subnet?address=192.168.1.0&mask=255.255.255.0&hostCount=60
+{                              
+  "status": "ok",              
+  "data": [                    
+    {                          
+      "address": "192.168.1.0",
+      "mask": "255.255.255.192"
+    },                         
+    {
+      "address": "192.168.1.64",
+      "mask": "255.255.255.192"
+    },
+    {
+      "address": "192.168.1.128",
+      "mask": "255.255.255.192"
+    },
+    {
+      "address": "192.168.1.192",
+      "mask": "255.255.255.192"
+    }
+  ]
+}
+
+```
+
+
+### `vlsm` Command
+
+```
+> curl http://localhost:3000/vlsm?address=192.168.1.0&mask=255.255.255.0&vlsmList=2,2,10
+{
+  "status": "ok",
+  "data": [
+    {
+      "address": "192.168.1.0",
+      "mask": "255.255.255.252"
+    },
+    {
+      "address": "192.168.1.4",
+      "mask": "255.255.255.252"
+    },
+    {
+      "address": "192.168.1.8",
+      "mask": "255.255.255.248"
+    },
+    {
+      "address": "192.168.1.16",
+      "mask": "255.255.255.240"
+    },
+    {
+      "address": "192.168.1.32",
+      "mask": "255.255.255.224"
+    },
+    {
+      "address": "192.168.1.64",
+      "mask": "255.255.255.192"
+    },
+    {
+      "address": "192.168.1.128",
+      "mask": "255.255.255.128"
+    }
+  ]
+}
+```
+
+### `vlsm` Command
+
+```
+curl \
+-X POST http://localhost:3000/summarize \
+-H 'Content-Type: application/json' \
+--data-raw '[{ "address": "192.168.1.0", "mask": "255.255.255.128" },{ "address": "192.168.1.128", "mask": "255.255.255.128" },]' \
+
+```
