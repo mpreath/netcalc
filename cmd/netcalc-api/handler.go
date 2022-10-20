@@ -149,7 +149,9 @@ func Vlsm(w http.ResponseWriter, r *http.Request) {
 func writeJsonResponse(w http.ResponseWriter, status int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	_ = json.NewEncoder(w).Encode(Response{
+	enc := json.NewEncoder(w)
+	enc.SetIndent("", "  ")
+	_ = enc.Encode(Response{
 		Status: "ok",
 		Data:   data,
 	})
@@ -158,7 +160,9 @@ func writeJsonResponse(w http.ResponseWriter, status int, data interface{}) {
 func writeErrorResponse(w http.ResponseWriter, err error) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusInternalServerError)
-	_ = json.NewEncoder(w).Encode(Response{
+	enc := json.NewEncoder(w)
+	enc.SetIndent("", "  ")
+	_ = enc.Encode(Response{
 		Status:    "error",
 		Error:     err.Error(),
 		ErrorCode: http.StatusInternalServerError,

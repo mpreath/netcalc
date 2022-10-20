@@ -8,5 +8,6 @@
 # testing artifacts
 *.json
 *.out
+*.env
 test/
 tmp/

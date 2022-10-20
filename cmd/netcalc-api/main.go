@@ -2,7 +2,9 @@ package main
 
 func main() {
 
-	app := NewApp()
-	app.InitializeRoutes()
+	config := &Configuration{
+		HttpPort: 3000,
+	}
+	app := NewApp(config)
 	app.Run()
 }

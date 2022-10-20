@@ -3,19 +3,28 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
 
 type App struct {
 	Router *mux.Router
+	Config *Configuration
 }
 
-func NewApp() *App {
-	return &App{Router: mux.NewRouter()}
+func NewApp(config *Configuration) *App {
+	app := &App{
+		Router: mux.NewRouter(),
+		Config: config,
+	}
+
+	app.initialize()
+
+	return app
 }
 
-func (app *App) InitializeRoutes() {
+func (app *App) initialize() {
 	app.Router.Path("/info").Methods(http.MethodGet).HandlerFunc(Info)
 	app.Router.Path("/subnet").Methods(http.MethodGet).HandlerFunc(Subnet)
 	app.Router.Path("/summarize").Methods(http.MethodPost).HandlerFunc(Summarize)
@@ -23,6 +32,6 @@ func (app *App) InitializeRoutes() {
 }
 
 func (app *App) Run() {
-	log.Println("Start listening")
-	log.Println(http.ListenAndServe(":8080", app.Router))
+	log.Printf("Netcalc API Server Started [%s]\n", strconv.Itoa(app.Config.HttpPort))
+	log.Println(http.ListenAndServe(":"+strconv.Itoa(app.Config.HttpPort), app.Router))
 }
