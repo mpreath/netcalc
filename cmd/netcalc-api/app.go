@@ -10,10 +10,10 @@ import (
 
 type App struct {
 	Router *mux.Router
-	Config *Configuration
+	Config *Config
 }
 
-func NewApp(config *Configuration) *App {
+func NewApp(config *Config) *App {
 	app := &App{
 		Router: mux.NewRouter(),
 		Config: config,
