@@ -2,9 +2,7 @@ package main
 
 func main() {
 
-	config := &Configuration{
-		HttpPort: 3000,
-	}
+	config := LoadConfig()
 	app := NewApp(config)
 	app.Run()
 }

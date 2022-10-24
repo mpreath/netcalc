@@ -1,4 +1,4 @@
-all: test build
+all: go-test build
 
 build: netcalc netcalc-api
 

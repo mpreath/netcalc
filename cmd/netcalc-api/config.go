@@ -1,5 +1,11 @@
 package main
 
-type Configuration struct {
+type Config struct {
 	HttpPort int
+}
+
+func LoadConfig() *Config {
+	return &Config{
+		HttpPort: 3000,
+	}
 }
