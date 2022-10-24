@@ -57,8 +57,17 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hostCount, _ := strconv.Atoi(r.URL.Query().Get("hostCount"))
-	networkCount, _ := strconv.Atoi(r.URL.Query().Get("networkCount"))
+	hostCount, err := strconv.Atoi(r.URL.Query().Get("hostCount"))
+	if err != nil {
+		writeErrorResponse(w, err)
+		return
+	}
+
+	networkCount, err := strconv.Atoi(r.URL.Query().Get("networkCount"))
+	if err != nil {
+		writeErrorResponse(w, err)
+		return
+	}
 
 	net, err := network.New(ipAddress, subnetMask)
 	if err != nil {
@@ -153,10 +162,14 @@ func writeJsonResponse(w http.ResponseWriter, status int, data interface{}) {
 	w.WriteHeader(status)
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
-	_ = enc.Encode(Response{
+	err := enc.Encode(Response{
 		Status: "ok",
 		Data:   data,
 	})
+	if err != nil {
+		log.Println(err)
+		return
+	}
 }
 
 func writeErrorResponse(w http.ResponseWriter, err error) {
@@ -164,9 +177,13 @@ func writeErrorResponse(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
-	_ = enc.Encode(Response{
+	err = enc.Encode(Response{
 		Status:    "error",
 		Error:     err.Error(),
 		ErrorCode: http.StatusInternalServerError,
 	})
+	if err != nil {
+		log.Println(err)
+		return
+	}
 }
