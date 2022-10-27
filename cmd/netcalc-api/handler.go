@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/mpreath/netcalc/pkg/network"
 	"github.com/mpreath/netcalc/pkg/network/networknode"
 	"github.com/mpreath/netcalc/pkg/utils"
@@ -57,17 +58,8 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hostCount, err := strconv.Atoi(r.URL.Query().Get("hostCount"))
-	if err != nil {
-		writeErrorResponse(w, err)
-		return
-	}
-
-	networkCount, err := strconv.Atoi(r.URL.Query().Get("networkCount"))
-	if err != nil {
-		writeErrorResponse(w, err)
-		return
-	}
+	hostCount, _ := strconv.Atoi(r.URL.Query().Get("hosts"))
+	networkCount, _ := strconv.Atoi(r.URL.Query().Get("networks"))
 
 	net, err := network.New(ipAddress, subnetMask)
 	if err != nil {
@@ -88,6 +80,9 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
+	} else {
+		writeErrorResponse(w, fmt.Errorf("no valid hosts or networks value provided"))
+		return
 	}
 
 	writeJsonResponse(w, http.StatusOK, node.Flatten())
