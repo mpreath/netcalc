@@ -1,11 +1,9 @@
 package main
 
 import (
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"strconv"
-
-	"github.com/gorilla/mux"
 )
 
 type App struct {
@@ -32,6 +30,6 @@ func (app *App) initialize() {
 }
 
 func (app *App) Run() {
-	log.Printf("Netcalc API Server Started [%s]\n", strconv.Itoa(app.Config.HttpPort))
-	log.Println(http.ListenAndServe(":"+strconv.Itoa(app.Config.HttpPort), app.Router))
+	log.Printf("Netcalc API Server Started [%s]\n", app.Config.HttpPort)
+	log.Println(http.ListenAndServe(":"+app.Config.HttpPort, app.Router))
 }

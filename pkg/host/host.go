@@ -7,6 +7,7 @@ import (
 	"github.com/mpreath/netcalc/pkg/utils"
 )
 
+// TODO: add doc related comments
 type Host struct {
 	Address uint32 `json:"address"`
 	Mask    uint32 `json:"mask"`
