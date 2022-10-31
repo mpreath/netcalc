@@ -61,6 +61,11 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 	hostCount, _ := strconv.Atoi(r.URL.Query().Get("hosts"))
 	networkCount, _ := strconv.Atoi(r.URL.Query().Get("networks"))
 
+	if hostCount == 0 && networkCount == 0 {
+		writeErrorResponse(w, fmt.Errorf("subnet: no host or network counts provided"))
+		return
+	}
+
 	net, err := network.New(ipAddress, subnetMask)
 	if err != nil {
 		writeErrorResponse(w, err)
