@@ -1,3 +1,6 @@
+// Package network provides types and methods for working with
+// TCP/IP networks. Each network has an Address (uint32) and Mask (uint32)
+// that represent a give IPv4 network.
 package network
 
 import (

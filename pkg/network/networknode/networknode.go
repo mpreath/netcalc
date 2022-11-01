@@ -1,3 +1,5 @@
+// Package networknode provides types and methods for working with
+// TCP/IP networks for creating a subnetworks and summarizing subnetworks.
 package networknode
 
 import (
@@ -8,6 +10,9 @@ import (
 	"github.com/mpreath/netcalc/pkg/utils"
 )
 
+// NetworkNode is a wrapper around the network.Network struct adding
+// a Utilized field (used internally) and an array of NetworkNode pointers
+// to build the subnet binary tree.
 type NetworkNode struct {
 	Network  *network.Network `json:"network,omitempty"`
 	Utilized bool             `json:"-"`
@@ -20,6 +25,9 @@ func New(n *network.Network) *NetworkNode {
 	}
 }
 
+// Split adds two subnetworks (subnets) to the Subnets array.
+// The subnets created have a mask that is extended by 1-bit
+// effectively splitting the original network.
 func (node *NetworkNode) Split() error {
 	if len(node.Subnets) > 0 {
 		return nil
@@ -63,6 +71,8 @@ func (node *NetworkNode) NetworkCount() int {
 	}
 }
 
+// SplitToHostCount provided with a NetworkNode and hostCount, recursively calls Split on the
+// node(s) until the host count of the networks created support the hostCount provided.
 func SplitToHostCount(node *NetworkNode, hostCount int) error {
 
 	valid, err := ValidForHostCount(node.Network, hostCount)
@@ -89,6 +99,8 @@ func SplitToHostCount(node *NetworkNode, hostCount int) error {
 	}
 }
 
+// ValidForHostCount provided a Network and hostCount returns true if the current network's
+// host count supports the provided hostCount and a further split network would not.
 func ValidForHostCount(n *network.Network, hostCount int) (bool, error) {
 
 	currentMaskBc := utils.GetBitsInMask(n.Mask)
@@ -110,6 +122,8 @@ func ValidForHostCount(n *network.Network, hostCount int) (bool, error) {
 	return false, nil
 }
 
+// SplitToNetCount provided with a NetworkNode and netCount, recursively calls Split on the
+// node(s) until the number of networks created is equal to or greater than the netCount argument.
 func SplitToNetCount(node *NetworkNode, netCount int) error {
 	longestValidMask, _ := utils.GetMaskFromBits(30)
 	if netCount <= 0 {
@@ -136,6 +150,10 @@ func SplitToNetCount(node *NetworkNode, netCount int) error {
 	return nil
 }
 
+// SplitToVlsmCount provided with a NetworkNode and vlsmCount value (hostCount), recursively calls
+// Split on the node until the host count of the split network is valid for the vlsmCount.
+// This differs from SplitToHostCount because it recursively goes down one branch of the tree rather than
+// all branches creating an unbalanced binary tree.
 func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 
 	// if network supports requirements
@@ -202,6 +220,7 @@ func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 	return nil
 }
 
+// Flatten returns the leaf nodes of the binary tree as an array of Networks.
 func (node *NetworkNode) Flatten() []*network.Network {
 	var networkList []*network.Network
 	if len(node.Subnets) == 0 {
@@ -213,6 +232,7 @@ func (node *NetworkNode) Flatten() []*network.Network {
 	return networkList
 }
 
+// FlattenUtilized returns the leaf nodes with Utilized set to true of the binary tree as an array of Networks.
 func (node *NetworkNode) FlattenUtilized() []*network.Network {
 	var networkList []*network.Network
 	if node.Utilized {

@@ -7,6 +7,9 @@ import (
 	"github.com/mpreath/netcalc/pkg/utils"
 )
 
+// SummarizeNetworks takes an array of Network objects and returns a summarized Network.
+// Summarization occurs by sorting the array and then finding a common bit boundary that
+// a common mask and common network bits can be calculated.
 func SummarizeNetworks(networks []*Network) (*Network, error) {
 
 	if len(networks) == 0 {
