@@ -1,1 +1,1 @@
-web: bin/netcalc-api
+api: bin/netcalc-api
