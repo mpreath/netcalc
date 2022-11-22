@@ -3,14 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mpreath/netcalc/pkg/network"
-	"github.com/mpreath/netcalc/pkg/network/networknode"
-	"github.com/mpreath/netcalc/pkg/utils"
 	"log"
 	"net/http"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/mpreath/netcalc/pkg/network"
+	"github.com/mpreath/netcalc/pkg/network/networknode"
+	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type Response struct {
@@ -18,6 +19,13 @@ type Response struct {
 	Error     string      `json:"error,omitempty"`
 	ErrorCode int         `json:"error_code,omitempty"`
 	Data      interface{} `json:"data,omitempty"`
+}
+
+type NetworkInfo struct {
+	NetworkAddress   string `json:"network_address"`
+	Mask             string `json:"mask"`
+	BroadcastAddress string `json:"broadcast_address"`
+	NumberOfHosts    int    `json:"number_of_hosts"`
 }
 
 func Info(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +48,14 @@ func Info(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJsonResponse(w, http.StatusOK, net)
+	info := &NetworkInfo{
+		NetworkAddress:   utils.ExportAddress(net.Address),
+		Mask:             utils.ExportAddress(net.Mask),
+		BroadcastAddress: utils.ExportAddress(net.BroadcastAddress()),
+		NumberOfHosts:    net.HostCount(),
+	}
+
+	writeJsonResponse(w, http.StatusOK, info)
 
 }
 
