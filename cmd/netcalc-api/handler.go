@@ -3,15 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/netcalc"
+	"github.com/mpreath/netcalc/pkg/netcalc/networknode"
 	"log"
 	"net/http"
 	"sort"
 	"strconv"
 	"strings"
-
-	"github.com/mpreath/netcalc/pkg/network"
-	"github.com/mpreath/netcalc/pkg/network/networknode"
-	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type Response struct {
@@ -30,28 +28,28 @@ type NetworkInfo struct {
 
 func Info(w http.ResponseWriter, r *http.Request) {
 
-	ipAddress, err := utils.ParseAddress(r.URL.Query().Get("address"))
+	ipAddress, err := netcalc.ParseAddress(r.URL.Query().Get("address"))
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
 	}
 
-	subnetMask, err := utils.ParseAddress(r.URL.Query().Get("mask"))
+	subnetMask, err := netcalc.ParseAddress(r.URL.Query().Get("mask"))
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
 	}
 
-	net, err := network.New(ipAddress, subnetMask)
+	net, err := netcalc.NewNetwork(ipAddress, subnetMask)
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
 	}
 
 	info := &NetworkInfo{
-		NetworkAddress:   utils.ExportAddress(net.Address),
-		Mask:             utils.ExportAddress(net.Mask),
-		BroadcastAddress: utils.ExportAddress(net.BroadcastAddress()),
+		NetworkAddress:   netcalc.ExportAddress(net.Address),
+		Mask:             netcalc.ExportAddress(net.Mask),
+		BroadcastAddress: netcalc.ExportAddress(net.BroadcastAddress()),
 		NumberOfHosts:    net.HostCount(),
 	}
 
@@ -61,13 +59,13 @@ func Info(w http.ResponseWriter, r *http.Request) {
 
 func Subnet(w http.ResponseWriter, r *http.Request) {
 
-	ipAddress, err := utils.ParseAddress(r.URL.Query().Get("address"))
+	ipAddress, err := netcalc.ParseAddress(r.URL.Query().Get("address"))
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
 	}
 
-	subnetMask, err := utils.ParseAddress(r.URL.Query().Get("mask"))
+	subnetMask, err := netcalc.ParseAddress(r.URL.Query().Get("mask"))
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
@@ -81,7 +79,7 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	net, err := network.New(ipAddress, subnetMask)
+	net, err := netcalc.NewNetwork(ipAddress, subnetMask)
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
@@ -109,14 +107,14 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 }
 
 func Summarize(w http.ResponseWriter, r *http.Request) {
-	var networkList []*network.Network
+	var networkList []*netcalc.Network
 
 	err := json.NewDecoder(r.Body).Decode(&networkList)
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
 	}
-	summarizedNetwork, err := network.SummarizeNetworks(networkList)
+	summarizedNetwork, err := netcalc.SummarizeNetworks(networkList)
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
@@ -127,19 +125,19 @@ func Summarize(w http.ResponseWriter, r *http.Request) {
 
 func Vlsm(w http.ResponseWriter, r *http.Request) {
 
-	ipAddress, err := utils.ParseAddress(r.URL.Query().Get("address"))
+	ipAddress, err := netcalc.ParseAddress(r.URL.Query().Get("address"))
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
 	}
 
-	subnetMask, err := utils.ParseAddress(r.URL.Query().Get("mask"))
+	subnetMask, err := netcalc.ParseAddress(r.URL.Query().Get("mask"))
 	if err != nil {
 		writeErrorResponse(w, err)
 		return
 	}
 
-	net, err := network.New(ipAddress, subnetMask)
+	net, err := netcalc.NewNetwork(ipAddress, subnetMask)
 	if err != nil {
 		writeErrorResponse(w, err)
 		return

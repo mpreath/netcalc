@@ -4,13 +4,12 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/mpreath/netcalc/pkg/network/networknode"
-	"github.com/mpreath/netcalc/pkg/utils"
+	"github.com/mpreath/netcalc/pkg/netcalc"
+	"github.com/mpreath/netcalc/pkg/netcalc/networknode"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/mpreath/netcalc/pkg/network"
 	"github.com/spf13/cobra"
 )
 
@@ -22,21 +21,21 @@ var summarizeCmd = &cobra.Command{
 	Use:   "summarize",
 	Short: "summarizes the networks provided to stdin",
 	Run: func(cmd *cobra.Command, args []string) {
-		var networks []*network.Network
+		var networks []*netcalc.Network
 
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			input := strings.Split(scanner.Text(), "\t")
 
-			networkAddress, err := utils.ParseAddress(input[0])
+			networkAddress, err := netcalc.ParseAddress(input[0])
 			if err != nil {
 				log.Fatal(err)
 			}
-			networkMask, err := utils.ParseAddress(input[1])
+			networkMask, err := netcalc.ParseAddress(input[1])
 			if err != nil {
 				log.Fatal(err)
 			}
-			net, err := network.New(networkAddress, networkMask)
+			net, err := netcalc.NewNetwork(networkAddress, networkMask)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -44,7 +43,7 @@ var summarizeCmd = &cobra.Command{
 			networks = append(networks, net)
 		}
 
-		networkSummary, err := network.SummarizeNetworks(networks)
+		networkSummary, err := netcalc.SummarizeNetworks(networks)
 
 		if err != nil {
 			log.Fatal(err)

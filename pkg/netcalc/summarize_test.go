@@ -1,8 +1,6 @@
-package network
+package netcalc
 
 import (
-	"github.com/mpreath/netcalc/pkg/host"
-	"github.com/mpreath/netcalc/pkg/utils"
 	"testing"
 )
 
@@ -39,28 +37,28 @@ func TestSummarizeNetworks(t *testing.T) {
 
 	for _, testCase := range testCases {
 		var testNetworks []*Network
-		expectedNetworkAddress, err := utils.ParseAddress(testCase.expectedNetwork.Address)
+		expectedNetworkAddress, err := ParseAddress(testCase.expectedNetwork.Address)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		expectedNetworkMask, err := utils.ParseAddress(testCase.expectedNetwork.Mask)
+		expectedNetworkMask, err := ParseAddress(testCase.expectedNetwork.Mask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		expectedNetwork, err := host.New(expectedNetworkAddress, expectedNetworkMask)
+		expectedNetwork, err := NewNetwork(expectedNetworkAddress, expectedNetworkMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 		for _, networkMap := range testCase.testNetworks {
-			testNetworkAddress, err := utils.ParseAddress(networkMap.Address)
+			testNetworkAddress, err := ParseAddress(networkMap.Address)
 			if err != nil {
 				t.Fatalf(err.Error())
 			}
-			testNetworkMask, err := utils.ParseAddress(networkMap.Mask)
+			testNetworkMask, err := ParseAddress(networkMap.Mask)
 			if err != nil {
 				t.Fatalf(err.Error())
 			}
-			testNetwork, err := New(testNetworkAddress, testNetworkMask)
+			testNetwork, err := NewNetwork(testNetworkAddress, testNetworkMask)
 			if err != nil {
 				t.Fatalf(err.Error())
 			}

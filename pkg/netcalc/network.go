@@ -1,13 +1,11 @@
 // Package network provides types and methods for working with
 // TCP/IP networks. Each network has an Address (uint32) and Mask (uint32)
 // that represent a give IPv4 network.
-package network
+package netcalc
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mpreath/netcalc/pkg/host"
-	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 type Network struct {
@@ -27,8 +25,8 @@ func (n *Network) MarshalJSON() ([]byte, error) {
 		Mask    string `json:"mask"`
 		*Alias
 	}{
-		Address: utils.ExportAddress(n.Address),
-		Mask:    utils.ExportAddress(n.Mask),
+		Address: ExportAddress(n.Address),
+		Mask:    ExportAddress(n.Mask),
 		Alias:   (*Alias)(n),
 	})
 }
@@ -39,12 +37,12 @@ func (n *Network) UnmarshalJSON(body []byte) (err error) {
 		return err
 	}
 
-	n.Address, err = utils.ParseAddress(jsonNetwork.Address)
+	n.Address, err = ParseAddress(jsonNetwork.Address)
 	if err != nil {
 		return err
 	}
 
-	n.Mask, err = utils.ParseAddress(jsonNetwork.Mask)
+	n.Mask, err = ParseAddress(jsonNetwork.Mask)
 	if err != nil {
 		return err
 	}
@@ -52,29 +50,29 @@ func (n *Network) UnmarshalJSON(body []byte) (err error) {
 	return nil
 }
 
-func New(address uint32, mask uint32) (*Network, error) {
-	if !utils.IsValidMask(mask) {
+func NewNetwork(address uint32, mask uint32) (*Network, error) {
+	if !IsValidMask(mask) {
 		return nil, fmt.Errorf("network.New: invalid subnet mask")
 	}
 
 	return &Network{
-		Address: utils.GetNetworkAddress(address, mask),
+		Address: GetNetworkAddress(address, mask),
 		Mask:    mask,
 	}, nil
 }
 
-func (n *Network) Hosts() []*host.Host {
-	var harr []*host.Host
+func (n *Network) Hosts() []*Host {
+	var harr []*Host
 
 	for i, address := 0, n.Address+1; address < n.BroadcastAddress(); i, address = i+1, address+1 {
-		harr = append(harr, &host.Host{Address: address, Mask: n.Mask})
+		harr = append(harr, &Host{Address: address, Mask: n.Mask})
 	}
 
 	return harr
 }
 
 func (n *Network) BroadcastAddress() uint32 {
-	return utils.GetBroadcastAddress(n.Address, n.Mask)
+	return GetBroadcastAddress(n.Address, n.Mask)
 }
 
 func (n *Network) HostCount() int {

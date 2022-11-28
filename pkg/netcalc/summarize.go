@@ -1,10 +1,8 @@
-package network
+package netcalc
 
 import (
 	"fmt"
 	"sort"
-
-	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 // SummarizeNetworks takes an array of Network objects and returns a summarized Network.
@@ -27,8 +25,8 @@ func SummarizeNetworks(networks []*Network) (*Network, error) {
 
 	for idx := 1; idx < len(networks); idx++ {
 		commonBits = commonBits & networks[idx].Address
-		commonMask = utils.GetCommonBitMask(commonBits, networks[idx].Address)
-		commonBits = utils.GetNetworkAddress(commonBits, commonMask)
+		commonMask = GetCommonBitMask(commonBits, networks[idx].Address)
+		commonBits = GetNetworkAddress(commonBits, commonMask)
 	}
 
 	return &Network{Address: commonBits, Mask: commonMask}, nil

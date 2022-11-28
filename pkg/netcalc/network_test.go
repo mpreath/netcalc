@@ -1,13 +1,11 @@
-package network
+package netcalc
 
 import (
 	"encoding/json"
 	"testing"
-
-	"github.com/mpreath/netcalc/pkg/utils"
 )
 
-func TestMarshalJSON(t *testing.T) {
+func TestMarshalJSONNetwork(t *testing.T) {
 	testCases := []struct {
 		ddAddress string
 		ddMask    string
@@ -16,15 +14,15 @@ func TestMarshalJSON(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testAddress, err := utils.ParseAddress(testCase.ddAddress)
+		testAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.ParseAddress(testCase.ddMask)
+		testMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork, _ := New(testAddress, testMask)
+		testNetwork, _ := NewNetwork(testAddress, testMask)
 
 		s, err := json.Marshal(testNetwork)
 		if err != nil {
@@ -37,7 +35,7 @@ func TestMarshalJSON(t *testing.T) {
 	}
 }
 
-func TestUnmarshalJSON(t *testing.T) {
+func TestUnmarshalJSONNetwork(t *testing.T) {
 	testCases := []struct {
 		ddAddress  string
 		jsonString string
@@ -52,19 +50,19 @@ func TestUnmarshalJSON(t *testing.T) {
 			t.Errorf(err.Error())
 		}
 
-		expectedResult, err := utils.ParseAddress(testCase.ddAddress)
+		expectedResult, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Errorf(err.Error())
 		}
 
 		if testNetwork.Address != expectedResult {
-			t.Errorf("unmarshalled address (%s) doesn't match spec address (%s)", utils.ExportAddress(testNetwork.Address), utils.ExportAddress(expectedResult))
+			t.Errorf("unmarshalled address (%s) doesn't match spec address (%s)", ExportAddress(testNetwork.Address), ExportAddress(expectedResult))
 
 		}
 	}
 }
 
-func TestNew(t *testing.T) {
+func TestNewNetwork(t *testing.T) {
 	testCases := []struct {
 		ddAddress        string
 		ddMask           string
@@ -76,15 +74,15 @@ func TestNew(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testAddress, err := utils.ParseAddress(testCase.ddAddress)
+		testAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.ParseAddress(testCase.ddMask)
+		testMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork, err := New(testAddress, testMask)
+		testNetwork, err := NewNetwork(testAddress, testMask)
 		if err != nil {
 			if err.Error() != testCase.errorString {
 				t.Errorf(err.Error())
@@ -92,8 +90,8 @@ func TestNew(t *testing.T) {
 			continue
 		}
 
-		ddTestNetwork := utils.ExportAddress(testNetwork.Address)
-		ddTestMask := utils.ExportAddress(testNetwork.Mask)
+		ddTestNetwork := ExportAddress(testNetwork.Address)
+		ddTestMask := ExportAddress(testNetwork.Mask)
 
 		if ddTestNetwork != testCase.ddNetworkAddress {
 			t.Errorf("generated address (%s) doesn't match spec address (%s)", ddTestNetwork, testCase.ddNetworkAddress)
@@ -116,15 +114,15 @@ func TestHosts(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testAddress, err := utils.ParseAddress(testCase.ddAddress)
+		testAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.ParseAddress(testCase.ddMask)
+		testMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork, err := New(testAddress, testMask)
+		testNetwork, err := NewNetwork(testAddress, testMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
@@ -148,15 +146,15 @@ func TestHostCount(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testAddress, err := utils.ParseAddress(testCase.ddAddress)
+		testAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := utils.ParseAddress(testCase.ddMask)
+		testMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork, err := New(testAddress, testMask)
+		testNetwork, err := NewNetwork(testAddress, testMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
