@@ -3,12 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mpreath/netcalc/pkg/network"
-	"github.com/mpreath/netcalc/pkg/network/networknode"
+	"github.com/mpreath/netcalc/pkg/netcalc"
+	"github.com/mpreath/netcalc/pkg/netcalc/networknode"
 	"log"
 	"sync"
 
-	"github.com/mpreath/netcalc/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -23,15 +22,15 @@ This command subnets a network based on host count and network count parameters.
 Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_address> <subnet_mask>.`,
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		networkAddress, err := utils.ParseAddress(args[0])
+		networkAddress, err := netcalc.ParseAddress(args[0])
 		if err != nil {
 			log.Fatal(err)
 		}
-		networkMask, err := utils.ParseAddress(args[1])
+		networkMask, err := netcalc.ParseAddress(args[1])
 		if err != nil {
 			log.Fatal(err)
 		}
-		net, err := network.New(networkAddress, networkMask)
+		net, err := netcalc.NewNetwork(networkAddress, networkMask)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -156,8 +155,8 @@ func printNetworkTree(node *networknode.NetworkNode, opts ...int) {
 			fmt.Printf("[n] = # of useable hosts\n\n")
 		}
 
-		ipAddress := utils.ExportAddress(node.Network.Address)
-		numOfBits := utils.GetBitsInMask(node.Network.Mask)
+		ipAddress := netcalc.ExportAddress(node.Network.Address)
+		numOfBits := netcalc.GetBitsInMask(node.Network.Mask)
 
 		for i := 0; i < depth; i++ {
 			fmt.Printf(" |")
@@ -172,8 +171,8 @@ func printNetworkTree(node *networknode.NetworkNode, opts ...int) {
 		fmt.Printf("\n")
 	} else {
 		if len(node.Subnets) == 0 {
-			ipAddress := utils.ExportAddress(node.Network.Address)
-			mask := utils.ExportAddress(node.Network.Mask)
+			ipAddress := netcalc.ExportAddress(node.Network.Address)
+			mask := netcalc.ExportAddress(node.Network.Mask)
 			fmt.Printf("%s\t%s\n", ipAddress, mask)
 		}
 	}

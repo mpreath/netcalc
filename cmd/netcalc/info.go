@@ -3,10 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mpreath/netcalc/pkg/netcalc"
 	"log"
 
-	"github.com/mpreath/netcalc/pkg/network"
-	"github.com/mpreath/netcalc/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -23,15 +22,15 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		networkAddress, err := utils.ParseAddress(args[0])
+		networkAddress, err := netcalc.ParseAddress(args[0])
 		if err != nil {
 			log.Fatal(err)
 		}
-		networkMask, err := utils.ParseAddress(args[1])
+		networkMask, err := netcalc.ParseAddress(args[1])
 		if err != nil {
 			log.Fatal(err)
 		}
-		n, err := network.New(networkAddress, networkMask)
+		n, err := netcalc.NewNetwork(networkAddress, networkMask)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -47,25 +46,25 @@ Usage: netcalc info <ip_address> <subnet_mask>.`,
 	},
 }
 
-func printNetworkInformation(n *network.Network) {
+func printNetworkInformation(n *netcalc.Network) {
 	if n != nil {
 
-		fmt.Printf("Network:\t%s\n", utils.ExportAddress(n.Address))
-		fmt.Printf("Mask:\t\t%s (/%d)\n", utils.ExportAddress(n.Mask), utils.GetBitsInMask(n.Mask))
-		fmt.Printf("Bcast:\t\t%s\n", utils.ExportAddress(n.BroadcastAddress()))
+		fmt.Printf("Network:\t%s\n", netcalc.ExportAddress(n.Address))
+		fmt.Printf("Mask:\t\t%s (/%d)\n", netcalc.ExportAddress(n.Mask), netcalc.GetBitsInMask(n.Mask))
+		fmt.Printf("Bcast:\t\t%s\n", netcalc.ExportAddress(n.BroadcastAddress()))
 
 		if VerboseFlag {
 			fmt.Printf("\n")
 
 			for _, host := range n.Hosts() {
-				fmt.Printf("%s\t%s\n", utils.ExportAddress(host.Address), utils.ExportAddress(host.Mask))
+				fmt.Printf("%s\t%s\n", netcalc.ExportAddress(host.Address), netcalc.ExportAddress(host.Mask))
 			}
 		}
 
 	}
 }
 
-func printNetworkInformationJSON(network *network.Network) error {
+func printNetworkInformationJSON(network *netcalc.Network) error {
 	s, err := json.MarshalIndent(network, "", "  ")
 	if err != nil {
 		return err

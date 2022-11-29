@@ -1,13 +1,11 @@
-package host
+package netcalc
 
 import (
 	"encoding/json"
 	"testing"
-
-	"github.com/mpreath/netcalc/pkg/utils"
 )
 
-func TestMarshalJSON(t *testing.T) {
+func TestMarshalJSONHost(t *testing.T) {
 	testCases := []struct {
 		ddAddress string
 		ddMask    string
@@ -16,16 +14,16 @@ func TestMarshalJSON(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testAddress, err := utils.ParseAddress(testCase.ddAddress)
+		testAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		testMask, err := utils.ParseAddress(testCase.ddMask)
+		testMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testHost, err := New(testAddress, testMask)
+		testHost, err := NewHost(testAddress, testMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
@@ -41,7 +39,7 @@ func TestMarshalJSON(t *testing.T) {
 	}
 }
 
-func TestNew(t *testing.T) {
+func TestNewHost(t *testing.T) {
 	testCases := []struct {
 		ddAddress     string
 		ddMask        string
@@ -52,16 +50,16 @@ func TestNew(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testAddress, err := utils.ParseAddress(testCase.ddAddress)
+		testAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		testMask, err := utils.ParseAddress(testCase.ddMask)
+		testMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testHost, err := New(testAddress, testMask)
+		testHost, err := NewHost(testAddress, testMask)
 		if err != nil {
 			if !testCase.errorExpected {
 				t.Fatalf(err.Error())
@@ -70,8 +68,8 @@ func TestNew(t *testing.T) {
 			}
 		}
 
-		ddTestAddress := utils.ExportAddress(testHost.Address)
-		ddTestMask := utils.ExportAddress(testHost.Mask)
+		ddTestAddress := ExportAddress(testHost.Address)
+		ddTestMask := ExportAddress(testHost.Mask)
 
 		if ddTestAddress != testCase.ddAddress {
 			t.Errorf("generated address (%s) doesn't match spec address (%s)", ddTestAddress, testCase.ddAddress)

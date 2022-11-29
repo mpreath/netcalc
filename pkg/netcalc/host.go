@@ -1,12 +1,10 @@
 // Package host provides a Host type consisting of two 32-bit unsigned integers
 // representing a 32-bit IP Address (Address) and a 32-bit subnet mask (Mask).
-package host
+package netcalc
 
 import (
 	"encoding/json"
 	"fmt"
-
-	"github.com/mpreath/netcalc/pkg/utils"
 )
 
 // Host type consisting of two 32-bit unsigned integers
@@ -21,16 +19,16 @@ func (h *Host) MarshalJSON() ([]byte, error) {
 		Address string `json:"address"`
 		Mask    string `json:"mask"`
 	}{
-		Address: utils.ExportAddress(h.Address),
-		Mask:    utils.ExportAddress(h.Mask),
+		Address: ExportAddress(h.Address),
+		Mask:    ExportAddress(h.Mask),
 	})
 }
 
-// New initializes and returns a Host based on the address and mask arguments.
+// NewHost initializes and returns a Host based on the address and mask arguments.
 // It returns an error if the mask is invalid.
-func New(address uint32, mask uint32) (*Host, error) {
+func NewHost(address uint32, mask uint32) (*Host, error) {
 
-	if !utils.IsValidMask(mask) {
+	if !IsValidMask(mask) {
 		return nil, fmt.Errorf("host.New: invalid subnet mask")
 	}
 
