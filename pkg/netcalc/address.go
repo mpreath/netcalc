@@ -26,7 +26,7 @@ func (a *IPv6Address) NetworkPrefix() NetworkPrefix {
 	subnetLength := 64 - a.RoutingPrefixLength
 	if subnetLength > 0 {
 		networkPrefix = NetworkPrefix(a.RoutingPrefix << subnetLength)
-		networkPrefix = networkPrefix | NetworkPrefix(a.SubnetId<<16-subnetLength>>subnetLength)
+		networkPrefix = networkPrefix | NetworkPrefix(a.SubnetId<<(16-subnetLength)>>(16-subnetLength))
 	} else {
 		networkPrefix = NetworkPrefix(a.RoutingPrefix)
 	}
