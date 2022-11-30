@@ -1,5 +1,3 @@
-// Package host provides a Host type consisting of two 32-bit unsigned integers
-// representing a 32-bit IP Address (Address) and a 32-bit subnet mask (Mask).
 package netcalc
 
 import (
