@@ -1,7 +1,6 @@
-package networknode
+package netcalc
 
 import (
-	"github.com/mpreath/netcalc/pkg/netcalc"
 	"testing"
 )
 
@@ -17,17 +16,17 @@ func TestSplit(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testAddress, err := netcalc.ParseAddress(testCase.ddAddress)
+		testAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testMask, err := netcalc.ParseAddress(testCase.ddMask)
+		testMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		testNetwork, _ := netcalc.NewNetwork(testAddress, testMask)
-		testNode := New(testNetwork)
+		testNetwork, _ := NewNetwork(testAddress, testMask)
+		testNode := NewNetworkNode(testNetwork)
 
 		err = testNode.Split()
 		if err != nil {
@@ -57,16 +56,16 @@ func TestSplitToHostCount(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testNetworkAddress, err := netcalc.ParseAddress(testCase.ddAddress)
+		testNetworkAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetworkMask, err := netcalc.ParseAddress(testCase.ddMask)
+		testNetworkMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork, _ := netcalc.NewNetwork(testNetworkAddress, testNetworkMask)
-		testNode := New(testNetwork)
+		testNetwork, _ := NewNetwork(testNetworkAddress, testNetworkMask)
+		testNode := NewNetworkNode(testNetwork)
 
 		err = SplitToHostCount(testNode, testCase.hostCount)
 
@@ -102,16 +101,16 @@ func TestSplitToNetCount(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testNetworkAddress, err := netcalc.ParseAddress(testCase.ddAddress)
+		testNetworkAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetworkMask, err := netcalc.ParseAddress(testCase.ddMask)
+		testNetworkMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork, _ := netcalc.NewNetwork(testNetworkAddress, testNetworkMask)
-		testNode := New(testNetwork)
+		testNetwork, _ := NewNetwork(testNetworkAddress, testNetworkMask)
+		testNode := NewNetworkNode(testNetwork)
 
 		err = SplitToNetCount(testNode, testCase.netCount)
 
@@ -142,16 +141,16 @@ func TestSplitToVlsmCount(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testNetworkAddress, err := netcalc.ParseAddress(testCase.ddAddress)
+		testNetworkAddress, err := ParseAddress(testCase.ddAddress)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetworkMask, err := netcalc.ParseAddress(testCase.ddMask)
+		testNetworkMask, err := ParseAddress(testCase.ddMask)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
-		testNetwork, _ := netcalc.NewNetwork(testNetworkAddress, testNetworkMask)
-		testNode := New(testNetwork)
+		testNetwork, _ := NewNetwork(testNetworkAddress, testNetworkMask)
+		testNode := NewNetworkNode(testNetwork)
 
 		for _, vlsm := range testCase.vlsmList {
 			err = SplitToVlsmCount(testNode, vlsm)
