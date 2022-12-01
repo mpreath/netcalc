@@ -1,10 +1,9 @@
 // Package networknode provides types and methods for working with
 // TCP/IP networks for creating a subnetworks and summarizing subnetworks.
-package networknode
+package netcalc
 
 import (
 	"fmt"
-	"github.com/mpreath/netcalc/pkg/netcalc"
 	"math"
 )
 
@@ -12,12 +11,12 @@ import (
 // a Utilized field (used internally) and an array of NetworkNode pointers
 // to build the subnet binary tree.
 type NetworkNode struct {
-	Network  *netcalc.Network `json:"network,omitempty"`
-	Utilized bool             `json:"-"`
-	Subnets  []*NetworkNode   `json:"subnets,omitempty"`
+	Network  *Network       `json:"network,omitempty"`
+	Utilized bool           `json:"-"`
+	Subnets  []*NetworkNode `json:"subnets,omitempty"`
 }
 
-func New(n *netcalc.Network) *NetworkNode {
+func NewNetworkNode(n *Network) *NetworkNode {
 	return &NetworkNode{
 		Network: n,
 	}
@@ -30,14 +29,14 @@ func (node *NetworkNode) Split() error {
 	if len(node.Subnets) > 0 {
 		return nil
 	}
-	bc := netcalc.GetBitsInMask(node.Network.Mask) + 1
+	bc := GetBitsInMask(node.Network.Mask) + 1
 	if bc < 31 {
-		newMask, err := netcalc.GetMaskFromBits(bc)
+		newMask, err := GetMaskFromBits(bc)
 		if err != nil {
 			return err
 		}
 		// left will contain the lower value
-		leftNetwork, err := netcalc.NewNetwork(node.Network.Address, newMask)
+		leftNetwork, err := NewNetwork(node.Network.Address, newMask)
 		if err != nil {
 			return err
 		}
@@ -45,7 +44,7 @@ func (node *NetworkNode) Split() error {
 		node.Subnets = append(node.Subnets, &NetworkNode{Network: leftNetwork})
 
 		// right will contain the larger value
-		rightNetwork, err := netcalc.NewNetwork(leftNetwork.BroadcastAddress()+1, newMask)
+		rightNetwork, err := NewNetwork(leftNetwork.BroadcastAddress()+1, newMask)
 		if err != nil {
 			return err
 		}
@@ -99,9 +98,9 @@ func SplitToHostCount(node *NetworkNode, hostCount int) error {
 
 // ValidForHostCount provided a Network and hostCount returns true if the current network's
 // host count supports the provided hostCount and a further split network would not.
-func ValidForHostCount(n *netcalc.Network, hostCount int) (bool, error) {
+func ValidForHostCount(n *Network, hostCount int) (bool, error) {
 
-	currentMaskBc := netcalc.GetBitsInMask(n.Mask)
+	currentMaskBc := GetBitsInMask(n.Mask)
 	currentBc := 32 - currentMaskBc
 	currentHc := int(math.Pow(2, float64(currentBc)))
 	futureBc := currentBc - 1 // need to look ahead into the future
@@ -123,7 +122,7 @@ func ValidForHostCount(n *netcalc.Network, hostCount int) (bool, error) {
 // SplitToNetCount provided with a NetworkNode and netCount, recursively calls Split on the
 // node(s) until the number of networks created is equal to or greater than the netCount argument.
 func SplitToNetCount(node *NetworkNode, netCount int) error {
-	longestValidMask, _ := netcalc.GetMaskFromBits(30)
+	longestValidMask, _ := GetMaskFromBits(30)
 	if netCount <= 0 {
 		// this is our recursive base case
 		return nil
@@ -159,7 +158,7 @@ func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 	// if network supports requirements, but is already utilized, then check the
 	// next subnet
 	// if network doesn't support network
-	longestValidMask, _ := netcalc.GetMaskFromBits(30)
+	longestValidMask, _ := GetMaskFromBits(30)
 
 	if vlsmCount < 2 {
 		return fmt.Errorf("network.SplitToVlsmCount: you must specify at least 2 hosts for count")
@@ -173,12 +172,12 @@ func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 		//    then we have found our network
 		currentHostCount := node.Network.HostCount()
 		var lookaheadHostCount int
-		currentMaskBc := netcalc.GetBitsInMask(node.Network.Mask)
+		currentMaskBc := GetBitsInMask(node.Network.Mask)
 		lookaheadMaskBc := currentMaskBc + 1
 		if lookaheadMaskBc <= 30 {
 			// the next split will be a legitimate network
-			lookaheadMask, _ := netcalc.GetMaskFromBits(lookaheadMaskBc)
-			lookaheadNetwork, _ := netcalc.NewNetwork(node.Network.Address, lookaheadMask)
+			lookaheadMask, _ := GetMaskFromBits(lookaheadMaskBc)
+			lookaheadNetwork, _ := NewNetwork(node.Network.Address, lookaheadMask)
 			lookaheadHostCount = lookaheadNetwork.HostCount()
 		} else {
 			lookaheadHostCount = 0
@@ -219,8 +218,8 @@ func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 }
 
 // Flatten returns the leaf nodes of the binary tree as an array of Networks.
-func (node *NetworkNode) Flatten() []*netcalc.Network {
-	var networkList []*netcalc.Network
+func (node *NetworkNode) Flatten() []*Network {
+	var networkList []*Network
 	if len(node.Subnets) == 0 {
 		return append(networkList, node.Network)
 	} else {
@@ -231,8 +230,8 @@ func (node *NetworkNode) Flatten() []*netcalc.Network {
 }
 
 // FlattenUtilized returns the leaf nodes with Utilized set to true of the binary tree as an array of Networks.
-func (node *NetworkNode) FlattenUtilized() []*netcalc.Network {
-	var networkList []*netcalc.Network
+func (node *NetworkNode) FlattenUtilized() []*Network {
+	var networkList []*Network
 	if node.Utilized {
 		return append(networkList, node.Network)
 	} else if len(node.Subnets) > 0 {

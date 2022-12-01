@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mpreath/netcalc/pkg/netcalc"
-	"github.com/mpreath/netcalc/pkg/netcalc/networknode"
 	"log"
 	"net/http"
 	"sort"
@@ -85,16 +84,16 @@ func Subnet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	node := networknode.New(net)
+	node := netcalc.NewNetworkNode(net)
 
 	if hostCount > 0 {
-		err = networknode.SplitToHostCount(node, hostCount)
+		err = netcalc.SplitToHostCount(node, hostCount)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 	} else if networkCount > 0 {
-		err = networknode.SplitToNetCount(node, networkCount)
+		err = netcalc.SplitToNetCount(node, networkCount)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -143,7 +142,7 @@ func Vlsm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	node := networknode.New(net)
+	node := netcalc.NewNetworkNode(net)
 
 	vlsmArgs := strings.Split(r.URL.Query().Get("vlsmList"), ",")
 	var vlsmList = make([]int, len(vlsmArgs))
@@ -159,7 +158,7 @@ func Vlsm(w http.ResponseWriter, r *http.Request) {
 	})
 
 	for _, vlsm := range vlsmList {
-		err = networknode.SplitToVlsmCount(node, vlsm)
+		err = netcalc.SplitToVlsmCount(node, vlsm)
 
 		if err != nil {
 			writeErrorResponse(w, err)

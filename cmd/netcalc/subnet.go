@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mpreath/netcalc/pkg/netcalc"
-	"github.com/mpreath/netcalc/pkg/netcalc/networknode"
 	"log"
 	"sync"
 
@@ -35,7 +34,7 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 			log.Fatal(err)
 		}
 		// generate network from args
-		node := networknode.New(net)
+		node := netcalc.NewNetworkNode(net)
 
 		if HostCount > 0 {
 			err := SplitToHostCountThreaded(node, HostCount)
@@ -44,7 +43,7 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 			}
 
 		} else if NetCount > 0 {
-			err = networknode.SplitToNetCount(node, NetCount)
+			err = netcalc.SplitToNetCount(node, NetCount)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -62,10 +61,10 @@ Usage: netcalc subnet [--hosts <num of hosts>|--nets <num of networks>] <ip_addr
 	},
 }
 
-func SplitToHostCountThreaded(node *networknode.NetworkNode, hostCount int) error {
+func SplitToHostCountThreaded(node *netcalc.NetworkNode, hostCount int) error {
 	wg := new(sync.WaitGroup)
 
-	valid, err := networknode.ValidForHostCount(node.Network, hostCount)
+	valid, err := netcalc.ValidForHostCount(node.Network, hostCount)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -78,7 +77,7 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, hostCount int) erro
 			log.Fatal(err)
 		}
 		if len(node.Subnets) > 0 {
-			valid, err := networknode.ValidForHostCount(node.Subnets[0].Network, hostCount)
+			valid, err := netcalc.ValidForHostCount(node.Subnets[0].Network, hostCount)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -97,7 +96,7 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, hostCount int) erro
 				}
 
 				if len(node.Subnets[0].Subnets) > 0 && len(node.Subnets[1].Subnets) > 0 {
-					valid, err := networknode.ValidForHostCount(node.Subnets[0].Subnets[0].Network, hostCount)
+					valid, err := netcalc.ValidForHostCount(node.Subnets[0].Subnets[0].Network, hostCount)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -124,9 +123,9 @@ func SplitToHostCountThreaded(node *networknode.NetworkNode, hostCount int) erro
 	return nil
 }
 
-func SplitToHostCountWrapper(wg *sync.WaitGroup, node *networknode.NetworkNode, hostCount int) {
+func SplitToHostCountWrapper(wg *sync.WaitGroup, node *netcalc.NetworkNode, hostCount int) {
 	defer wg.Done()
-	err := networknode.SplitToHostCount(node, hostCount)
+	err := netcalc.SplitToHostCount(node, hostCount)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -139,7 +138,7 @@ func init() {
 	rootCmd.AddCommand(subnetCmd)
 }
 
-func printNetworkTree(node *networknode.NetworkNode, opts ...int) {
+func printNetworkTree(node *netcalc.NetworkNode, opts ...int) {
 	var depth int
 
 	if len(opts) == 0 {

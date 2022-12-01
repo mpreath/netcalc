@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mpreath/netcalc/pkg/netcalc"
-	"github.com/mpreath/netcalc/pkg/netcalc/networknode"
 	"log"
 	"os"
 	"strings"
@@ -49,7 +48,7 @@ var summarizeCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		node := networknode.NetworkNode{
+		node := netcalc.NetworkNode{
 			Network: networkSummary,
 		}
 
