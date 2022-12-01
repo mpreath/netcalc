@@ -6,34 +6,6 @@ import (
 	"strings"
 )
 
-type IPv4Address struct {
-	Address uint32
-	Mask    uint32
-}
-
-type NetworkPrefix uint64
-
-type IPv6Address struct {
-	RoutingPrefix       uint64
-	RoutingPrefixLength uint16
-	SubnetId            uint16
-	InterfaceIdentifier uint64
-}
-
-func (a *IPv6Address) NetworkPrefix() NetworkPrefix {
-	var networkPrefix NetworkPrefix
-
-	subnetLength := 64 - a.RoutingPrefixLength
-	if subnetLength > 0 {
-		networkPrefix = NetworkPrefix(a.RoutingPrefix << subnetLength)
-		networkPrefix = networkPrefix | NetworkPrefix(a.SubnetId<<(16-subnetLength)>>(16-subnetLength))
-	} else {
-		networkPrefix = NetworkPrefix(a.RoutingPrefix)
-	}
-
-	return networkPrefix
-}
-
 func ParseAddress(addressString string) (uint32, error) {
 	octets := strings.Split(addressString, ".")
 	var address uint32 = 0
