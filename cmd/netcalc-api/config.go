@@ -20,6 +20,9 @@ func LoadConfig() *Config {
 
 	config := &Config{}
 	err = viper.Unmarshal(config)
+	if err != nil {
+		return nil
+	}
 
 	return config
 }
