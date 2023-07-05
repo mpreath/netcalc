@@ -24,10 +24,11 @@ func NewApp(config *Config) *App {
 }
 
 func (app *App) initialize() {
-	app.Router.Path("/info").Methods(http.MethodGet).HandlerFunc(Info)
-	app.Router.Path("/subnet").Methods(http.MethodGet).HandlerFunc(Subnet)
-	app.Router.Path("/summarize").Methods(http.MethodPost).HandlerFunc(Summarize)
-	app.Router.Path("/vlsm").Methods(http.MethodGet).HandlerFunc(Vlsm)
+	app.Router.Path("/jwt").Methods(http.MethodGet).HandlerFunc(app.GetJWT)
+	app.Router.Path("/info").Methods(http.MethodGet).HandlerFunc(app.ValidateJWT(Info))
+	app.Router.Path("/subnet").Methods(http.MethodGet).HandlerFunc(app.ValidateJWT(Subnet))
+	app.Router.Path("/summarize").Methods(http.MethodPost).HandlerFunc(app.ValidateJWT(Summarize))
+	app.Router.Path("/vlsm").Methods(http.MethodGet).HandlerFunc(app.ValidateJWT(Vlsm))
 }
 
 func (app *App) Run() {

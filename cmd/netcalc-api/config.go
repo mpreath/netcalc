@@ -3,7 +3,9 @@ package main
 import "github.com/spf13/viper"
 
 type Config struct {
-	HttpPort string `mapstructure:"PORT"`
+	HttpPort  string `mapstructure:"PORT"`
+	ApiKey    string `mapstructure:"API_KEY"`
+	SecretKey string `mapstructure:"SECRET_KEY"`
 }
 
 func LoadConfig() *Config {
