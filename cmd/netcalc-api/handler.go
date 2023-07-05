@@ -3,12 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mpreath/netcalc/pkg/netcalc"
 	"log"
 	"net/http"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/mpreath/netcalc/pkg/netcalc"
 )
 
 type Response struct {
