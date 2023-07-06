@@ -24,8 +24,11 @@ func NewApp(config *Config) *App {
 }
 
 func (app *App) initialize() {
+	// Middleware
 	app.Router.Use(LoggingMiddleware)
 	app.Router.Use(CORSMiddleware)
+
+	// Routes
 	jwtRouter := app.Router.PathPrefix("/jwt").Subrouter()
 	jwtRouter.Path("/new").Methods(http.MethodGet).HandlerFunc(app.GetJWT)
 
