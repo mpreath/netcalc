@@ -24,11 +24,17 @@ func NewApp(config *Config) *App {
 }
 
 func (app *App) initialize() {
-	app.Router.Path("/jwt").Methods(http.MethodGet).HandlerFunc(app.GetJWT)
-	app.Router.Path("/info").Methods(http.MethodGet).HandlerFunc(app.ValidateJWT(Info))
-	app.Router.Path("/subnet").Methods(http.MethodGet).HandlerFunc(app.ValidateJWT(Subnet))
-	app.Router.Path("/summarize").Methods(http.MethodPost).HandlerFunc(app.ValidateJWT(Summarize))
-	app.Router.Path("/vlsm").Methods(http.MethodGet).HandlerFunc(app.ValidateJWT(Vlsm))
+	app.Router.Use(LoggingMiddleware)
+	app.Router.Use(CORSMiddleware)
+	jwtRouter := app.Router.PathPrefix("/jwt").Subrouter()
+	jwtRouter.Path("/new").Methods(http.MethodGet).HandlerFunc(app.GetJWT)
+
+	apiRouter := app.Router.PathPrefix("/api").Subrouter()
+	apiRouter.Use(app.ValidateJWT)
+	apiRouter.Path("/info").Methods(http.MethodGet, http.MethodOptions).HandlerFunc(Info)
+	apiRouter.Path("/subnet").Methods(http.MethodGet, http.MethodOptions).HandlerFunc(Subnet)
+	apiRouter.Path("/summarize").Methods(http.MethodPost, http.MethodOptions).HandlerFunc(Summarize)
+	apiRouter.Path("/vlsm").Methods(http.MethodGet, http.MethodOptions).HandlerFunc(Vlsm)
 }
 
 func (app *App) Run() {

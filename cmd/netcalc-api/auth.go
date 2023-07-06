@@ -19,7 +19,7 @@ func (app *App) CreateJWT() (string, error) {
 	return tokenString, nil
 }
 
-func (app *App) ValidateJWT(next func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
+func (app *App) ValidateJWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Header["Token"] != nil {
 			token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
@@ -37,7 +37,7 @@ func (app *App) ValidateJWT(next func(w http.ResponseWriter, r *http.Request)) h
 			}
 
 			if token.Valid {
-				next(w, r)
+				next.ServeHTTP(w, r)
 			}
 		} else {
 			w.WriteHeader(http.StatusUnauthorized)
