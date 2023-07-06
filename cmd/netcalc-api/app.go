@@ -29,7 +29,7 @@ func (app *App) initialize() {
 	app.Router.Use(CORSMiddleware)
 
 	// Routes
-	jwtRouter := app.Router.PathPrefix("/jwt").Subrouter()
+	jwtRouter := app.Router.PathPrefix("/token").Subrouter()
 	jwtRouter.Path("/new").Methods(http.MethodGet).HandlerFunc(app.GetJWT)
 
 	apiRouter := app.Router.PathPrefix("/api").Subrouter()

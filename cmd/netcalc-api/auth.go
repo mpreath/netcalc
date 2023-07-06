@@ -11,12 +11,26 @@ import (
 func (app *App) CreateJWT() (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Hour).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	tokenString, err := token.SignedString([]byte(app.Config.SecretKey))
 	if err != nil {
 		return "", err
 	}
 	return tokenString, nil
+}
+
+func (app *App) GetJWT(w http.ResponseWriter, r *http.Request) {
+	if r.Header["Api-Key"] != nil {
+		if r.Header["Api-Key"][0] != app.Config.ApiKey {
+			return
+		} else {
+			token, err := app.CreateJWT()
+			if err != nil {
+				return
+			}
+			fmt.Fprint(w, token)
+		}
+	}
 }
 
 func (app *App) ValidateJWT(next http.Handler) http.Handler {
@@ -44,18 +58,4 @@ func (app *App) ValidateJWT(next http.Handler) http.Handler {
 			w.Write([]byte("not authorized"))
 		}
 	})
-}
-
-func (app *App) GetJWT(w http.ResponseWriter, r *http.Request) {
-	if r.Header["Api-Key"] != nil {
-		if r.Header["Api-Key"][0] != app.Config.ApiKey {
-			return
-		} else {
-			token, err := app.CreateJWT()
-			if err != nil {
-				return
-			}
-			fmt.Fprint(w, token)
-		}
-	}
 }

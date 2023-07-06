@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 )
 
@@ -12,7 +11,6 @@ func CORSMiddleware(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Methods", "*")
 
 		if r.Method == "OPTIONS" {
-			log.Println("OPTIONS")
 			w.WriteHeader(http.StatusOK)
 			return
 		}
