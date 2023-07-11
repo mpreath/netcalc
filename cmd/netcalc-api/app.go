@@ -33,7 +33,7 @@ func (app *App) initialize() {
 	jwtRouter.Path("/new").Methods(http.MethodGet).HandlerFunc(app.GetJWT)
 
 	apiRouter := app.Router.PathPrefix("/api").Subrouter()
-	apiRouter.Use(app.ValidateJWT)
+	// apiRouter.Use(app.ValidateJWT)
 	apiRouter.Path("/info").Methods(http.MethodGet, http.MethodOptions).HandlerFunc(Info)
 	apiRouter.Path("/subnet").Methods(http.MethodGet, http.MethodOptions).HandlerFunc(Subnet)
 	apiRouter.Path("/summarize").Methods(http.MethodPost, http.MethodOptions).HandlerFunc(Summarize)
