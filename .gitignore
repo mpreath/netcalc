@@ -12,5 +12,6 @@
 *.json
 *.out
 *.env
+*.log
 test/
 tmp/
