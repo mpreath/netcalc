@@ -24,7 +24,7 @@ func ParseAddress(addressString string) (uint32, error) {
 			val32 := uint32(val)
 
 			if val32 > 255 {
-				return 0, fmt.Errorf("utils:ParseAddress: parsing \"%s\": number must be 255 or less", octet)
+				return 0, fmt.Errorf("ParseAddress: parsing \"%s\": number must be 255 or less", octet)
 			}
 
 			// we have a good number
@@ -33,7 +33,7 @@ func ParseAddress(addressString string) (uint32, error) {
 		}
 	} else {
 		// incorrect number of octets
-		return 0, fmt.Errorf("utils:ParseAddress: parsing \"%s\": too many octets", addressString)
+		return 0, fmt.Errorf("ParseAddress: parsing \"%s\": too many octets", addressString)
 	}
 
 	return address, nil
@@ -87,7 +87,7 @@ func GetMaskFromBits(bits int) (uint32, error) {
 		mask = mask << bc
 		return mask, nil
 	} else {
-		return 0, fmt.Errorf("utils:GetMaskFromBits: bits must be 32 or less")
+		return 0, fmt.Errorf("GetMaskFromBits: bits must be 32 or less")
 	}
 
 }
