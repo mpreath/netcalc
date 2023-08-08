@@ -50,7 +50,7 @@ func (n *Network) UnmarshalJSON(body []byte) (err error) {
 
 func NewNetwork(address uint32, mask uint32) (*Network, error) {
 	if !IsValidMask(mask) {
-		return nil, fmt.Errorf("network.New: invalid subnet mask")
+		return nil, fmt.Errorf("NewNetwork: invalid subnet mask")
 	}
 
 	return &Network{

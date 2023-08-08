@@ -52,7 +52,7 @@ func (node *NetworkNode) Split() error {
 		node.Subnets = append(node.Subnets, &NetworkNode{Network: rightNetwork})
 
 	} else {
-		return fmt.Errorf("network:Split: network doesn't support being split")
+		return fmt.Errorf("NetworkNode#Split: network doesn't support being split")
 	}
 
 	return nil
@@ -111,7 +111,7 @@ func ValidForHostCount(n *Network, hostCount int) (bool, error) {
 		return true, nil
 	} else if currentHc < hostCount {
 		// requirements too large, raise an error
-		return false, fmt.Errorf("network.SplitToHostCount: network can't support that many hosts")
+		return false, fmt.Errorf("ValidForHostCount: network can't support that many hosts")
 	} else if currentMaskBc >= 30 {
 		return true, nil
 	}
@@ -128,7 +128,7 @@ func SplitToNetCount(node *NetworkNode, netCount int) error {
 		return nil
 	} else if node.Network.Mask == longestValidMask {
 		// can't split any more
-		return fmt.Errorf("network.SplitToNetCount: network can't support that many subnetworks")
+		return fmt.Errorf("SplitToNetCount: network can't support that many subnetworks")
 	} else {
 		err := node.Split()
 		if err != nil {
@@ -161,7 +161,7 @@ func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 	longestValidMask, _ := GetMaskFromBits(30)
 
 	if vlsmCount < 2 {
-		return fmt.Errorf("network.SplitToVlsmCount: you must specify at least 2 hosts for count")
+		return fmt.Errorf("SplitToVlsmCount: you must specify at least 2 hosts for count")
 	} else {
 
 		// need to determine if this is our recursive base case
@@ -191,13 +191,13 @@ func SplitToVlsmCount(node *NetworkNode, vlsmCount int) error {
 			// if its not utilized mark it as utilized and return nil
 			// if it is utilized return error
 			if node.Utilized || len(node.Subnets) > 0 {
-				return fmt.Errorf("network.SplitToVlsmCount: network already utilized")
+				return fmt.Errorf("SplitToVlsmCount: network already utilized")
 			} else {
 				node.Utilized = true
 				return nil // no error, base case success
 			}
 		} else if node.Network.Mask == longestValidMask {
-			return fmt.Errorf("network.SplitToVlsmCount: network can't support that many subnetworks")
+			return fmt.Errorf("SplitToVlsmCount: network can't support that many subnetworks")
 		}
 
 		err := node.Split()
