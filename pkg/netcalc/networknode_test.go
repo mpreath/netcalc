@@ -12,7 +12,7 @@ func TestSplit(t *testing.T) {
 	}{
 		{"192.168.1.1", "255.255.255.0", ""},
 		{"10.1.0.0", "255.255.0.0", ""},
-		{"10.1.1.1", "255.255.255.252", "network:Split: network doesn't support being split"},
+		{"10.1.1.1", "255.255.255.252", "NetworkNode#Split: network doesn't support being split"},
 	}
 
 	for _, testCase := range testCases {
@@ -52,7 +52,7 @@ func TestSplitToHostCount(t *testing.T) {
 	}{
 		{"192.168.1.1", "255.255.255.0", 1, 2, ""},
 		{"10.1.0.0", "255.255.0.0", 100, 126, ""},
-		{"192.168.1.1", "255.255.255.0", 300, 0, "network.SplitToHostCount: network can't support that many hosts"},
+		{"192.168.1.1", "255.255.255.0", 300, 0, "ValidForHostCount: network can't support that many hosts"},
 	}
 
 	for _, testCase := range testCases {
@@ -97,7 +97,7 @@ func TestSplitToNetCount(t *testing.T) {
 	}{
 		{"192.168.1.1", "255.255.255.0", 2, 2, ""},
 		{"10.1.0.0", "255.255.0.0", 4, 4, ""},
-		{"192.168.1.1", "255.255.255.252", 2, 0, "network.SplitToNetCount: network can't support that many subnetworks"},
+		{"192.168.1.1", "255.255.255.252", 2, 0, "SplitToNetCount: network can't support that many subnetworks"},
 	}
 
 	for _, testCase := range testCases {

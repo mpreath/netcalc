@@ -70,7 +70,7 @@ func TestNewNetwork(t *testing.T) {
 		errorString      string
 	}{
 		{"192.168.1.1", "255.255.255.0", "192.168.1.0", ""},
-		{"192.168.1.1", "255.0.255.0", "192.168.1.0", "network.New: invalid subnet mask"},
+		{"192.168.1.1", "255.0.255.0", "192.168.1.0", "NewNetwork: invalid subnet mask"},
 	}
 
 	for _, testCase := range testCases {
