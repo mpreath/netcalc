@@ -243,7 +243,7 @@ The summarize command takes those networks and summarizes at the bit level to cr
 ### `info` Command
 
 ```
-> curl http://localhost:3000/info?address=192.168.1.0&mask=255.255.255.0
+> curl http://localhost:3000/api/info?address=192.168.1.0&mask=255.255.255.0
 {
   "status": "ok",
   "data": {
@@ -257,7 +257,7 @@ The summarize command takes those networks and summarizes at the bit level to cr
 ### `subnet` Command
 
 ```
-> curl http://localhost:3000/subnet?address=192.168.1.0&mask=255.255.255.0&hostCount=60
+> curl http://localhost:3000/api/subnet?address=192.168.1.0&mask=255.255.255.0&hostCount=60
 {                              
   "status": "ok",              
   "data": [                    
@@ -286,7 +286,7 @@ The summarize command takes those networks and summarizes at the bit level to cr
 ### `vlsm` Command
 
 ```
-> curl http://localhost:3000/vlsm?address=192.168.1.0&mask=255.255.255.0&vlsmList=2,2,10
+> curl http://localhost:3000/api/vlsm?address=192.168.1.0&mask=255.255.255.0&vlsmList=2,2,10
 {
   "status": "ok",
   "data": [
@@ -325,7 +325,7 @@ The summarize command takes those networks and summarizes at the bit level to cr
 ### `summarize` Command
 
 ```
-curl --location --request POST 'http://localhost:3000/summarize' \
+curl --location --request POST 'http://localhost:3000/api/summarize' \
 --header 'Content-Type: application/json' \
 --data-raw '[
     {
