@@ -1,0 +1,12 @@
+# autobase
+
+autobase is simply a ready to use framework for starting a new autotools-based application in C.
+
+## Quickstart
+
+1. Install autotools
+2. Create a directory for your project
+3. Download autobase and copy into your project directory.
+4. Edit configuration files to match your project.
+5. `./configure`
+6. `make`
